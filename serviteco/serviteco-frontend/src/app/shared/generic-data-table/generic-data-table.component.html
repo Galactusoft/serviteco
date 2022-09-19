@@ -1,0 +1,188 @@
+<div class="h-full relative">
+  <div fxLayout="column" fxLayoutAlign="space-between">
+    <table class="generic-table generic-table-container" [dataSource]="dataSource" mat-table matSort>
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Model Properties Column -->
+      <ng-container *ngFor="let column of columns">
+        <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header class="title-center">
+            {{ column.label }}
+          </th>
+          <td *matCellDef="let row" []="column.cssClasses" mat-cell>
+            {{ row[column.property] }}
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'boolean'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <div>
+              <span *ngIf="row[column.property] === 1 || row[column.property] === true"
+                class="rounded px-2 py-1 font-medium text-s font-bold registro-activo" fxFlex="none">Si</span>
+              <span *ngIf="row[column.property] === 0 || row[column.property] === false"
+                class="rounded px-2 py-1 font-medium text-s font-bold registro-inactivo" fxFlex="none">No</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'checkbox'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <mat-checkbox (change)="checkRow.emit({ data: row, event: $event })" [checked]="row[column.property]">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'toggleSlide'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <mat-slide-toggle (change)="slideRow.emit({ data: row, event: $event })" [checked]="row[column.property]">
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'toggleSlide2'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <mat-slide-toggle (change)="slideRow2.emit({ data: row, event: $event })" [checked]="row[column.property]">
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'image'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <img [src]="row[column.property]" class="avatar h-9 w-9 align-middle my-2" />
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'button'" [matColumnDef]="column.property">
+          <ng-container *ngIf="column.property === 'starred'">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" class="w-10" mat-cell>
+              <button (click)="emitToggleStar($event, row)" mat-icon-button type="button">
+                <mat-icon *ngIf="row[column.property]" class="text-amber-500">star</mat-icon>
+                <mat-icon *ngIf="!row[column.property]">star</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="column.property === 'delete'">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" class="w-10" mat-cell>
+              <button (click)="emitDelete($event, row)" mat-icon-button type="button" color="accent">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="column.property === 'edit'">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" class="w-10" mat-cell>
+              <button mat-icon-button type="button">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="column.property === 'menu'">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" class="w-10" mat-cell>
+              <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="contactMenu" mat-icon-button
+                type="button">
+                <mat-icon>more</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'icon'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <mat-icon>getIcon(row[column.property])</mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'currency'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header class="title-center">
+            {{ column.label }}
+          </th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            {{ row[column.property] | currency }}
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header class="title-center">
+            {{ column.label }}
+          </th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            {{ row[column.property] | date: 'yyyy-MM-dd' }}
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'dateTime'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header class="title-center">
+            {{ column.label }}
+          </th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            {{ row[column.property] | date: 'yyyy-MM-dd hh:mm:ss' }}
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="column.type === 'tipoContenido'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <div>
+              <span *ngIf="row[column.property] === 2" class="rounded px-2 py-1 font-medium text-s font-bold"
+                fxFlex="none">Webinar</span>
+              <span *ngIf="row[column.property] === 3" class="rounded px-2 py-1 font-medium text-s font-bold"
+                fxFlex="none">Video</span>
+              <span *ngIf="row[column.property] === 4" class="rounded px-2 py-1 font-medium text-s font-bold"
+                fxFlex="none">Pdf</span>
+              <span *ngIf="row[column.property] === 5" class="rounded px-2 py-1 font-medium text-s font-bold"
+                fxFlex="none">Presentación</span>
+              <span *ngIf="row[column.property] === 6" class="rounded px-2 py-1 font-medium text-s font-bold"
+                fxFlex="none">Imagen</span>
+            </div>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <tr *matHeaderRowDef="visibleColumns; sticky: true" mat-header-row></tr>
+      <!--suppress UnnecessaryLabelJS -->
+      <tr (click)="emitSelect($event, row)" *matRowDef="let row; columns: visibleColumns"
+        class="hover:bg-hover cursor-pointer" mat-row [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selected || selected !== row,
+        'bg-primary-100 dark:bg-hover': selected && selected === row}"></tr>
+    </table>
+
+    <div *ngIf="dataSource.filteredData.length === 0" fxFlex="auto" fxLayout="column" fxLayoutAlign="center center">
+      <!-- <img class="m-12 h-64" src="assets/img/illustrations/idea.svg" /> -->
+      <h2 class="headline m-0 text-center">No existen registros</h2>
+    </div>
+
+    <mat-paginator style="display: none;"></mat-paginator>
+
+    <mat-paginator [pageSize]="pageSizeInit" *ngIf="showPaginator" [fxHide]="dataSource.filteredData.length === 0"
+      [length]="cantidad" [showFirstLastButtons]="true" (page)="mostrarMas($event)">
+    </mat-paginator>
+
+  </div>
+
+
+
+</div>
+
+<mat-menu #contactMenu="matMenu" xPosition="before" yPosition="below">
+  <button mat-menu-item>
+    <mat-icon>edit</mat-icon>
+    <span>Editar</span>
+  </button>
+
+  <button mat-menu-item>
+    <mat-icon>delete</mat-icon>
+    <span>Eliminar</span>
+  </button>
+</mat-menu>

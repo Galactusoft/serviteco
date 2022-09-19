@@ -1,0 +1,241 @@
+<div class="flex flex-col w-full">
+
+    <ng-container>
+
+        <!-- Header -->
+        <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <!-- Background -->
+            <ng-container>
+                <img class="absolute inset-0 object-cover w-full h-full" src="assets/images/serviteco/slide2.jpg">
+            </ng-container>
+            <!-- Close button -->
+            <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+                <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
+                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- Usuario -->
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+
+                <form [formGroup]="usuarioForm">
+
+                    <!-- Avatar and actions -->
+                    <div class="flex flex-auto items-end -mt-16">
+                        <!-- Avatar -->
+                        <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
+                            style="background-color: white;">
+                            <mat-icon *ngIf="!imagenBase64" class="icon-size-20" [svgIcon]="'heroicons_outline:user'">
+                            </mat-icon>
+                            <div>
+                                <img [src]="imagenBase64">
+                            </div>
+                        </div>
+                        <!-- Actions -->
+                        <ng-container *ngIf="!editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(true)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                    <span class="ml-2">Editar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(false)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                    <span class="ml-2">Cancelar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Tipo de usuario</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'health_and_safety'" matPrefix>
+                                    </mat-icon>
+                                    <mat-select [formControlName]="'tipo_usuario'" required [disabled]="!editMode"
+                                        (selectionChange)="selectTipoUsuario()">
+                                        <mat-option [value]="'importador'">Importador</mat-option>
+                                        <mat-option [value]="'distribuidor'">Distribuidor</mat-option>
+                                        <mat-option [value]="'taller autorizado'">Taller Autorizado</mat-option>
+                                        <mat-option [value]="'funcionario'">Funcionario taller</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2"
+                                    *ngIf="usuarioForm.get('tipo_usuario').value == 'importador'">
+                                    <mat-label>Importador</mat-label>
+                                    <input matInput [formControlName]="'nombre_importador'" readonly
+                                        [required]="usuarioForm.get('tipo_usuario').value == 'importador'">
+                                    <button mat-icon-button (click)="openBuscadorImportadores()" matSuffix
+                                        [disabled]="!editMode">
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2"
+                                    *ngIf="usuarioForm.get('tipo_usuario').value == 'distribuidor'">
+                                    <mat-label>Distribuidor</mat-label>
+                                    <input matInput [formControlName]="'nombre_distribuidor'" [spellcheck]="false"
+                                        readonly [required]="usuarioForm.get('tipo_usuario').value == 'distribuidor'">
+                                    <button mat-icon-button (click)="openBuscadorDistribuidoras()" matSuffix
+                                        [disabled]="!editMode">
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2"
+                                    *ngIf="usuarioForm.get('tipo_usuario').value == 'taller autorizado' || usuarioForm.get('tipo_funcionario').value == 'taller autorizado'">
+                                    <mat-label>Taller Autorizado</mat-label>
+                                    <input matInput [formControlName]="'nombre_taller'" [spellcheck]="false" readonly
+                                        [required]="usuarioForm.get('tipo_usuario').value == 'taller autorizado' || usuarioForm.get('tipo_usuario').value == 'funcionario'">
+                                    <button mat-icon-button (click)="openBuscadorTalleresAutorizados()" matSuffix
+                                        [disabled]="!editMode">
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Usuario</mat-label>
+                                    <input class="uppercase" [formControlName]="'username'" matInput required
+                                        maxlength="300" [readonly]="!editMode || noEditaUsername"
+                                        (change)="validarUsername($event.target.value)">
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
+                                    <mat-label>Nombre Completo</mat-label>
+                                    <input [formControlName]="'nombre_completo'" matInput required maxlength="300"
+                                        [readonly]="!editMode" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Identificacion</mat-label>
+                                    <input [formControlName]="'identificacion'" matInput required maxlength="300"
+                                        [readonly]="!editMode" appNumberOnly type="text">
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
+                                    <mat-label>Correo electrónico</mat-label>
+                                    <input [formControlName]="'correo'" matInput required maxlength="300"
+                                        [readonly]="!editMode" class="uppercase">
+                                    <mat-error *ngIf="usuarioForm.get('correo').hasError('email')">
+                                        Por favor ingrese un correo válido, ejm: correo@correo.com
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input [formControlName]="'telefono'" matInput required maxlength="300"
+                                        [readonly]="!editMode" type="tel" appNumberOnly>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
+                                    <mat-label>Cargo</mat-label>
+                                    <input [formControlName]="'cargo'" matInput required maxlength="300"
+                                        [readonly]="!editMode" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto"
+                                    *ngIf="usuarioForm.get('tipo_funcionario').value == 'taller autorizado'">
+                                    <mat-label>Jefe de taller</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'health_and_safety'" matPrefix>
+                                    </mat-icon>
+                                    <mat-select [formControlName]="'jefe_taller'" required [disabled]="!editMode">
+                                        <mat-option [value]="'NO'">NO</mat-option>
+                                        <mat-option [value]="'SI'">SI</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'health_and_safety'" matPrefix>
+                                    </mat-icon>
+                                    <mat-select [formControlName]="'estado'" required [disabled]="!editMode">
+                                        <mat-option [value]="'1'">ACTIVO</mat-option>
+                                        <mat-option [value]="'0'">INACTIVO</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4" *ngIf="editPassword">
+                            <div class="flex">
+                                <ng-container>
+                                    <div class="flex items-center" style="cursor: pointer; text-decoration: underline;"
+                                        (click)="cambiarPassword()">
+                                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_solid:pencil'">
+                                        </mat-icon>
+                                        <span class="leading-none">Cambiar contraseña</span>
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <ng-container *ngIf="editMode">
+                        <div
+                            class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <!-- Delete -->
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteUsuario()">
+                                Eliminar
+                            </button>
+                            <!-- Cancel -->
+                            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="toggleEditMode(false)">
+                                Cancelar
+                            </button>
+                            <!-- Save -->
+                            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="usuarioForm.invalid"
+                                [matTooltip]="'Save'" (click)="updateUsuario()">
+                                Guardar
+                            </button>
+                        </div>
+                    </ng-container>
+
+                </form>
+
+
+            </div>
+        </div>
+
+    </ng-container>
+
+</div>

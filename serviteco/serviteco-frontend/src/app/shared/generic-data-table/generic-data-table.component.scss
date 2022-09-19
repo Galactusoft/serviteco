@@ -1,0 +1,29 @@
+.generic-table-container {
+  width: 100%;
+}
+.title-center {
+  text-align: center;
+}
+
+.mat-table-sticky {
+  border-right: 1px solid #e0e0e0;
+  background-color: red($color: #000000);
+}
+
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+  background-color: red($color: #000000);
+}
+
+.mat-table-sticky:last-child {
+  border-left: 1px solid #e0e0e0;
+  background-color: red($color: #000000);
+}
+
+.registro-activo {
+  background-color: red !important;
+}
+
+.registro-inactivo {
+  background-color: blue !important;
+}

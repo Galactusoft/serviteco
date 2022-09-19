@@ -1,0 +1,94 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Gestión de transferencia de propiedad</div>
+        <button mat-icon-button (click)="cancelar()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <form [formGroup]="usuarioFinalForm" class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+        <div class="grid sm:grid-cols-2 gap-2 w-full">
+
+
+            <!-- Company -->
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Identificación</mat-label>
+                    <input matInput [formControlName]="'identificacion'" required
+                        (change)="consultarUsuarioFinal($event.target.value)" appNumberOnly>
+                </mat-form-field>
+            </div>
+
+            <!-- Name -->
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Nombres</mat-label>
+                    <input matInput [formControlName]="'nombres'" required class="uppercase">
+                </mat-form-field>
+            </div>
+
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Apellidos</mat-label>
+                    <input matInput [formControlName]="'apellidos'" required class="uppercase">
+                </mat-form-field>
+            </div>
+
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput [formControlName]="'telefono'" required appNumberOnly>
+                </mat-form-field>
+            </div>
+
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Dirección</mat-label>
+                    <input matInput [formControlName]="'direccion'" required class="uppercase">
+                </mat-form-field>
+            </div>
+
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Correo</mat-label>
+                    <input matInput [formControlName]="'correo'" required class="uppercase">
+                </mat-form-field>
+            </div>
+
+            <div class="mt-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>Código postal</mat-label>
+                    <input matInput [formControlName]="'codigo_postal'" required appNumberOnly>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+
+
+            <div class="-ml-2">
+
+            </div>
+
+            <div class="flex items-center mt-4 sm:mt-0">
+                <button class="sm:mx-3" mat-stroked-button (click)="cancelar()">
+                    <span>Cerrar</span>
+                </button>
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" *ngIf="!existeUsuario"
+                    (click)="registrarUsurioFinal()" [disabled]="usuarioFinalForm.invalid">
+                    Registrar
+                </button>
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" *ngIf="existeUsuario"
+                    (click)="registrarUsurioFinal()" [disabled]="usuarioFinalForm.invalid">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>

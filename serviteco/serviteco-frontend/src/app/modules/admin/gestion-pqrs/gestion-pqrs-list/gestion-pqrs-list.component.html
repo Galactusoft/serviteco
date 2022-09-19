@@ -1,0 +1,201 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+
+                    <!-- Breadcrumbs -->
+                    <div>
+                        <div class="hidden sm:flex flex-wrap items-center font-medium">
+                            <div>
+                                <a class="whitespace-nowrap text-primary-500" style="cursor: pointer;"
+                                    [routerLink]="['/inicio']">Inicio</a>
+                            </div>
+                            <div class="flex items-center ml-1 whitespace-nowrap">
+                                <mat-icon class="icon-size-5 text-secondary"
+                                    [svgIcon]="'heroicons_solid:chevron-right'">
+                                </mat-icon>
+                                <span class="ml-1 text-secondary">Gestión PQRS</span>
+                            </div>
+                        </div>
+                        <div class="flex sm:hidden">
+                            <a class="inline-flex items-center -ml-1.5 text-secondary font-medium"
+                                [routerLink]="'/admin-ifec'">
+                                <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-left'">
+                                </mat-icon>
+                                <span class="ml-1">Volver</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">PQRS</div>
+                        <div class="ml-0.5 font-medium text-secondary">
+                            <ng-container *ngIf="pqrsCount > 0">
+                                {{pqrsCount}}
+                            </ng-container>
+                            {{pqrsCount | i18nPlural: {
+                            '=0' : 'No existen pqrs',
+                            '=1' : 'pqrs',
+                            'other': 'pqrs'
+                            } }}
+                        </div>
+                    </div>
+                    <!-- Main actions -->
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex-auto">
+                            <mat-form-field
+                                class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                                    [placeholder]="'Buscar pqrs'"
+                                    (keydown.enter)="applyFilter($event.target.value)">
+                            </mat-form-field>
+                        </div>
+                        <!-- Add usuario button -->
+                        <button class="ml-2" mat-flat-button [color]="'primary'" (click)="createPqrs()">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+
+
+                <!-- usuarios list -->
+                <div class="relative">
+                    <div class="overflow-x-auto">
+
+                        <ng-container *ngIf="pqrsPaginator$ | async as pqrs">
+                            <ng-container *ngIf="pqrsCount; else noPqrs">
+                                <div class="overflow-x-auto mx-6">
+                                    <table class="w-full bg-transparent" mat-table matSort
+                                        [dataSource]="recentTransactionsDataSource" [trackBy]="trackByFn"
+                                        #recentTransactionsTable>
+
+                                        <!-- name -->
+                                        <ng-container matColumnDef="radicado">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Radicado
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                                    {{transaction.uuid}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- email -->
+                                        <ng-container matColumnDef="tipo_solicitud">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Tipo Solicitud
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{transaction.tipo_solicitud}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="identificacion">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Identificación
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                                    {{transaction.identificacion}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- email -->
+                                        <ng-container matColumnDef="nombres">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Nombres
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{transaction.nombres}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="apellidos">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Apellidos
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{transaction.apellidos}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="correo">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Correo
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{transaction.correo}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="telefono">
+                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                                Teléfono
+                                            </th>
+                                            <td mat-cell *matCellDef="let transaction">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{transaction.telefono}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="recentTransactionsTableColumns"
+                                            style="cursor: pointer;"></tr>
+                                        <tr style="cursor: pointer;" (click)="editPqrs(row)"
+                                            class="order-row h-16 hover:bg-hover cursor-pointer" mat-row
+                                            *matRowDef="let row; columns: recentTransactionsTableColumns;"
+                                            [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPqrs || selectedPqrs.id !== row.id,
+                                            'bg-primary-100 dark:bg-hover': selectedPqrs && selectedPqrs.id === row.id}"></tr>
+                                    </table>
+                                    <mat-paginator style="float: right;" [pageSize]="pageSizeInit"
+                                        [length]="pqrsCount" (page)="mostrarMas($event)"
+                                        [showFirstLastButtons]="true"></mat-paginator>
+                                </div>
+
+                            </ng-container>
+                        </ng-container>
+
+                        <!-- No usuarios -->
+                        <ng-template #noPqrs>
+                            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">No
+                                existen PQRS</div>
+                        </ng-template>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

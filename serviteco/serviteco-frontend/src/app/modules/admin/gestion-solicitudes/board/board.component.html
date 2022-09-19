@@ -1,0 +1,426 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium">
+                <div>
+                    <a class="inline-flex items-center leading-6 text-primary hover:underline" [routerLink]="['..']">
+                        <span class="inline-flex items-center">
+                            <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:arrow-sm-left'">
+                            </mat-icon>
+                            <span class="ml-1.5 font-medium leading-5">Volver a las solicitudes</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Tablero de control
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto">
+
+        <!-- Lists -->
+        <div class="flex">
+
+            <!-- Group all cdkDropList's after this point together so that the cards can be transferred between lists -->
+            <div class="flex items-start">
+
+                <!-- List -->
+
+                <ng-container *ngIf="panelSolicitud">
+
+
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
+
+                        <div class="flex items-center justify-between">
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                Solicitudes creadas
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{ panelSolicitud.creadas.length }}
+                            </div>
+                            <div class="ml-1 mt-1">
+                                <mat-icon class="w-8 h-8 min-h-8 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border mb-10">
+                            <div class="p-3 pb-0">
+
+                                <!-- Card -->
+                                <ng-container
+                                    *ngFor="let solicitud of panelSolicitud.creadas; let i = index; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                        style="cursor: pointer;" (click)="editSolicitud(solicitud)">
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">
+                                            Código: {{ solicitud.id }}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-500">
+                                            Serial: {{ solicitud.codigo_producto }} <br>
+                                            Fecha ingreso: {{ solicitud.fecha_ingreso | date: 'yyyy-MM-dd' }} <br>
+                                            Fecha ultimo estado: {{ solicitud.fecha_ultimo_estado | date: 'yyyy-MM-dd' }} <br>
+                                            Nombres: {{ solicitud.nombres }} {{ solicitud.apellidos }} <br>
+                                            Identificación: {{
+                                            solicitud.identificacion }}
+                                        </div>
+                                        <!-- Labels -->
+                                        <ng-container>
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.serial_producto }}
+                                                    </div>
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.marca_producto }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="text-sm font-medium text-red-500" *ngIf="validarAlertaAtencion(solicitud)">
+                                            ALERTA, LA SOLICITUD NO HA SIDO ATENDIDA EN 72 HORAS
+                                        </div>
+                                    </a>
+                                </ng-container>
+
+                                <ng-container *ngIf="panelSolicitud.creadas.length == 0">
+                                    <div class="mx-1 mb-2 py-0.5 px-3">
+                                        Sin solicitudes
+                                    </div>
+                                </ng-container>
+
+                                <div class="mx-1 mb-2 py-0.5 px-3">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
+
+                        <div class="flex items-center justify-between">
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                Solicitudes en diagnóstico
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{ panelSolicitud.enDx.length }}
+                            </div>
+                            <div class="ml-1 mt-1">
+                                <mat-icon class="w-8 h-8 min-h-8 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border mb-10">
+                            <div class="p-3 pb-0">
+
+                                <!-- Card -->
+                                <ng-container
+                                    *ngFor="let solicitud of panelSolicitud.enDx; let i = index; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                        style="cursor: pointer;" (click)="editSolicitud(solicitud)">
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">
+                                            Código: {{ solicitud.id }}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-500">
+                                            Serial: {{ solicitud.codigo_producto }} <br>
+                                            Fecha ingreso: {{ solicitud.fecha_ingreso | date: 'yyyy-MM-dd' }} <br>
+                                            Fecha ultimo estado: {{ solicitud.fecha_ultimo_estado | date: 'yyyy-MM-dd' }} <br>
+                                            Nombres: {{ solicitud.nombres }} {{ solicitud.apellidos }} <br>
+                                            Identificación: {{
+                                            solicitud.identificacion }}
+                                        </div>
+                                        <!-- Labels -->
+                                        <ng-container>
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.serial_producto }}
+                                                    </div>
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.marca_producto }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="text-sm font-medium text-red-500" *ngIf="validarAlertaAtencion(solicitud)">
+                                            ALERTA, LA SOLICITUD NO HA SIDO ATENDIDA EN 72 HORAS
+                                        </div>
+                                    </a>
+                                </ng-container>
+                                <ng-container *ngIf="panelSolicitud.enDx.length == 0">
+                                    <div class="mx-1 mb-2 py-0.5 px-3">
+                                        Sin solicitudes
+                                    </div>
+                                </ng-container>
+                                <div class="mx-1 mb-2 py-0.5 px-3">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
+
+                        <div class="flex items-center justify-between">
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                Solicitudes enviadas
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{ panelSolicitud.enviadas.length }}
+                            </div>
+                            <div class="ml-1 mt-1">
+                                <mat-icon class="w-8 h-8 min-h-8 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+
+                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border mb-10">
+                            <div class="p-3 pb-0">
+
+                                <!-- Card -->
+                                <ng-container
+                                    *ngFor="let solicitud of panelSolicitud.enviadas; let i = index; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                        style="cursor: pointer;" (click)="editSolicitud(solicitud)">
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">
+                                            Código: {{ solicitud.id }}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-500">
+                                            Serial: {{ solicitud.codigo_producto }} <br>
+                                            Fecha ingreso: {{ solicitud.fecha_ingreso | date: 'yyyy-MM-dd' }} <br>
+                                            Fecha ultimo estado: {{ solicitud.fecha_ultimo_estado | date: 'yyyy-MM-dd' }} <br>
+                                            Nombres: {{ solicitud.nombres }} {{ solicitud.apellidos }} <br>
+                                            Identificación: {{
+                                            solicitud.identificacion }}
+                                        </div>
+                                        <!-- Labels -->
+                                        <ng-container>
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.serial_producto }}
+                                                    </div>
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.marca_producto }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="text-sm font-medium text-red-500" *ngIf="validarAlertaAtencion(solicitud)">
+                                            ALERTA, LA SOLICITUD NO HA SIDO ATENDIDA EN 72 HORAS
+                                        </div>
+                                    </a>
+                                </ng-container>
+                                <ng-container *ngIf="panelSolicitud.enviadas.length == 0">
+                                    <div class="mx-1 mb-2 py-0.5 px-3">
+                                        Sin solicitudes
+                                    </div>
+                                </ng-container>
+                                <div class="mx-1 mb-2 py-0.5 px-3">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
+
+                        <div class="flex items-center justify-between">
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                Solicitudes evaluadas
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{ panelSolicitud.evaluadas.length }}
+                            </div>
+                            <div class="ml-1 mt-1">
+                                <mat-icon class="w-8 h-8 min-h-8 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+
+                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border mb-10">
+                            <div class="p-3 pb-0">
+
+                                <!-- Card -->
+                                <ng-container
+                                    *ngFor="let solicitud of panelSolicitud.evaluadas; let i = index; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                        style="cursor: pointer;" (click)="editSolicitud(solicitud)">
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">
+                                            Código: {{ solicitud.id }}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-500">
+                                            Serial: {{ solicitud.codigo_producto }} <br>
+                                            Fecha ingreso: {{ solicitud.fecha_ingreso | date: 'yyyy-MM-dd' }} <br>
+                                            Fecha ultimo estado: {{ solicitud.fecha_ultimo_estado | date: 'yyyy-MM-dd' }} <br>
+                                            Nombres: {{ solicitud.nombres }} {{ solicitud.apellidos }} <br>
+                                            Identificación: {{
+                                            solicitud.identificacion }}
+                                        </div>
+                                        <!-- Labels -->
+                                        <ng-container>
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.serial_producto }}
+                                                    </div>
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.marca_producto }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="text-sm font-medium text-red-500" *ngIf="validarAlertaAtencion(solicitud)">
+                                            ALERTA, LA SOLICITUD NO HA SIDO ATENDIDA EN 72 HORAS
+                                        </div>
+                                    </a>
+                                </ng-container>
+                                <ng-container *ngIf="panelSolicitud.evaluadas.length == 0">
+                                    <div class="mx-1 mb-2 py-0.5 px-3">
+                                        Sin solicitudes
+                                    </div>
+                                </ng-container>
+                                <div class="mx-1 mb-2 py-0.5 px-3">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
+
+                        <div class="flex items-center justify-between">
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                Solicitudes asignadas
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{ panelSolicitud.asignadas.length }}
+                            </div>
+                            <div class="ml-1 mt-1">
+                                <mat-icon class="w-8 h-8 min-h-8 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+
+                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border mb-10">
+                            <div class="p-3 pb-0">
+
+                                <!-- Card -->
+                                <ng-container
+                                    *ngFor="let solicitud of panelSolicitud.asignadas; let i = index; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                        style="cursor: pointer;" (click)="editSolicitud(solicitud)">
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">
+                                            Código: {{ solicitud.id }}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-500">
+                                            Serial: {{ solicitud.codigo_producto }} <br>
+                                            Fecha ingreso: {{ solicitud.fecha_ingreso | date: 'yyyy-MM-dd' }} <br>
+                                            Fecha ultimo estado: {{ solicitud.fecha_ultimo_estado | date: 'yyyy-MM-dd' }} <br>
+                                            Nombres: {{ solicitud.nombres }} {{ solicitud.apellidos }} <br>
+                                            Identificación: {{
+                                            solicitud.identificacion }}
+                                        </div>
+                                        <!-- Labels -->
+                                        <ng-container>
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.serial_producto }}
+                                                    </div>
+                                                    <div
+                                                        class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                        {{ solicitud.marca_producto }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="text-sm font-medium text-red-500" *ngIf="validarAlertaAtencion(solicitud)">
+                                            ALERTA, LA SOLICITUD NO HA SIDO ATENDIDA EN 72 HORAS
+                                        </div>
+                                    </a>
+                                </ng-container>
+                                <ng-container *ngIf="panelSolicitud.asignadas.length == 0">
+                                    <div class="mx-1 mb-2 py-0.5 px-3">
+                                        Sin solicitudes
+                                    </div>
+                                </ng-container>
+                                <div class="mx-1 mb-2 py-0.5 px-3">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </ng-container>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Invisible router-outlet for ScrumboardCard component -->
+<div class="absolute invisible w-0 h-0 opacity-0 pointer-events-none">
+    <router-outlet></router-outlet>
+</div>

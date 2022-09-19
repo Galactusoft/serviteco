@@ -1,0 +1,225 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div *ngIf="!usuarioRegistro"
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium">
+                <div>
+                    <a class="inline-flex items-center leading-6 text-primary hover:underline" [routerLink]="['..']">
+                        <span class="inline-flex items-center">
+                            <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:arrow-sm-left'">
+                            </mat-icon>
+                            <span class="ml-1.5 font-medium leading-5">Volver a los registros</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    {{ titulo }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="bg-card" *ngIf="usuarioRegistro">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
+                <!-- Avatar and name -->
+                <div class="flex flex-auto items-center min-w-0">
+                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                        {{ titulo }}
+                    </h2>
+                </div>
+                <!-- Actions -->
+                <div class="flex items-center mt-6 sm:mt-0 sm:ml-5 space-x-3 w-90">
+                    <img src="/assets/images/serviteco/Logo_Serviteco_Texto.png">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6">
+
+        <div>
+
+            <!-- Advanced search form -->
+            <form class="flex flex-col items-start w-full p-8 space-y-4 rounded-2xl shadow overflow-hidden bg-card"
+                [formGroup]="contactenosForm">
+
+                <div class="grid sm:grid-cols-6 gap-6 w-full">
+
+                    <ng-container *ngIf="listaTiposIdentificacion$ | async as tiposIdentificacion">
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Tipo Identificación</mat-label>
+                                <mat-select formControlName="id_tipo_identificacion">
+                                    <mat-option *ngFor="let tipoIdent of tiposIdentificacion" [value]="tipoIdent.id">
+                                        {{ tipoIdent.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Identificación</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                            </mat-icon>
+                            <input [formControlName]="'identificacion'" matInput required
+                                maxlength="300" (change)="consultarUsuarioFinal($event.target.value)">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Nombres</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                            </mat-icon>
+                            <input [formControlName]="'nombres'" matInput required
+                                maxlength="300">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Apellidos</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                            </mat-icon>
+                            <input [formControlName]="'apellidos'" matInput required
+                                maxlength="300">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Correo</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                            </mat-icon>
+                            <input [formControlName]="'correo'" matInput required
+                                maxlength="300">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Teléfono</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                            </mat-icon>
+                            <input [formControlName]="'telefono'" matInput required
+                                maxlength="300">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full" style="margin-top: 25px !important;">
+
+                    <div class="sm:col-span-4">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Mensaje</mat-label>
+                            <textarea matInput [formControlName]="'mensaje'" cdkTextareaAutosize
+                                [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full" style="margin-top: 25px !important;">
+
+                    <div class="sm:col-span-4" *ngIf="editMode && !usuarioFinal">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Respuesta</mat-label>
+                            <textarea matInput [formControlName]="'respuesta'" cdkTextareaAutosize
+                                [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;" *ngIf="editMode">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Cargue de imagenes</div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0">
+                        <!-- Avatar and name -->
+                        <div class="flex flex-auto items-center min-w-0">
+
+                            <div class="flex flex-col min-w-0 ml-4">
+
+                            </div>
+                        </div>
+                        <!-- Actions -->
+                        <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+                            <button class="fuse-mat-button-rounded bg-accent-700" mat-flat-button [color]="'accent'"
+                                onclick="document.getElementById('fileToUpload').click()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2">Cargar foto</span>
+                            </button>
+                            <input id="fileToUpload" type="file" (change)="adjuntarEvidencia($event)"
+                                style="display:none;">
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-wrap -m-2 mt-2">
+                        <ng-container *ngFor="let column of imagenes; let i = index; trackBy:trackByFn">
+                            <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                                <a class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8" mat-icon-button>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x-circle'"
+                                        (click)="deleteEvidencia(i, column.id)"></mat-icon>
+                                </a>
+                                <a class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                                    (click)="mostrarEvidencia(i)">
+                                    <div class="aspect-w-9 aspect-h-6">
+                                        <div class="flex items-center justify-center">
+                                            <!-- Icon -->
+                                            <img [src]="column.imagen" height="30">
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                        <ng-container>
+                                            <div class="text-secondary truncate">{{ column.name }}</div>
+                                        </ng-container>
+                                    </div>
+                                </a>
+                            </div>
+                        </ng-container>
+                    </div>
+
+
+
+                </fuse-card>
+
+                <ng-container>
+                    <div class="flex items-center justify-end w-full mt-20" style="margin-top: 50px !important;">
+
+                        <button type="button" mat-button [routerLink]="['..']" [matTooltip]="'Cancelar'"
+                            *ngIf="!usuarioRegistro">Volver</button>
+
+                        <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                            [disabled]="contactenosForm.invalid" [matTooltip]="'Guardar'" (click)="updateContactenos()">Guardar
+                        </button>
+
+                    </div>
+                </ng-container>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

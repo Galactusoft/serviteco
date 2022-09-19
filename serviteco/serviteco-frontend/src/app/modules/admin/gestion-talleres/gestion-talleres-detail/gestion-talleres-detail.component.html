@@ -1,0 +1,251 @@
+<div class="flex flex-col w-full">
+
+    <ng-container>
+
+        <!-- Header -->
+        <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <!-- Background -->
+            <ng-container>
+                <img class="absolute inset-0 object-cover w-full h-full" src="assets/images/serviteco/slide2.jpg">
+            </ng-container>
+            <!-- Close button -->
+            <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+                <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
+                    <mat-icon class="text-black" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- Taller -->
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+
+                <form [formGroup]="tallerForm">
+
+                    <!-- Avatar and actions -->
+                    <div class="flex flex-auto items-end -mt-16">
+                        <!-- Avatar -->
+                        <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
+                            style="background-color: white;">
+                            <mat-icon *ngIf="!imagenBase64" class="icon-size-20" [svgIcon]="'feather:tool'">
+                            </mat-icon>
+                            <div>
+                                <img [src]="imagenBase64">
+                            </div>
+                        </div>
+                        <!-- Actions -->
+                        <ng-container *ngIf="!editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(true)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                    <span class="ml-2">Editar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(false)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                    <span class="ml-2">Cancelar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>NIT</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'nit'" matInput required [readonly]="!editMode"
+                                        maxlength="300" appNumberOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Nombre</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'nombre'" matInput required [readonly]="!editMode"
+                                        maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Direccion</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'direccion'" matInput required [readonly]="!editMode"
+                                        maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Teléfono</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'telefono'" matInput required [readonly]="!editMode"
+                                        maxlength="300" appNumberOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Correo</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'correo'" matInput required [readonly]="!editMode"
+                                        maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Correo contabilidad</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'correo_contabilidad'" matInput required
+                                        [readonly]="!editMode" maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Ubicación geográfica</mat-label>
+                                    <input matInput [formControlName]="'ubicacion'" [spellcheck]="false" readonly>
+                                    <button mat-icon-button (click)="openMapa()" matSuffix [disabled]="!editMode">
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'health_and_safety'" matPrefix>
+                                    </mat-icon>
+                                    <mat-select [formControlName]="'estado'" required [disabled]="!editMode">
+                                        <mat-option [value]="'1'">ACTIVO</mat-option>
+                                        <mat-option [value]="'0'">INACTIVO</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
+                                    <mat-label>Adjuntar logo</mat-label>
+                                    <input formControlName="foto" matInput type="text" readonly class="uppercase">
+                                    <button mat-icon-button matSuffix [disabled]="!editMode"
+                                        onclick="document.getElementById('fileToUpload').click()">
+                                        <mat-icon>add_photo_alternate</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <input id="fileToUpload" type="file" (change)="adjuntarFoto($event)"
+                                    style="display:none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+
+                            <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                                style="width: inherit; margin-top: 40px !important;">
+                                <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                                    <div
+                                        class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                                        Importadores autorizados
+                                    </div>
+                                </div>
+
+                                <div class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
+                                    (click)="openBuscadorImportador()" *ngIf="editMode">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                    <span class="ml-2 font-medium text-secondary group-hover:underline">Asociar una
+                                        importadora</span>
+                                </div>
+
+                                <ng-container *ngIf="listadoImportadoras.length == 0">
+                                    No existen importadoras autorizadas asociadas al taller
+                                </ng-container>
+
+                                <ng-container *ngFor="let marca of listadoImportadoras; let i = index; trackBy: trackByFn">
+
+                                    <!-- Divider -->
+                                    <div class="col-span-12 my-4 border-b"></div>
+
+                                    <!-- Item -->
+                                    <div class="col-span-8 text-lg font-medium">
+                                        <a class="top-1.5 right-1.5 w-8 h-8 min-h-8" mat-icon-button
+                                            style="margin-right: -12px;margin-left: 12px;" [color]="'warn'">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"
+                                                (click)="deleteImportadora(i)"></mat-icon>
+                                        </a>
+                                        {{ marca.nombre }}
+                                    </div>
+
+                                </ng-container>
+
+                            </fuse-card>
+
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <ng-container *ngIf="editMode">
+                        <div
+                            class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <!-- Delete -->
+                            <!-- <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteTaller()">
+                                Eliminar
+                            </button> -->
+                            <!-- Cancel -->
+                            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="toggleEditMode(false)">
+                                Cancelar
+                            </button>
+                            <!-- Save -->
+                            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="tallerForm.invalid"
+                                [matTooltip]="'Save'" (click)="updateTaller()">
+                                Guardar
+                            </button>
+                        </div>
+                    </ng-container>
+
+                </form>
+
+
+            </div>
+        </div>
+
+    </ng-container>
+
+</div>

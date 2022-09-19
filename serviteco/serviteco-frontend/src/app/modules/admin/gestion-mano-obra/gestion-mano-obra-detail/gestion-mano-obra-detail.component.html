@@ -1,0 +1,150 @@
+<div class="flex flex-col w-full">
+
+    <ng-container>
+
+        <!-- Header -->
+        <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <!-- Background -->
+            <ng-container>
+                <img class="absolute inset-0 object-cover w-full h-full" src="assets/images/serviteco/slide2.jpg">
+            </ng-container>
+            <!-- Close button -->
+            <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+                <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
+                    <mat-icon class="text-black" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- mano-obra -->
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+
+                <form [formGroup]="manoObraForm">
+
+                    <!-- Avatar and actions -->
+                    <div class="flex flex-auto items-end -mt-16">
+                        <!-- Avatar -->
+                        <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
+                            style="background-color: white;">
+                            <mat-icon class="icon-size-20" [svgIcon]="'heroicons_outline:hand'">
+                            </mat-icon>
+                        </div>
+                        <!-- Actions -->
+                        <ng-container *ngIf="!editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(true)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                    <span class="ml-2">Editar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="editMode">
+                            <div class="flex items-center ml-auto mb-1">
+                                <button mat-stroked-button (click)="toggleEditMode(false)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                    <span class="ml-2">Cancelar</span>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Nombre</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'nombre'" matInput required [readonly]="!editMode"
+                                        maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Descripción</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'descripcion'" matInput required [readonly]="!editMode"
+                                        maxlength="300" class="uppercase">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Valor unitario</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'valor_unitario'" matInput required
+                                        [readonly]="!editMode" maxlength="300" type="number">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Número de minutos hombre</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'horas'" matInput required [readonly]="!editMode"
+                                        maxlength="300" type="number">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-4">
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'health_and_safety'" matPrefix>
+                                    </mat-icon>
+                                    <mat-select [formControlName]="'estado'" required [disabled]="!editMode">
+                                        <mat-option [value]="'1'">ACTIVO</mat-option>
+                                        <mat-option [value]="'0'">INACTIVO</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Actions -->
+                    <ng-container *ngIf="editMode">
+                        <div
+                            class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <!-- Delete -->
+                            <!-- <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deletemano-obra()">
+                                Eliminar
+                            </button> -->
+                            <!-- Cancel -->
+                            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="toggleEditMode(false)">
+                                Cancelar
+                            </button>
+                            <!-- Save -->
+                            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="manoObraForm.invalid"
+                                [matTooltip]="'Save'" (click)="updateManoObra()">
+                                Guardar
+                            </button>
+                        </div>
+                    </ng-container>
+
+                </form>
+
+
+            </div>
+        </div>
+
+    </ng-container>
+
+</div>

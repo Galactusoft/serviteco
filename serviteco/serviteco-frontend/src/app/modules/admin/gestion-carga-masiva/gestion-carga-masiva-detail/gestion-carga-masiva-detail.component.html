@@ -1,0 +1,181 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title and action buttons -->
+            <div class="flex items-center justify-between w-full">
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight leading-8">Carga Masiva</h2>
+                    <div class="font-medium tracking-tight text-secondary">Funcionalidad para realizar el cargue masivo
+                        de productos desde un archivo xlsx</div>
+                </div>
+                <div class="flex items-center ml-6">
+                    <input id="fileToUpload" type="file" (change)="adjuntar($event)" style="display:none;">
+                    <button class="hidden sm:inline-flex ml-3" mat-flat-button [color]="'primary'" (click)="downloadFile()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                        <span class="ml-2">Descargar plantilla</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="w-full p-6">
+
+        <mat-stepper class="example-stepper" linear [orientation]="(stepperOrientation | async)!">
+
+            <mat-step [stepControl]="firstFormGroup" label="Importador">
+                <form [formGroup]="firstFormGroup">
+                    <div class="grid w-full mb-10 mt-5">
+
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Importador</mat-label>
+                                <input matInput [formControlName]="'nombre_importador'" [spellcheck]="false" readonly
+                                    required>
+                                <button mat-icon-button (click)="openBuscadorImportador()" *ngIf="puedeSeleccionarImportador" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+
+                    <div style="float: right;">
+                        <button class="hidden sm:inline-flex ml-3" mat-flat-button matStepperNext [color]="'primary'">
+                            <span>Siguiente</span>
+                            <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:arrow-right'"></mat-icon>
+
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup" label="Marca">
+                <form [formGroup]="secondFormGroup">
+                    <div class="grid w-full mb-10 mt-5">
+
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Marca</mat-label>
+                                <input matInput [formControlName]="'nombre_marca'" [spellcheck]="false" readonly
+                                    required>
+                                <button mat-icon-button (click)="openBuscadorMarcas()" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+
+                    <div style="float: right;">
+                        <button class="hidden sm:inline-flex ml-3" mat-flat-button matStepperNext [color]="'primary'">
+                            <span>Siguiente</span>
+                            <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:arrow-right'"></mat-icon>
+
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="thirdFormGroup" label="Categoría">
+
+                <form [formGroup]="thirdFormGroup">
+                    <div class="grid w-full mb-10 mt-5">
+
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Categoría</mat-label>
+                                <input matInput [formControlName]="'nombre_tipo_producto'" [spellcheck]="false" readonly
+                                    required>
+                                <button mat-icon-button (click)="openBuscadorCategoria()" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+
+                    <div style="float: right;">
+                        <button class="hidden sm:inline-flex ml-3" mat-flat-button matStepperNext [color]="'primary'">
+                            <span>Siguiente</span>
+                            <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:arrow-right'"></mat-icon>
+
+                        </button>
+                    </div>
+                </form>
+
+            </mat-step>
+            <mat-step [stepControl]="fourFormGroup" label="Referencia">
+
+                <form [formGroup]="fourFormGroup">
+                    <div class="grid w-full mb-10 mt-5">
+
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Referencia</mat-label>
+                                <input matInput [formControlName]="'nombre_referencia'" [spellcheck]="false" readonly
+                                    required>
+                                <button mat-icon-button (click)="openBuscadorReferencias()" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+
+                    <div style="float: right;">
+                        <button class="hidden sm:inline-flex ml-3" mat-flat-button matStepperNext [color]="'primary'">
+                            <span>Siguiente</span>
+                            <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:arrow-right'"></mat-icon>
+
+                        </button>
+                    </div>
+                </form>
+
+            </mat-step>
+            <mat-step label="Adjuntar archivo">
+
+                <form [formGroup]="fiveFormGroup">
+                    <div class="grid w-full mb-10 mt-5">
+
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Adjuntar archivo</mat-label>
+                                <input formControlName="nombre_archivo" matInput type="text" readonly>
+                                <button mat-icon-button matSuffix
+                                    onclick="document.getElementById('fileToUpload').click()">
+                                    <mat-icon>upload</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <input id="fileToUpload" type="file" (change)="adjuntar($event)" style="display:none;">
+                        </div>
+
+                    </div>
+
+                    <div class="p-6 sm:p-10" [innerHTML]="console"></div>
+
+
+                    <div style="float: right;">
+                        <button class="hidden sm:inline-flex ml-3" mat-flat-button [color]="'primary'" (click)="realizarCargaMasiva()">
+                            <span>Iniciar carga</span>
+                            <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:arrow-right'"></mat-icon>
+                        </button>
+                    </div>
+                </form>
+
+            </mat-step>
+
+        </mat-stepper>
+
+    </div>
+</div>

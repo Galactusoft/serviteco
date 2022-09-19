@@ -1,0 +1,338 @@
+<div class="absolute inset-0 min-w-0 text-center overflow-auto print:overflow-visible" cdkScrollable>
+
+
+
+    <!-- Main -->
+    <div class="inline-block p-6 sm:p-10 text-left print:p-0">
+
+        <!-- Title and action buttons -->
+        <div class="flex items-center justify-between w-full">
+            <div>
+                <div class="text-3xl font-semibold tracking-tight leading-8">Detalle del producto {{ producto.serial }}
+                </div>
+                <div class="font-medium tracking-tight text-secondary">Información del producto, propietarios y
+                    solicitudes</div>
+            </div>
+            <div class="flex items-center ml-6">
+                <button class="hidden sm:inline-flex" mat-flat-button [color]="'primary'" (click)="registrarSolicitud()"
+                    *ngIf="puedeRegistrarRecepcionSolicitudes && producto.id_distribuidor != null && producto.usuario != null">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                    <span class="ml-2">Registrar solicitud</span>
+                </button>
+                <button class="hidden sm:inline-flex ml-3" mat-flat-button [color]="'primary'" (click)="editarProducto()"
+                    *ngIf="puedeRegistrarRecepcionSolicitudes">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                    <span class="ml-2">Editar</span>
+                </button>
+                <button class="hidden sm:inline-flex ml-3" mat-stroked-button (click)="openPDF()"
+                    *ngIf="!usuarioTallerAutorizado">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                    <span class="ml-2">Descargar hoja de vida</span>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Invoice -->
+        <div class="p-16 rounded-2xl shadow bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent mt-6"
+            style="width: 62rem !important;">
+
+            <div class="flex items-start justify-between">
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <div class="font-medium tracking-tight text-secondary">Serial</div>
+                    <div class="font-medium">{{ producto.serial }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Importado por</div>
+                    <div class="font-medium">{{ producto.nombre_importador }}</div>
+                    <ng-container *ngIf="!usuarioTallerAutorizado">
+                        <div class="font-medium tracking-tight text-secondary">Vendido por</div>
+                        <div class="font-medium">{{ producto.nombre_distribuidor }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Número de factura</div>
+                        <div class="font-medium">{{ producto.numero_factura }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Fecha de venta</div>
+                        <div class="font-medium">{{ producto.fecha_venta | date: 'yyyy-MM-dd' }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Nombre propietario</div>
+                        <div class="font-medium">{{ producto.nombres_propietario }} {{ producto.apellidos_propietario }}
+                        </div>
+                        <div class="font-medium tracking-tight text-secondary">Número de factura usuario</div>
+                        <div class="font-medium">{{ producto.numero_factura_usuario }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Fecha de venta usuario</div>
+                        <div class="font-medium">{{ producto.fecha_venta_usuario | date: 'yyyy-MM-dd' }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Dirección</div>
+                        <div class="font-medium">{{ usuarioFinal?.direccion }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Correo electrónico</div>
+                        <div class="font-medium">{{ usuarioFinal?.correo }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Teléfono</div>
+                        <div class="font-medium">{{ usuarioFinal?.telefono }}</div>
+                    </ng-container>
+
+                </div>
+                <div class="grid auto-cols-max grid-flow-col gap-x-8 -mr-16 py-6 px-8 rounded-l-2xl bg-accent dark">
+                    <div class="place-self-center w-40">
+                        <img class="w-40" [src]="imagenBase64">
+                    </div>
+                    <div class="pl-10 border-l text-md">
+                        <div class="font-medium tracking-tight text-secondary">Información del producto</div>
+
+                        <div class="font-medium tracking-tight text-secondary mt-4">Categoría</div>
+                        <div class="font-medium">{{ producto.nombre_tipo_producto }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Referencia</div>
+                        <div>{{ producto.nombre_referencia }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Marca</div>
+                        <div>{{ producto.nombre_marca }}</div>
+                        <div class="font-medium tracking-tight text-secondary">--------</div>
+                        <div [ngClass]="{'text-green-500': textoGarantia === 'Garantía vigente',
+                        'text-red-500': textoGarantia === 'Garantía vencida'}">{{ textoGarantia }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1">
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Histórico de dueños del producto</div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-x-1 mt-6">
+                        <!-- Columns -->
+                        <div class="font-medium text-lg text-secondary">Nombre completo</div>
+                        <div class="font-medium text-lg text-secondary">Correo</div>
+                        <div class="font-medium text-lg text-right text-secondary">Telefono</div>
+
+                        <ng-container *ngFor="let usuario of listadoUsuario; let i = index">
+
+                            <!-- Divider -->
+                            <div class="col-span-8 my-4 border-b"></div>
+
+                            <div class="self-center"> {{ usuario.nombres }} {{ usuario.apellidos }} </div>
+
+                            <div class="self-center">
+                                {{ usuario.correo}}
+                            </div>
+
+                            <div class="col-span-2 self-center text-right">{{ usuario.telefono}}</div>
+
+                        </ng-container>
+
+                    </div>
+
+                </fuse-card>
+
+            </div>
+
+            <div class="grid grid-cols-1">
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Histórico de ingresos a SERVITECO</div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-x-1 mt-6">
+                        <!-- Columns -->
+                        <div class="font-medium text-lg text-secondary"># Radicado</div>
+                        <div class="font-medium text-lg text-secondary">Tipo Recepción</div>
+                        <div class="font-medium text-lg text-secondary">Fecha ingreso</div>
+                        <div class="font-medium text-lg text-secondary">Estado Actual</div>
+                        <div class="font-medium text-lg text-secondary" *ngIf="!usuarioConsulta">Ver recepción</div>
+                        <div class="font-medium text-lg text-secondary" *ngIf="usuarioConsulta">Ver historial</div>
+
+                        <ng-container *ngFor="let solicitud of listadoSolicitudes; let i = index">
+
+                            <!-- Divider -->
+                            <div class="col-span-8 my-4 border-b"></div>
+
+                            <div class="self-center"> {{solicitud.id}}</div>
+
+                            <div class="self-center"> {{solicitud.tipo_recepcion}}</div>
+
+                            <div class="self-center"> {{solicitud.fecha_ingreso | date: 'yyyy-MM-dd hh:mm:ss' }}</div>
+
+                            <div class="self-center">
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': solicitud.estado_actual === 'CREADA',
+                                'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': solicitud.estado_actual === 'ENVIADA',
+                            'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-50': solicitud.estado_actual === 'SOLICITUD EVALUADA',
+                            'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': solicitud.estado_actual === 'ASIGNADA',
+                            'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': solicitud.estado_actual === 'SOLUCIONADA'}">
+                                    <span class="leading-relaxed whitespace-nowrap">{{solicitud.estado_actual}}</span>
+                                </span>
+                            </div>
+
+                            <div class="self-center" *ngIf="!usuarioConsulta">
+                                <button class="min-w-10 min-h-7 h-7 px-2 ml-4" mat-stroked-button
+                                    (click)="verDetalleSolicitud(solicitud)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="self-center" *ngIf="usuarioConsulta">
+                                <button class="min-w-10 min-h-7 h-7 px-2 ml-4" mat-stroked-button
+                                    (click)="verHistorialSolicitud(solicitud)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+
+                        </ng-container>
+
+                    </div>
+
+                </fuse-card>
+
+            </div>
+
+            <div class="mt-16">
+                <div class="font-medium">Politica de privacidad de la información.</div>
+                <div class="flex items-start mt-4">
+                    <img class="flex-0 w-10 mt-2" src="assets/images/serviteco/Logo_Serviteco.png">
+                    <div class="ml-6 text-sm text-secondary">
+                        La información aqui suministrada corresponde a registros almacenados en nuestra base de datos
+                        segun el historial
+                        presentado del producto desde su registro en el sistema SERVITECO a la fecha actual de consulta
+                        de esta información, está
+                        prohibida su publicación.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Print Report -->
+        <div class="p-16 rounded-2xl " id="htmlData" #htmlData style="display: none;">
+
+            <table style="width: 100%;margin-bottom: 20px !important;border: 1px solid black;text-align: center;">
+                <tr>
+                    <td rowspan="4" style="width: 20% !important;border: 1px solid black;">
+                        <div class="w-30 mx-auto">
+                            <img src="/assets/images/serviteco/Logo_Serviteco.png">
+                        </div>
+                    </td>
+                    <td rowspan="4" style="width: 60% !important;border: 1px solid black;">
+                        <span>SERVITECO</span><br>
+                        <span>SERVICIOS TÉCNICOS AGROFORESTALES</span>
+                    </td>
+                    <td style="width: 20% !important;border: 1px solid black;"><span
+                            style="margin-top: -5px;">SGD-CC-001</span></td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">Versión 01</td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">27 de agosto de 2022</td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">Página 1 de 1</td>
+                </tr>
+            </table>
+
+            <div class="flex items-start justify-between">
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <div class="font-medium tracking-tight text-secondary">Serial</div>
+                    <div class="font-medium">{{ producto.serial }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Importado por</div>
+                    <div class="font-medium">{{ producto.nombre_importador }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Vendido por</div>
+                    <div class="font-medium">{{ producto.nombre_distribuidor }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Número de factura</div>
+                    <div class="font-medium">{{ producto.numero_factura }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Fecha de venta</div>
+                    <div class="font-medium">{{ producto.fecha_venta | date: 'yyyy-MM-dd' }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Nombre propietario</div>
+                    <div class="font-medium">{{ producto.nombres_propietario }} {{ producto.apellidos_propietario }}
+                    </div>
+                    <div class="font-medium tracking-tight text-secondary">Número de factura usuario</div>
+                    <div class="font-medium">{{ producto.numero_factura_usuario }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Fecha de venta usuario</div>
+                    <div class="font-medium">{{ producto.fecha_venta_usuario | date: 'yyyy-MM-dd' }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Dirección</div>
+                    <div class="font-medium">{{ usuarioFinal?.direccion }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Correo electrónico</div>
+                    <div class="font-medium">{{ usuarioFinal?.correo }}</div>
+                    <div class="font-medium tracking-tight text-secondary">Teléfono</div>
+                    <div class="font-medium">{{ usuarioFinal?.telefono }}</div>
+
+                </div>
+                <div class="grid auto-cols-max grid-flow-col gap-x-8 -mr-16 py-6 px-8 rounded-l-2xl bg-accent dark">
+                    <div class="place-self-center w-40">
+                        <img class="w-40" [src]="imagenBase64">
+                    </div>
+                    <div class="pl-10 border-l text-md">
+                        <div class="font-medium tracking-tight text-secondary">Información del producto</div>
+
+                        <div class="font-medium tracking-tight text-secondary mt-4">Categoría</div>
+                        <div class="font-medium">{{ producto.nombre_tipo_producto }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Referencia</div>
+                        <div>{{ producto.nombre_referencia }}</div>
+                        <div class="font-medium tracking-tight text-secondary">Marca</div>
+                        <div>{{ producto.nombre_marca }}</div>
+                        <div class="font-medium tracking-tight text-secondary">--------</div>
+                        <div [ngClass]="{'text-green-500': textoGarantia === 'Garantía vigente',
+                        'text-red-500': textoGarantia === 'Garantía vencida'}">{{ textoGarantia }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 40px !important;">
+                <div class="items-center justify-center text-center">
+                    <div style="margin-top: -12px;"
+                        class="items-center h-8 px-8 rounded-full text-center bg-primary text-on-primary">
+                        Histórico de dueños del producto</div>
+                </div>
+
+                <table style="width: 100%;">
+                    <thead>
+                        <th>Nombre completo</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let usuario of listadoUsuario; let i = index">
+                            <td>{{ usuario.nombres }} {{ usuario.apellidos }}</td>
+                            <td>{{ usuario.correo}}</td>
+                            <td>{{ usuario.telefono}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div style="margin-top: 40px !important;">
+                <div class="items-center justify-center text-center">
+                    <div style="margin-top: -12px;"
+                        class="items-center h-8 px-8 rounded-full text-center bg-primary text-on-primary">
+                        Histórico de ingresos a SERVITECO</div>
+                </div>
+
+                <table style="width: 100%;">
+                    <thead>
+                        <th># Radicado</th>
+                        <th>Tipo Recepción</th>
+                        <th>Fecha ingreso</th>
+                        <th>Estado Actual</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let solicitud of listadoSolicitudes; let i = index">
+                            <td>{{solicitud.id}}</td>
+                            <td>{{solicitud.tipo_recepcion}}</td>
+                            <td>{{solicitud.fecha_ingreso | date: 'yyyy-MM-dd hh:mm:ss' }}</td>
+                            <td>{{solicitud.estado_actual}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

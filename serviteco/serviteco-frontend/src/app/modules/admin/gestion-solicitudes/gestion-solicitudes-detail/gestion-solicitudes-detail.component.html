@@ -1,0 +1,1131 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <!-- Title -->
+        <div class="tracking-tight">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium" *ngIf="!externo">
+                <div>
+                    <a class="inline-flex items-center leading-6 text-primary hover:underline"
+                        [routerLink]="linkVolver">
+                        <span class="inline-flex items-center">
+                            <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:arrow-sm-left'">
+                            </mat-icon>
+                            <span class="ml-1.5 font-medium leading-5">{{ labelVolver }}</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                {{ tituloFormulario }}
+            </h2>
+        </div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4" *ngIf="solicitud.id != null">
+            <button class="hidden sm:inline-flex ml-3" mat-stroked-button (click)="openPDF()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                <span class="ml-2">Descargar reporte solicitud</span>
+            </button>
+            <button class="hidden sm:inline-flex ml-3" mat-stroked-button (click)="downloadPOS()" *ngIf="!externo">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:printer'"></mat-icon>
+                <span class="ml-2">Descargar Archivo POS</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6">
+
+        <div>
+
+            <!-- Advanced search form -->
+            <form class="flex flex-col items-start w-full p-8 space-y-4 rounded-2xl shadow overflow-hidden bg-card"
+                [formGroup]="solicitudForm">
+
+                <ng-container *ngIf="!externo">
+                    <ng-container *ngIf="editMode">
+                        <mat-horizontal-stepper [linear]="true" labelPosition="bottom" #stepper
+                            style="margin-bottom: -20px !important;">
+                            <ng-template matStepperIcon="edit">
+                                <mat-icon>done</mat-icon>
+                            </ng-template>
+                            <ng-template matStepperIcon="home">
+                                <mat-icon>done
+                                </mat-icon>
+                            </ng-template>
+                            <ng-template matStepperIcon="form">
+                                <mat-icon>call_made</mat-icon>
+                            </ng-template>
+                            <ng-template matStepperIcon="last">
+                                <mat-icon>done_all</mat-icon>
+                            </ng-template>
+                            <mat-step label="Creada" [completed]="estadoCreada" state="home">
+                            </mat-step>
+                            <mat-step label="En Diagnóstico" [completed]="estadoEnDiagnostico" state="form">
+                            </mat-step>
+                            <mat-step label="Enviada" [completed]="estadoEnviada" state="form">
+                            </mat-step>
+                            <mat-step label="Evaluada" [completed]="estadoEvaluada" state="form">
+                            </mat-step>
+                            <mat-step label="Asignada" [completed]="estadoAsignada" state="form">
+                            </mat-step>
+                            <mat-step label="Solucionada" [completed]="estadoResuelta" state="last">
+                            </mat-step>
+                            <mat-step label="Entregada" [completed]="estadoEntregada" state="last">
+                            </mat-step>
+                        </mat-horizontal-stepper>
+                    </ng-container>
+                </ng-container>
+
+                <div class="grid sm:grid-cols-6 gap-6 w-full">
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label># Ticket</mat-label>
+                            <input matInput [formControlName]="'id'" [spellcheck]="false" readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Serial del producto</mat-label>
+                            <input matInput [formControlName]="'codigo_producto'" [spellcheck]="false" readonly
+                                required>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Referencia</mat-label>
+                            <input [formControlName]="'serial_producto'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Categoria</mat-label>
+                            <input [formControlName]="'marca_producto'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Fecha de venta</mat-label>
+                            <input [formControlName]="'fecha_venta'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Número de Factura</mat-label>
+                            <input [formControlName]="'numero_factura'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Vendido por</mat-label>
+                            <input [formControlName]="'nombre_distribuidor'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Fecha de venta usuario final</mat-label>
+                            <input [formControlName]="'fecha_venta_usuario'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Número de factura usuario final</mat-label>
+                            <input [formControlName]="'numero_factura_usuario'" matInput readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Identificación</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'identificacion'" matInput required
+                                maxlength="100" [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+                    <!-- Company -->
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Nombres</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'nombres'" matInput required max="200"
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Apellidos</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'apellidos'" matInput required
+                                maxlength="200" [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Teléfono</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'telefono'" matInput required
+                                maxlength="100" [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Correo</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'correo'" matInput required maxlength="300"
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Ciudad</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'ciudad'" matInput required maxlength="300"
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Tipo de recepción</mat-label>
+                            <mat-select [formControlName]="'tipo_recepcion'" required [disabled]="editMode">
+                                <mat-option [value]="'Garantía'">Garantía</mat-option>
+                                <mat-option [value]="'Servicio Técnico'">Servicio Técnico</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Fecha de ingreso</mat-label>
+                            <input matInput [matDatepicker]="pickerFechaIngreso" formControlName="fecha_ingreso"
+                                readonly required>
+                            <mat-datepicker-toggle matSuffix [for]="pickerFechaIngreso" [disabled]="editMode">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #pickerFechaIngreso></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Horas de uso</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'horas_uso'" matInput required max="100"
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2" *ngIf="editMode">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Recepción de solicitud creada por</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'nombre_creador'" matInput
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2" *ngIf="editMode">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Transportadora envío repuestos</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'transportadora'" matInput
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-2" *ngIf="editMode">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Número de guia</mat-label>
+                            <input [autocomplete]="'off'" [formControlName]="'numero_guia'" matInput
+                                [readonly]="editMode">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="sm:col-span-6">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Asignación de taller autorizado</mat-label>
+                            <input matInput [formControlName]="'nombre_taller'" [spellcheck]="false" readonly
+                                required>
+                            <button mat-icon-button (click)="openBuscadorTalleresAutorizados()" matSuffix [disabled]="editMode" *ngIf="usuarioSeleccionaTaller">
+                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                </mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full" style="margin-top: 25px !important;">
+
+                    <div class="sm:col-span-4">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Descripción de la falla</mat-label>
+                            <textarea matInput [formControlName]="'descripcion_falla'" cdkTextareaAutosize
+                                [readonly]="editMode" [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000"
+                                required></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <mat-divider class="mt-6 mb-10"></mat-divider>
+
+                <ng-container *ngIf="!externo || historialSolicitud">
+                    <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                        style="width: inherit;" *ngIf="editMode">
+                        <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                            <div
+                                class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                                Bitácora Solicitud</div>
+                        </div>
+                        <ng-container *ngIf="loadBitacora">
+                            <ng-container *ngIf="listadoBitacora.length > 0">
+                                <div class="grid">
+                                    <!-- Header -->
+                                    <div class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                        matSort matSortDisableClear>
+
+                                        <div [mat-sort-header]="'fecha_sistema'">
+                                            Fecha
+                                        </div>
+
+                                        <div [mat-sort-header]="'estado'">
+                                            Estado
+                                        </div>
+
+                                        <div [mat-sort-header]="'usuario'">
+                                            Usuario
+                                        </div>
+
+                                        <div [mat-sort-header]="'cargo'">
+                                            Cargo
+                                        </div>
+
+                                        <div [mat-sort-header]="'company'">
+                                            Empresa
+                                        </div>
+
+                                        <div [mat-sort-header]="'usuario_asignado'">
+                                            Usuario Asignado
+                                        </div>
+
+                                        <div [mat-sort-header]="'cargo_asignado'">
+                                            Cargo Usuario Asignado
+                                        </div>
+
+                                        <div [mat-sort-header]="'company_asignado'">
+                                            Empresa Usuario Asignado
+                                        </div>
+
+                                        <div [mat-sort-header]="'respuesta'">
+                                            Respuesta
+                                        </div>
+
+                                    </div>
+                                    <!-- Rows -->
+                                    <ng-container *ngFor="let bitacora of listadoBitacora; trackBy: trackByFn">
+                                        <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                            <div>
+                                                {{bitacora.fecha_sistema}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.estado}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.usuario_asignado}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.cargo_asignado}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.company_asignado}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.usuario}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.cargo}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.company}}
+                                            </div>
+
+                                            <div>
+                                                {{bitacora.respuesta}}
+                                            </div>
+
+
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                    </fuse-card>
+                </ng-container>
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;"
+                    *ngIf="(solicitud?.id_estado_actual == '2' || solicitud?.id_estado_actual == '3'  || solicitud?.id_estado_actual == '4'  || solicitud?.id_estado_actual == '5' || solicitud?.id_estado_actual == '6' || solicitud?.id_estado_actual == '7')">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Diagnóstico de la solicitud</div>
+                    </div>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full mb-4">
+                        <mat-label>Diagnóstico de la falla</mat-label>
+                        <textarea matInput [formControlName]="'diagnostico_falla'" cdkTextareaAutosize
+                            [readonly]="externo || usuarioSoloConsulta" [cdkAutosizeMinRows]="7"
+                            [cdkAutosizeMaxRows]="7" maxlength="2000" required></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full mb-4">
+                        <mat-label>Es garantia ?</mat-label>
+                        <mat-select [formControlName]="'es_garantia'" required
+                            [disabled]="externo || usuarioSoloConsulta">
+                            <mat-option [value]="'SI'">SI</mat-option>
+                            <mat-option [value]="'NO'">NO</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-label>Observación del diagnostico</mat-label>
+                        <textarea matInput [formControlName]="'observacion_diagnostico'" cdkTextareaAutosize
+                            [readonly]="externo || usuarioSoloConsulta" [cdkAutosizeMinRows]="7"
+                            [cdkAutosizeMaxRows]="7" maxlength="2000" required></textarea>
+                    </mat-form-field>
+
+                </fuse-card>
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;"
+                    *ngIf="(solicitud.id != null && (solicitud?.id_estado_actual == '1' || solicitud?.id_estado_actual == '2' || solicitud?.id_estado_actual == '3'  || solicitud?.id_estado_actual == '4'  || solicitud?.id_estado_actual == '5' || solicitud?.id_estado_actual == '6' || solicitud?.id_estado_actual == '7'))">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Cargue de evidencias</div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0">
+                        <!-- Avatar and name -->
+                        <div class="flex flex-auto items-center min-w-0">
+
+                            <div class="flex flex-col min-w-0 ml-4">
+
+                            </div>
+                        </div>
+                        <!-- Actions -->
+                        <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3"
+                            *ngIf="!externo && !usuarioSoloConsulta">
+                            <button class="fuse-mat-button-rounded bg-accent-700" mat-flat-button [color]="'accent'"
+                                onclick="document.getElementById('fileToUpload').click()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2">Cargar foto</span>
+                            </button>
+                            <input id="fileToUpload" type="file" (change)="adjuntarEvidencia($event)"
+                                style="display:none;">
+                        </div>
+                    </div>
+
+
+                    <div class="flex flex-wrap -m-2 mt-2">
+                        <ng-container *ngFor="let column of imagenes; let i = index; trackBy:trackByFn">
+                            <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                                <a class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8" mat-icon-button
+                                    *ngIf="!externo && !usuarioSoloConsulta">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x-circle'"
+                                        (click)="deleteEvidencia(i, column.id)"></mat-icon>
+                                </a>
+                                <a class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                                    (click)="mostrarEvidencia(i)">
+                                    <div class="aspect-w-9 aspect-h-9">
+                                        <div class="flex items-center justify-center">
+                                            <!-- Icon -->
+                                            <img [src]="column.imagen" style="max-height: 6rem;">
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                        <ng-container>
+                                            <div class="text-secondary truncate">{{ column.name }}</div>
+                                        </ng-container>
+                                    </div>
+                                </a>
+                            </div>
+                        </ng-container>
+                    </div>
+
+
+
+                </fuse-card>
+
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;" *ngIf="(solicitud?.id_estado_actual != '1')">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Cotización de solicitud de repuestos y mano de obra {{ solicitud?.tipo_recepcion ==
+                            'Garantía' ? 'por garantía' : 'servicio técnico "POR NO GARANTÍA"' }}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0">
+                        <!-- Avatar and name -->
+                        <div class="flex flex-auto items-center min-w-0">
+
+                            <div class="flex flex-col min-w-0 ml-4">
+                                <div class="flex items-center">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+                                    <div class="ml-1.5 leading-6 truncate text-secondary">
+                                        {{ estadoCotizacion }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Actions -->
+                        <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3"
+                            *ngIf="!externo && !usuarioSoloConsulta">
+                            <button class="fuse-mat-button-rounded bg-accent-700" mat-flat-button [color]="'accent'"
+                                (click)="openBuscadorRepuestos()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2">Repuesto</span>
+                            </button>
+                            <button class="fuse-mat-button-rounded" mat-flat-button [color]="'primary'"
+                                (click)="openBuscadorManoObra()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2">Mano de obra</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-x-1 mt-12">
+                        <!-- Columns -->
+                        <div class="col-span-7 font-medium text-md text-secondary">REPUESTO</div>
+                        <div class="font-medium text-md text-right text-secondary">CANTIDAD</div>
+                        <div class="font-medium text-md text-right text-secondary">PRECIO</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">OBSERVACIONES</div>
+                        <div class="font-medium text-md text-right text-secondary">TOTAL</div>
+
+                        <ng-container *ngFor="let repuesto of listadoRepuestos; let i = index; trackBy: trackByFn">
+
+                            <!-- Divider -->
+                            <div class="col-span-12 my-4 border-b"></div>
+
+                            <!-- Item -->
+                            <div class="col-span-7 text-lg font-medium">
+                                <a class="top-1.5 right-1.5 w-8 h-8 min-h-8" mat-icon-button
+                                    style="margin-right: -12px;" [color]="'warn'">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"
+                                        (click)="deleteRepuesto(i)"></mat-icon>
+                                </a>
+                                {{ repuesto.nombre }}
+                            </div>
+                            <div class="self-center text-right" *ngIf="!externo">
+                                <input matInput value="1" min="1" minlength="1" type="number"
+                                    value="{{repuesto.cantidad}}"
+                                    (change)="onChangeCantidadRepuesto($event.target.value, repuesto, i)"
+                                    class="self-center text-right" style="margin-left: 5px !important;">
+                            </div>
+                            <div class="self-center text-right" *ngIf="externo">
+                                {{ repuesto.cantidad }}
+                            </div>
+                            <div class="self-center text-right" *ngIf="!externo">
+                                <input matInput value="1" min="1" minlength="1" type="number"
+                                    value="{{repuesto.valor_unitario}}"
+                                    (change)="onChangeValorUnitarioRepuesto($event.target.value, repuesto, i)"
+                                    class="self-center text-right" style="margin-left: 5px !important;">
+                            </div>
+                            <div class="self-center text-right" *ngIf="externo">
+                                {{ repuesto.valor_unitario | currency }}
+                            </div>
+
+                            <div class="col-span-2 self-center text-right" *ngIf="!externo">
+                                <input matInput type="text"
+                                    value="{{repuesto.observaciones}}"
+                                    (change)="onChangeObservacionesRepuesto($event.target.value, repuesto, i)"
+                                    class="self-center text-right" style="margin-left: 5px !important;">
+                            </div>
+                            <div class="col-span-2 self-center text-right" *ngIf="externo">
+                                {{ repuesto.observaciones }}
+                            </div>
+                            <div class="self-center text-right">{{ repuesto.total | currency }}</div>
+
+                        </ng-container>
+
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-x-1 mt-16">
+                        <!-- Columns -->
+                        <div class="col-span-7 font-medium text-md text-secondary">MANO DE OBRA</div>
+                        <div class="font-medium text-md text-right text-secondary">CANTIDAD</div>
+                        <div class="font-medium text-md text-right text-secondary">PRECIO</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">OBSERVACIONES</div>
+                        <div class="font-medium text-md text-right text-secondary">TOTAL</div>
+
+                        <ng-container *ngFor="let manoObra of listadoManoObra; let i = index; trackBy: trackByFn">
+
+                            <!-- Divider -->
+                            <div class="col-span-12 my-4 border-b"></div>
+
+                            <!-- Item -->
+                            <div class="col-span-7 text-lg font-medium">
+                                <a class="top-1.5 right-1.5 w-8 h-8 min-h-8" mat-icon-button
+                                    style="margin-right: -12px;" [color]="'warn'">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"
+                                        (click)="deleteManoObra(i)"></mat-icon>
+                                </a>
+                                {{ manoObra.nombre }}
+                            </div>
+                            <div class="self-center text-right" *ngIf="externo">
+                                {{ manoObra.cantidad }}
+                            </div>
+                            <div class="self-center text-right" *ngIf="!externo">
+                                <input matInput value="1" min="1" minlength="1" type="number"
+                                    value="{{manoObra.cantidad}}"
+                                    (change)="onChangeCantidadManoObra($event.target.value, manoObra, i)"
+                                    class="self-center text-right" style="margin-left: 5px !important;">
+                            </div>
+                            <div class="self-center text-right"> {{ manoObra.valor_unitario | currency }} </div>
+                            <div class="col-span-2 self-center text-right" *ngIf="!externo">
+                                <input matInput type="text"
+                                    value="{{manoObra.observaciones}}"
+                                    (change)="onChangeObservacionesManoObra($event.target.value, manoObra, i)"
+                                    class="self-center text-right" style="margin-left: 5px !important;">
+                            </div>
+                            <div class="col-span-2 self-center text-right" *ngIf="externo">
+                                {{ manoObra.observaciones }}
+                            </div>
+                            <div class="self-center text-right">{{ manoObra.total | currency }}</div>
+
+                        </ng-container>
+
+                        <!-- Spacer -->
+                        <div class="col-span-12 mt-16"></div>
+
+                        <!-- Total -->
+                        <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">TOTAL
+                        </div>
+                        <div class="col-span-2 text-right text-2xl font-medium">{{ total | currency }}</div>
+                    </div>
+
+                    <div class="flex flex-auto items-center min-w-0">
+
+                        <div class="flex flex-col min-w-0 mt-8">
+                            <div class="flex items-center">
+                                <div class="leading-6 truncate text-secondary" style="font-weight: bold; text-decoration: underline;">
+                                    Estos precios no incluyen impuestos, valores antes de IVA.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </fuse-card>
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;" *ngIf="externo">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Respuesta a solicitud</div>
+                    </div>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full mb-4">
+                        <mat-label>Respuesta a solicitud ?</mat-label>
+                        <mat-select [formControlName]="'respuesta'" required [disabled]="historialSolicitud">
+                            <mat-option [value]="'Se aprueba solicitud de garantia'">Se aprueba solicitud de garantía
+                            </mat-option>
+                            <mat-option [value]="'No se aprueba solicitud de garantía'">No se aprueba solicitud de
+                                garantía</mat-option>
+                            <mat-option [value]="'Se otorga cortesia comercial'">Se otorga cortesia comercial
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full mb-4">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea matInput [formControlName]="'observacion_respuesta'" cdkTextareaAutosize
+                            [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" required [readonly]="historialSolicitud"></textarea>
+                    </mat-form-field>
+
+                    <div class="grid sm:grid-cols-6 gap-6 w-full">
+
+                        <div class="sm:col-span-3" *ngIf="editMode">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Transportadora envío repuestos</mat-label>
+                                <input [autocomplete]="'off'" [formControlName]="'transportadora'" matInput [readonly]="historialSolicitud">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-3" *ngIf="editMode">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Número de guia</mat-label>
+                                <input [autocomplete]="'off'" [formControlName]="'numero_guia'" matInput [readonly]="historialSolicitud">
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                </fuse-card>
+
+                <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                    style="width: inherit; margin-top: 40px !important;"
+                    *ngIf="!externo && (solicitud?.id_estado_actual == '4'  || solicitud?.id_estado_actual == '5' || solicitud?.id_estado_actual == '6' || solicitud?.id_estado_actual == '7')">
+                    <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                        <div
+                            class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                            Respuesta de la importadora</div>
+                    </div>
+
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea matInput [formControlName]="'observacion_respuesta'" cdkTextareaAutosize
+                            [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" readonly></textarea>
+                    </mat-form-field>
+
+                </fuse-card>
+
+                <mat-divider class="mt-6 mb-10"></mat-divider>
+
+                <ng-container *ngIf="!externo && !usuarioSoloConsulta && (solicitud?.id_estado_actual == '1')">
+                    <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                        style="width: inherit;" *ngIf="editMode">
+                        <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                            <div
+                                class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                                Asignación interna para diagnóstico</div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-6 gap-6 w-full mb-6">
+
+                            <div class="sm:col-span-6">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Funcionario</mat-label>
+                                    <input matInput [formControlName]="'nombre_funcionario'" [spellcheck]="false"
+                                        readonly required>
+                                    <button mat-icon-button (click)="openBuscadorFuncionarios()" matSuffix>
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Mensaje para funcionario asignado</mat-label>
+                            <textarea matInput [formControlName]="'respuesta_asignacion'" cdkTextareaAutosize
+                                [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" required></textarea>
+                        </mat-form-field>
+
+                    </fuse-card>
+                </ng-container>
+
+                <mat-divider class="mt-6 mb-10"></mat-divider>
+
+                <ng-container
+                    *ngIf="!externo && !usuarioSoloConsulta && (solicitud?.id_estado_actual == '4' || solicitud?.id_estado_actual == '5')">
+                    <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
+                        style="width: inherit;" *ngIf="editMode">
+                        <div class="absolute inset-x-0 -top-4 flex items-center justify-center">
+                            <div
+                                class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bg-primary text-on-primary">
+                                Asignación interna de SERVITECO</div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-6 gap-6 w-full mb-6">
+
+                            <div class="sm:col-span-4">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Funcionario</mat-label>
+                                    <input matInput [formControlName]="'nombre_funcionario'" [spellcheck]="false"
+                                        readonly required>
+                                    <button mat-icon-button (click)="openBuscadorFuncionarios()" matSuffix>
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-select [formControlName]="'id_estado_actual'" required>
+                                        <mat-option [value]="'5'" *ngIf="puedeAsignar">Asignada</mat-option>
+                                        <mat-option [value]="'6'">Solucionada</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Mensaje para funcionario asignado</mat-label>
+                            <textarea matInput [formControlName]="'respuesta_asignacion'" cdkTextareaAutosize
+                                [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" required></textarea>
+                        </mat-form-field>
+
+                    </fuse-card>
+                </ng-container>
+
+                <!-- Actions -->
+                <ng-container *ngIf="!externo">
+                    <div class="flex items-center justify-end w-full mt-20" style="margin-top: 50px !important;">
+                        <ng-container *ngIf="false">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Eliminar'" (click)="deleteSolicitud()">
+                                Eliminar
+                            </button>
+                        </ng-container>
+
+                        <button type="button" mat-button [routerLink]="linkVolver"
+                            [matTooltip]="'Cancelar'">Volver</button>
+
+                        <ng-container *ngIf="!externo && !editMode">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="updateSolicitud()">Guardar
+                            </button>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="!externo && !usuarioSoloConsulta && puedeAsignar && solicitud?.id_estado_actual == '3'">
+                            <button class="ml-2" [color]="'warn'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="reenviarCorreo()">Reenviar correo
+                            </button>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="!externo && !usuarioSoloConsulta && puedeAsignar && solicitud?.id_estado_actual == '3'">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="actualizarEnvioDiagnosticoSolicitud()">Modificar
+                            </button>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="!externo && !usuarioSoloConsulta && editMode && (solicitud?.id_estado_actual == '1')">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="asignarSolicitudParaDiagnostico()">Asignar Dx
+                            </button>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="!externo && !usuarioSoloConsulta && editMode && (solicitud?.id_estado_actual == '2')">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="guardarDiagnosticoSolicitud()">Enviar Diagnóstico
+                            </button>
+                        </ng-container>
+                        <ng-container
+                            *ngIf="!externo && !usuarioSoloConsulta && !usuarioSoloConsulta && (solicitud?.id_estado_actual == '4' || solicitud?.id_estado_actual == '5')">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="asignarSolicitud()">Asignar
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="!externo && !usuarioSoloConsulta && (solicitud?.id_estado_actual == '6')">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="updateSolicitudEntregaCliente()">Entregada al cliente
+                            </button>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="externo && solicitud.id_estado_actual == '3'">
+                    <div class="flex items-center justify-end w-full mt-20" style="margin-top: 50px !important;">
+                        <ng-container *ngIf="editMode">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
+                                (click)="AprobarNoAprobarCotizacionSolicitud()">Guardar
+                            </button>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Print Report -->
+    <div class="p-16 rounded-2xl " id="solicitudReport" #solicitudReport style="display: none;">
+
+        <!-- Advanced search form -->
+        <form class="flex flex-col items-start w-full p-8 space-y-4 rounded-2xl" [formGroup]="solicitudForm">
+
+            <table style="width: 100%;margin-bottom: 20px !important;border: 1px solid black;text-align: center;">
+                <tr>
+                    <td rowspan="4" style="width: 20% !important;border: 1px solid black;">
+                        <div class="w-30 mx-auto">
+                            <img src="/assets/images/serviteco/Logo_Serviteco.png">
+                        </div>
+                    </td>
+                    <td rowspan="4" style="width: 60% !important;border: 1px solid black;">
+                        <span>SERVITECO</span><br>
+                        <span>SERVICIOS TÉCNICOS AGROFORESTALES</span>
+                    </td>
+                    <td style="width: 20% !important;border: 1px solid black;"><span
+                            style="margin-top: -5px;">SGD-CC-001</span></td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">Versión 01</td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">27 de agosto de 2022</td>
+                </tr>
+                <tr>
+                    <td style="width: 20% !important;border: 1px solid black;">Página 1 de 1</td>
+                </tr>
+            </table>
+
+            <table style="width: 100%;margin-bottom: 20px !important">
+                <thead>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoCreada">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoCreada">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'"
+                            *ngIf="estadoEnDiagnostico"></mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoEnDiagnostico">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoEnviada">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoEnviada">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoEvaluada">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoEvaluada">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoAsignada">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoAsignada">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoResuelta">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoResuelta">
+                        </mat-icon>
+                    </th>
+                    <th>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:badge-check'" *ngIf="estadoEntregada">
+                        </mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ban'" *ngIf="!estadoEntregada">
+                        </mat-icon>
+                    </th>
+                </thead>
+                <thead>
+                    <th>
+                        Creada
+                    </th>
+                    <th>
+                        En Diagnóstico
+                    </th>
+                    <th>
+                        Enviada
+                    </th>
+                    <th>
+                        Evaluada
+                    </th>
+                    <th>
+                        Asignada
+                    </th>
+                    <th>
+                        Solucionada
+                    </th>
+                    <th>
+                        Entregada
+                    </th>
+                </thead>
+            </table>
+
+            <table style="width: 100%;margin-bottom: 30px !important;text-align: center;">
+                <tbody>
+                    <tr style="font-weight: bold;">
+                        <td># Ticket</td>
+                        <td>Serial del producto</td>
+                        <td>Referencia</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('id').value}}</td>
+                        <td>{{solicitudForm.get('codigo_producto').value}}</td>
+                        <td>{{solicitudForm.get('serial_producto').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Categoría</td>
+                        <td>Fecha de venta</td>
+                        <td>Número de Factura</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('marca_producto').value}}</td>
+                        <td>{{solicitudForm.get('fecha_venta').value}}</td>
+                        <td>{{solicitudForm.get('numero_factura').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Vendido por</td>
+                        <td>Identificación</td>
+                        <td>Nombres</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('nombre_distribuidor').value}}</td>
+                        <td>{{solicitudForm.get('identificacion').value}}</td>
+                        <td>{{solicitudForm.get('nombres').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Apellidos</td>
+                        <td>Teléfono</td>
+                        <td>Correo</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('apellidos').value}}</td>
+                        <td>{{solicitudForm.get('telefono').value}}</td>
+                        <td>{{solicitudForm.get('correo').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Ciudad</td>
+                        <td>Tipo de recepción</td>
+                        <td>Fecha de ingreso</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('ciudad').value}}</td>
+                        <td>{{solicitudForm.get('tipo_recepcion').value}}</td>
+                        <td>{{solicitudForm.get('fecha_ingreso').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Horas de uso</td>
+                        <td>Recepción de solicitud creada por</td>
+                        <td>Transportadora envío repuestos</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('horas_uso').value}}</td>
+                        <td>{{solicitudForm.get('nombre_creador').value}}</td>
+                        <td>{{solicitudForm.get('transportadora').value}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td>Número de guia</td>
+                        <td>Fecha de venta usuario final</td>
+                        <td>Número de factura usuario final</td>
+                    </tr>
+                    <tr>
+                        <td>{{solicitudForm.get('fecha_venta_usuario').value}}</td>
+                        <td>{{solicitudForm.get('numero_factura_usuario').value}}</td>
+                        <td>{{solicitudForm.get('numero_guia').value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 40px !important;width: 100%;">
+                <div class="items-center justify-center text-center">
+                    <div style="margin-top: -12px;"
+                        class="items-center h-8 px-8 rounded-full text-center bg-primary text-on-primary">
+                        Bitácora Solicitud</div>
+                </div>
+
+                <table style="width: 100%;text-align: center;">
+                    <thead>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Usuario</th>
+                        <th>Cargo</th>
+                        <th>Empresa</th>
+                        <th>Usuario Asignado</th>
+                        <th>Cargo Usuario Asignado</th>
+                        <th>Empresa Usuario Asignado</th>
+                        <th>Respuesta</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bitacora of listadoBitacora; trackBy: trackByFn">
+                            <td>{{bitacora.fecha_sistema}}</td>
+                            <td>{{bitacora.estado}}</td>
+                            <td>{{bitacora.usuario_asignado}}</td>
+                            <td>{{bitacora.cargo_asignado}}</td>
+                            <td>{{bitacora.company_asignado}}</td>
+                            <td>{{bitacora.usuario}}</td>
+                            <td>{{bitacora.cargo}}</td>
+                            <td>{{bitacora.company}}</td>
+                            <td>{{bitacora.respuesta}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div style="margin-top: 40px !important;width: 100%;">
+                <div class="items-center justify-center text-center">
+                    <div style="margin-top: -12px;"
+                        class="items-center h-8 px-8 rounded-full text-center bg-primary text-on-primary">
+                        Diagnóstico de la solicitud</div>
+                </div>
+
+                <table style="width: 100%;text-align: center;">
+                    <thead>
+                        <th>Diagnóstico de la falla</th>
+                        <th>Es garantía ?</th>
+                        <th>Observación del diagnóstico</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{solicitudForm.get('diagnostico_falla').value}}</td>
+                            <td>{{solicitudForm.get('es_garantia').value}}</td>
+                            <td>{{solicitudForm.get('observacion_diagnostico').value}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div style="margin-top: 40px !important;width: 100%;">
+                <div class="items-center justify-center text-center">
+                    <div style="margin-top: -12px;"
+                        class="items-center h-8 px-8 rounded-full text-center bg-primary text-on-primary">
+                        Respuesta de la importadora</div>
+                </div>
+
+                <table style="width: 100%;text-align: center;">
+                    <thead>
+                        <th>Observaciones</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{solicitudForm.get('observacion_respuesta').value}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,113 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Buscador de usuarios</div>
+        <button mat-icon-button (click)="cancelar()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+            <!-- Search -->
+            <div class="flex-auto">
+                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput [formControl]="searchCtrl" [placeholder]="'Buscar usuario'">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-table style="margin-top: 5px;" *ngIf="usuarios$ | async as usuarios" #table [dataSource]="dataSource"
+            matSort>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Id
+                </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                    <p class="font-weight-600">
+                        {{usuario.id}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nombres">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Identificación
+                </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                    <p class="font-weight-600 uppercase">
+                        {{usuario.username}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="apellidos">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Ccmpleto
+                </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                    <p class="font-weight-600 uppercase">
+                        {{usuario.nombre_completo}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="correo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Correo
+                </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                    <p class="font-weight-600 uppercase">
+                        {{usuario.correo}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="telefono">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Telefono
+                </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                    <p class="font-weight-600">
+                        {{usuario.telefono}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+            <mat-row *matRowDef="let usuario; columns: displayedColumns;" class="unidad" matRipple
+                style="cursor: pointer;" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !seleccion || seleccion.id !== usuario.id,
+            'bg-primary-100 dark:bg-hover': seleccion && seleccion.id === usuario.id}"
+                (click)="selectUsuario(usuario)">
+            </mat-row>
+
+        </mat-table>
+
+        <div *ngIf="dataSource.filteredData.length === 0">
+            <h2 class="headline m-0 text-center">No existen usuarios</h2>
+        </div>
+
+        <mat-paginator [pageSize]="5" [length]="cantidad">
+        </mat-paginator>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+
+
+            <div class="-ml-2">
+
+            </div>
+
+            <div class="flex items-center mt-4 sm:mt-0">
+                <button class="sm:mx-3" mat-stroked-button (click)="cancelar()">
+                    <span>Cancelar</span>
+                </button>
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" (click)="matDialogRef.close(['accept',seleccion])">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
