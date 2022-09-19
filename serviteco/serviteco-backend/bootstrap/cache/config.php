@@ -190,7 +190,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\framework/cache/data',
+        'path' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -273,7 +273,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'galactus_devel',
+        'database' => 'servitec_prd',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -283,9 +283,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'galactus_devel',
-        'username' => 'galactus_user',
-        'password' => 'galactus_db',
+        'database' => 'servitec_prd',
+        'username' => 'root',
+        'password' => '',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -303,9 +303,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'galactus_devel',
-        'username' => 'galactus_user',
-        'password' => 'galactus_db',
+        'database' => 'servitec_prd',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -318,9 +318,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'galactus_devel',
-        'username' => 'galactus_user',
-        'password' => 'galactus_db',
+        'database' => 'servitec_prd',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -361,12 +361,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\app',
+        'root' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\app/public',
+        'root' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\app/public',
         'url' => '/https://galactusoft.com//storage',
         'visibility' => 'public',
       ),
@@ -384,7 +384,7 @@
     ),
     'links' => 
     array (
-      'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\public\\storage' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\app/public',
+      'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\public\\storage' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -455,13 +455,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -512,7 +512,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -578,7 +578,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\resources\\views/vendor/mail',
+        0 => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -679,7 +679,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\framework/sessions',
+    'files' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -699,9 +699,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\resources\\views',
+      0 => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\resources\\views',
     ),
-    'compiled' => 'C:\\Users\\Alexander Chavez\\git\\galactusoft\\galactusoft\\galactusoft-backend\\storage\\framework\\views',
+    'compiled' => 'C:\\Users\\Alexander Chavez\\git\\serviteco\\serviteco\\serviteco-backend\\storage\\framework\\views',
   ),
   'flare' => 
   array (

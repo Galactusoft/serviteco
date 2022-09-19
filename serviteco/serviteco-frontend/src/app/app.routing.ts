@@ -80,6 +80,7 @@ export const appRoutes: Route[] = [
             { path: 'registro-productos', loadChildren: () => import('app/modules/admin/gestion-productos/gestion-registro-producto.module').then(m => m.GestionRegistroProductosModule) },
             { path: 'gestion-usuario-final', loadChildren: () => import('app/modules/admin/gestion-usuario-final/gestion-usuario-final.module').then(m => m.GestionUsuarioFinalModule) },
             { path: 'gestion-reportes', loadChildren: () => import('app/modules/admin/gestion-reportes/gestion-reportes.module').then(m => m.GestionReportesModule) },
+            { path: 'ayuda-serviteco', loadChildren: () => import('app/modules/admin/gestion-ayuda/gestion-ayuda.module').then(m => m.GestionAyudaModule) },
         ]
     },
 

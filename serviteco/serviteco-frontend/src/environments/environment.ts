@@ -5,6 +5,7 @@
 export const environment = {
     production: false,
     HOST: 'https://serviteco.com.co/api',
+    HOST_LARAVEL: 'http://127.0.0.1:8000/api/v1',
     API_KEY_GOOGLE_MAPS: 'AIzaSyD5h2S1mlcI7_rhBgwAhK5_Nqfg15nFGrc',
     ID_EMPRESA: '2'
 };

@@ -263,9 +263,7 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
     }
 
     consultarData() {
-        console.log("ACAAA")
         const busqueda = this.form.getRawValue();
-        console.log(busqueda.id_importador)
         const paginator = new Paginator();
         paginator.pageIndex = this.pageIndex;
         paginator.pageSize = this.pageSize;

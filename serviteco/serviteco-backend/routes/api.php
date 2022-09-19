@@ -8,6 +8,7 @@ use App\Http\Controllers\V1\MesaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\CategoriaController;
+use App\Http\Controllers\V1\AyudaController;
 
 
 /*
@@ -32,7 +33,16 @@ Route::prefix('v1')->group(function () {
     Route::get('api_get_token/{id}', [AuthController::class, 'api_get_token']);
 
     Route::get('products', [ProductsController::class, 'index']);
-    Route::get('products/{id}', [ProductsController::class, 'show']);
+
+    Route::get('api_get_notificaciones', [ProductsController::class, 'show']);
+
+    // generales
+    Route::post('/ayuda/api_ayudas', [AyudaController::class, 'api_ayudas']);
+    Route::post('/ayuda/api_get_ayuda', [AyudaController::class, 'api_get_ayuda']);
+    Route::post('/ayuda/api_get_file', [AyudaController::class, 'api_get_file']);
+    Route::post('/ayuda/api_upload_file', [AyudaController::class, 'api_upload_file']);
+    Route::post('/ayuda/api_registrar_ayuda', [AyudaController::class, 'api_registrar_ayuda']);
+    Route::post('/ayuda/api_actualizar_ayuda', [AyudaController::class, 'api_actualizar_ayuda']);
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         //Todo lo que este dentro de este grupo requiere verificación de usuario.

@@ -69,7 +69,6 @@ export class GenericDataTableComponent<T> implements OnInit, OnChanges, AfterVie
         }
 
         if (changes.data) {
-            console.log(this.data)
             this.dataSource.data = this.data;
         }
 

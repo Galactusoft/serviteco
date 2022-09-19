@@ -194,6 +194,14 @@ export class NavigationMockApi {
                     link: '/gestion-reportes/productos-creados'
                 };
 
+                let ayuda_serviteco: FuseNavigationItem = {
+                    id: 'ayuda-serviteco',
+                    title: 'Ayuda SERVITECO',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/ayuda-serviteco'
+                };
+
                 let childrenGestion: FuseNavigationItem[] = [];
 
                 childrenGestion.push(usuarios);
@@ -269,6 +277,19 @@ export class NavigationMockApi {
                     children: childrenReportes
                 };
 
+                let childrenMesaAyuda: FuseNavigationItem[] = [];
+
+                childrenMesaAyuda.push(ayuda_serviteco);
+
+                let admin_ayuda_serviteco: FuseNavigationItem = {
+                    id: 'admin_ayuda_serviteco',
+                    title: 'Mesa de Ayuda',
+                    subtitle: 'Gestión mesa de ayuda SERVITECO',
+                    type: 'group',
+                    icon: 'heroicons_outline:collection',
+                    children: childrenMesaAyuda
+                };
+
                 let bandeja_solicitudes: FuseNavigationItem = {
                     id: 'bandeja_solicitudes',
                     title: 'Bandeja de solicitudes',
@@ -299,6 +320,7 @@ export class NavigationMockApi {
                     menuPrincipal.push(admin_pqrs);
                     menuPrincipal.push(admin_contactenos);
                     menuPrincipal.push(admin_reportes);
+                    menuPrincipal.push(admin_ayuda_serviteco);
                 } else {
                     if (this._aut.accessAdmin == 'funcionario' || this._aut.accessAdmin == 'taller autorizado') {
                         menuPrincipal.push(solicitudes);
