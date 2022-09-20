@@ -41,7 +41,7 @@ export class GestionReportesService {
             var heading = [customHead]
             XLSX.utils.sheet_add_aoa(worksheet, heading);
             var footering = [customFooter]
-            XLSX.utils.sheet_add_aoa(worksheet, footering, { origin: {r:obj.length + 2, c:0} });
+            XLSX.utils.sheet_add_aoa(worksheet, footering, { origin: { r: obj.length + 2, c: 0 } });
             var range = XLSX.utils.decode_range(worksheet['!ref'] || '');
             for (var C = range.s.r; C <= range.e.c; ++C) {
                 var address = XLSX.utils.encode_col(C) + '1';

@@ -7,18 +7,18 @@ import { BehaviorSubject, filter, fromEvent, Observable, Subject, takeUntil } fr
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { BuscadorMarcasImportadorComponent } from '../../buscadores/buscador-marcas-importador/buscador-marcas-importador.component';
+import { BuscadorMarcasImportadorComponent } from '../../../buscadores/buscador-marcas-importador/buscador-marcas-importador.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Marca } from '../../gestion-marcas/marcas';
-import { BuscadorImportadorasComponent } from '../../buscadores/buscador-importador/buscador-importador.component';
-import { Importador } from '../../gestion-importadores/importadores';
-import { GestionReporteService } from '../gestion-reportes.service';
+import { Marca } from '../../../gestion-marcas/marcas';
+import { BuscadorImportadorasComponent } from '../../../buscadores/buscador-importador/buscador-importador.component';
+import { Importador } from '../../../gestion-importadores/importadores';
+import { GestionReporteService } from '../../gestion-reportes.service';
 import Swal from 'sweetalert2';
 import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Paginator } from '../../paginator';
+import { Paginator } from '../../../paginator';
 
 @Component({
     selector: 'reporte-cuentas-cobrar-importador',

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\CategoriaController;
 use App\Http\Controllers\V1\AyudaController;
+use App\Http\Controllers\V1\ReportesImportadorController;
 
 
 /*
@@ -43,6 +44,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/ayuda/api_upload_file', [AyudaController::class, 'api_upload_file']);
     Route::post('/ayuda/api_registrar_ayuda', [AyudaController::class, 'api_registrar_ayuda']);
     Route::post('/ayuda/api_actualizar_ayuda', [AyudaController::class, 'api_actualizar_ayuda']);
+
+    Route::post('/reportes/api_reporte_distribuidores_talleres_activos_paginator', [ReportesImportadorController::class, 'api_reporte_distribuidores_talleres_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_distribuidores_talleres_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_distribuidores_talleres_activos_paginator']);
+    Route::post('/reportes/api_reporte_referencias_activas_paginator', [ReportesImportadorController::class, 'api_reporte_referencias_activas_paginator']);
+    Route::post('/reportes/api_export_reporte_referencias_activas_paginator', [ReportesImportadorController::class, 'api_export_reporte_referencias_activas_paginator']);
+    Route::post('/reportes/api_reporte_productos_activos_paginator', [ReportesImportadorController::class, 'api_reporte_productos_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_productos_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_productos_activos_paginator']);
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         //Todo lo que este dentro de este grupo requiere verificación de usuario.

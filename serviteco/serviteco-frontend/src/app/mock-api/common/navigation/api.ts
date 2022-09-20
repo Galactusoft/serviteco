@@ -183,7 +183,7 @@ export class NavigationMockApi {
                     title: 'Cuentas por cobrar por importador',
                     type: 'basic',
                     icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/cuentas-cobrar-importador'
+                    link: '/gestion-reportes/importadores/cuentas-cobrar-importador'
                 };
 
                 let reporte_productos: FuseNavigationItem = {
@@ -191,7 +191,31 @@ export class NavigationMockApi {
                     title: 'Productos creados',
                     type: 'basic',
                     icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/productos-creados'
+                    link: '/gestion-reportes/importadores/productos-creados'
+                };
+
+                let reporte_distribuidores_talleres: FuseNavigationItem = {
+                    id: 'reporte_distribuidores_talleres',
+                    title: 'Distribuidores y talleres activos',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/distribuidores-talleres-activos'
+                };
+
+                let reporte_referencias_activas: FuseNavigationItem = {
+                    id: 'reporte_referencias_activas',
+                    title: 'Referencias Activas',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/referencias-activas'
+                };
+
+                let reporte_productos_activos: FuseNavigationItem = {
+                    id: 'reporte_productos_activos',
+                    title: 'Productos Activos',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/productos-activos'
                 };
 
                 let ayuda_serviteco: FuseNavigationItem = {
@@ -267,6 +291,9 @@ export class NavigationMockApi {
 
                 childrenReportes.push(reporte_cuentas_cobrar_importador);
                 childrenReportes.push(reporte_productos);
+                childrenReportes.push(reporte_distribuidores_talleres);
+                childrenReportes.push(reporte_referencias_activas);
+                childrenReportes.push(reporte_productos_activos);
 
                 let admin_reportes: FuseNavigationItem = {
                     id: 'admin_reportes',

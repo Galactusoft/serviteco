@@ -7,32 +7,28 @@ import { BehaviorSubject, filter, fromEvent, Observable, Subject, takeUntil } fr
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { BuscadorMarcasImportadorComponent } from '../../buscadores/buscador-marcas-importador/buscador-marcas-importador.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Marca } from '../../gestion-marcas/marcas';
-import { BuscadorImportadorasComponent } from '../../buscadores/buscador-importador/buscador-importador.component';
-import { Importador } from '../../gestion-importadores/importadores';
-import { GestionReporteService } from '../gestion-reportes.service';
+import { BuscadorImportadorasComponent } from '../../../buscadores/buscador-importador/buscador-importador.component';
+import { Importador } from '../../../gestion-importadores/importadores';
+import { GestionReporteService } from '../../gestion-reportes.service';
 import Swal from 'sweetalert2';
 import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
-import { BuscadorCategoriasComponent } from '../../buscadores/buscador-categorias/buscador-categorias.component';
-import { TipoProducto } from '../../gestion-tipoProductos/tipoProductos';
-import { BuscadorReferenciasComponent } from '../../buscadores/buscador-referencias/buscador-referencias.component';
-import { Referencia } from '../../gestion-referencias/referencias';
-import { BuscadorDistribuidoresComponent } from '../../buscadores/buscador-distribuidor/buscador-distribuidor.component';
-import { Distribuidor } from '../../gestion-distribuidores/distribuidores';
 import { MatTableDataSource } from '@angular/material/table';
-import { Paginator } from '../../paginator';
+import { Paginator } from '../../../paginator';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 @Component({
-    selector: 'reporte-productos',
-    templateUrl: './reporte-productos.component.html',
+    selector: 'reporte-distribuidores-talleres-activos',
+    templateUrl: './reporte-distribuidores-talleres-activos.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReporteProductosComponent implements OnInit, OnDestroy {
+export class ReporteDistribuidoresTalleresActivosComponent implements OnInit, OnDestroy {
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     drawerMode: 'side' | 'over';
@@ -40,13 +36,16 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     // Paginator
-    productoPaginator$: Observable<any>;
-    productosCount: number = 0;
+    dataPaginator$: Observable<any>;
+    dataCount: number = 0;
+    dataCountTalleres: number = 0;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     data: any;
-    recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentTransactionsTableColumns: string[] = ['importador', 'marca', 'categoria', 'referencia', 'serial', 'distribuidor', 'factura', 'fecha_factura', 'propietario', 'factura_usuario', 'fecha_factura_usuario'];
+    dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    dataSourceTalleres: MatTableDataSource<any> = new MatTableDataSource();
+    tableColumns: string[] = ['id', 'nombre', 'direccion', 'telefono', 'correo', 'correo_contabilidad', 'estado', 'fecha_sistema'];
+    tableColumnsTalleres: string[] = ['id', 'nit', 'nombre', 'direccion', 'telefono', 'correo', 'correo_contabilidad', 'estado', 'fecha_sistema'];
     orderBy: string = "1";
     order: string = "asc";
     filter: string = "all";
@@ -54,6 +53,10 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
     pageSize: number = 10;
     pageSizeInit = 10;
     cantidad: number;
+
+    valorTotalRepuestos: number = 0;
+    valorTotalManoObra: number = 0;
+    valorTotal: number = 0;
 
     searchStrAbiertas$ = new BehaviorSubject<string>('');
     loadData: boolean = false;
@@ -66,14 +69,10 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
         nombre_importador: null,
         id_marca: null,
         nombre_marca: null,
-        id_tipo_producto: null,
-        nombre_tipo_producto: null,
-        id_referencia: null,
-        nombre_referencia: null,
         id_distribuidor: null,
-        nombre_distribuidor: null,
         proceso: 'all',
     });
+
     /**
      * Constructor
      */
@@ -97,7 +96,7 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
 
     ngAfterViewInit(): void {
         // Make the data source sortable
-        this.recentTransactionsDataSource.sort = this.sort;
+        this.dataSource.sort = this.sort;
     }
 
     /**
@@ -115,8 +114,8 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
             this.puedeSeleccionarImportador = true;
         }
 
-        this.productoPaginator$ = this._gestionReporteService.productoPaginator$;
-        this.recentTransactionsDataSource.sort = this.sort;
+        this.dataPaginator$ = this._gestionReporteService.dataPaginator$;
+        this.dataSource.sort = this.sort;
 
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
@@ -171,94 +170,6 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
                 this.form.get('nombre_importador').setValue(selected.nombre);
                 this.form.get('id_marca').setValue('');
                 this.form.get('nombre_marca').setValue('');
-                this.form.get('id_referencia').setValue("");
-                this.form.get('nombre_referencia').setValue("");
-            });
-    }
-
-    /**
-    * Open marcas dialog
-    */
-    openBuscadorMarcas(): void {
-        // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorMarcasImportadorComponent, {
-            data: {
-                idImportador: this.form.get('id_importador').value
-            }
-        });
-
-        dialogRef.afterClosed()
-            .subscribe((result) => {
-                if (!result) {
-                    return;
-                }
-                const selected: Marca = result[1];
-                this.form.get('id_marca').setValue(selected.id);
-                this.form.get('nombre_marca').setValue(selected.nombre);
-                this.form.get('id_referencia').setValue("");
-                this.form.get('nombre_referencia').setValue("");
-            });
-    }
-
-    /**
-    * Open categorias dialog
-    */
-    openBuscadorCategoria(): void {
-        // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorCategoriasComponent);
-
-        dialogRef.afterClosed()
-            .subscribe((result) => {
-                if (!result) {
-                    return;
-                }
-                const selected: TipoProducto = result[1];
-                this.form.get('id_tipo_producto').setValue(selected.id);
-                this.form.get('nombre_tipo_producto').setValue(selected.nombre);
-                this.form.get('id_referencia').setValue("");
-                this.form.get('nombre_referencia').setValue("");
-            });
-    }
-
-    /**
-    * Open subcategorias dialog
-    */
-    openBuscadorReferencias(): void {
-        // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorReferenciasComponent, {
-            data: {
-                idTipoProducto: this.form.get('id_tipo_producto').value,
-                idImportador: this.form.get('id_importador').value,
-                idMarca: this.form.get('id_marca').value
-            }
-        });
-
-        dialogRef.afterClosed()
-            .subscribe((result) => {
-                if (!result) {
-                    return;
-                }
-                const selected: Referencia = result[1];
-                this.form.get('id_referencia').setValue(selected.id);
-                this.form.get('nombre_referencia').setValue(selected.nombre);
-            });
-    }
-
-    /**
-    * Open distribuidores dialog
-    */
-    openBuscadorDistribuidores(): void {
-        // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorDistribuidoresComponent);
-
-        dialogRef.afterClosed()
-            .subscribe((result) => {
-                if (!result) {
-                    return;
-                }
-                const selected: Distribuidor = result[1];
-                this.form.get('id_distribuidor').setValue(selected.id);
-                this.form.get('nombre_distribuidor').setValue(selected.nombre);
             });
     }
 
@@ -271,19 +182,22 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
         paginator.order = this.order;
         paginator.orderBy = this.orderBy;
         paginator.id_importador = busqueda.id_importador;
-        paginator.id_marca = busqueda.id_marca;
-        paginator.id_marca = busqueda.id_marca;
-        paginator.id_categoria = busqueda.id_tipo_producto;
-        paginator.id_referencia = busqueda.id_referencia;
-        paginator.id_distribuidor = busqueda.id_distribuidor;
+        paginator.fecha_inicial = busqueda.fecha_inicial;
+        paginator.fecha_final = busqueda.fecha_final;
         // Search
-        this._gestionReporteService.getProductoPaginator(paginator).subscribe(data => {
+        this._gestionReporteService.getDistribuidoresTalleresActivosImportadorPaginator(paginator).subscribe(data => {
 
             // Update the counts
-            this.productosCount = data.cantidad;
+            this.dataCount = data.cantidad[0]['total'];
 
             // Store the table data
-            this.recentTransactionsDataSource.data = data.registros;
+            this.dataSource.data = data.registros;
+
+            // Update the counts talleres
+            this.dataCountTalleres = data.talleresCount[0]['total'];
+
+            // Store the table data talleres
+            this.dataSourceTalleres.data = data.talleres;
 
             this.loadData = true;
 
@@ -291,7 +205,8 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
             this._changeDetectorRef.markForCheck();
         });
 
-        this.recentTransactionsDataSource.sort = this.sort;
+        this.dataSource.sort = this.sort;
+
     }
 
     sortData(sort: Sort) {
@@ -328,11 +243,14 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
      */
     exportar(): void {
         const busqueda = this.form.getRawValue();
-        this._gestionReporteService.reporteProductosCreados(busqueda).subscribe(data => {
+        if (this._aut.accessAdmin == 'distribuidor') {
+            busqueda.id_importador = this._aut.accessImportador;
+        }
+        this._gestionReporteService.getExportDistribuidoresTalleresActivosImportadorPaginator(busqueda).subscribe(data => {
             if (data.registros.length > 0) {
-                var head = ['Importador', 'Marca', 'Categoría', 'Referencia', 'Serial', 'Distribuidor', 'Número Factura Venta Distribuidor', 'Fecha Factura Venta Distribuidor', 'Propietario Actual', 'Factura Usuario Final', 'Fecha Factura Usuario Final'];
-                var footer = [];
-                this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_productos_creados', head, footer);
+                var head = ['Id', 'Nombre', 'Fecha', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
+                var headTaller = ['Id', 'NIT', 'Nombre', 'Fecha', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
+                this.exportReportAsExcelFile(data.registros, 'reporte_distribuidores_talleres_activos', head, data.talleres, headTaller);
             } else {
                 Swal.fire({
                     title: 'No existe información para exportar reporte con los parámetros de búsqueda ingresados',
@@ -341,6 +259,46 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
                 })
             }
         })
+    }
+
+    // FUNCION QUE PERMITE EXPORTAR DOCUMENTO EN EXCEL
+    exportReportAsExcelFile(obj: any[], excelFileName: string, customHead: string[], objTaller: any[], customHeadTaller: string[]): void {
+
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(obj);
+
+        if (customHead.length > 0) {
+            var heading = [customHead]
+            XLSX.utils.sheet_add_aoa(worksheet, heading);
+            var range = XLSX.utils.decode_range(worksheet['!ref'] || '');
+            for (var C = range.s.r; C <= range.e.c; ++C) {
+                var address = XLSX.utils.encode_col(C) + '1';
+                if (!worksheet[address]) continue;
+                worksheet[address].v = worksheet[address].v
+            }
+        }
+
+        const worksheetTaller: XLSX.WorkSheet = XLSX.utils.json_to_sheet(objTaller);
+
+        if (customHeadTaller.length > 0) {
+            var headingTaller = [customHeadTaller]
+            XLSX.utils.sheet_add_aoa(worksheetTaller, headingTaller);
+            var range = XLSX.utils.decode_range(worksheetTaller['!ref'] || '');
+            for (var C = range.s.r; C <= range.e.c; ++C) {
+                var addressTaller = XLSX.utils.encode_col(C) + '1';
+                if (!worksheetTaller[addressTaller]) continue;
+                worksheetTaller[addressTaller].v = worksheetTaller[addressTaller].v
+            }
+        }
+
+        const workbook: XLSX.WorkBook = { Sheets: { 'distribuidores': worksheet, 'talleres': worksheetTaller }, SheetNames: ['distribuidores', 'talleres'] };
+        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this._saveAsExcelFile(excelBuffer, excelFileName);
+
+    }
+
+    private _saveAsExcelFile(buffer: any, fileName: string): void {
+        const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+        FileSaver.saveAs(data, fileName + '_' + new Date().getTime() + EXCEL_EXTENSION);
     }
 
 

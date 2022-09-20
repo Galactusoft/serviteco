@@ -25,15 +25,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FuseCardModule } from '@fuse/components/card';
 import { reportesRoutes } from './gestion-reportes.routing';
 import { GestionReportesComponent } from './gestion-reportes.component';
-import { ReporteCuentasCobrarImportadorComponent } from './reporte-cuentas-cobrar-importador/reporte-cuentas-cobrar-importador.component';
+import { ReporteCuentasCobrarImportadorComponent } from './importadores/reporte-cuentas-cobrar-importador/reporte-cuentas-cobrar-importador.component';
 import { GestionReporteService } from './gestion-reportes.service';
-import { ReporteProductosComponent } from './reporte-productos-creados/reporte-productos.component';
+import { ReporteProductosComponent } from './importadores/reporte-productos-creados/reporte-productos.component';
+import { ReporteDistribuidoresTalleresActivosComponent } from './importadores/reporte-distribuidores-talleres-activos/reporte-distribuidores-talleres-activos.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { ReporteReferenciasActivasComponent } from './importadores/reporte-referencias-activas/reporte-referencias-activas.component';
+import { ReporteProductosActivosComponent } from './importadores/reporte-productos-activos/reporte-productos-activos.component';
 
 @NgModule({
     declarations: [
         GestionReportesComponent,
         ReporteCuentasCobrarImportadorComponent,
-        ReporteProductosComponent
+        ReporteProductosComponent,
+        ReporteDistribuidoresTalleresActivosComponent,
+        ReporteReferenciasActivasComponent,
+        ReporteProductosActivosComponent
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),
@@ -59,6 +66,7 @@ import { ReporteProductosComponent } from './reporte-productos-creados/reporte-p
         MatSortModule,
         MatSnackBarModule,
         FuseCardModule,
+        MatTabsModule,
     ],
     providers   : [
         {

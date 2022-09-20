@@ -10,6 +10,7 @@ import { Paginator } from '../paginator';
 })
 export class GestionReporteService {
     url: string = `${environment.HOST}/reportes`;
+    urlLaravel: string = `${environment.HOST_LARAVEL}/reportes`;
 
     private _productoPaginator: BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _dataPaginator: BehaviorSubject<any | null> = new BehaviorSubject(null);
@@ -31,7 +32,7 @@ export class GestionReporteService {
     /**
      * Getter for productoPaginator
      */
-     get dataPaginator$(): Observable<any> {
+    get dataPaginator$(): Observable<any> {
         return this._dataPaginator.asObservable();
     }
 
@@ -65,8 +66,77 @@ export class GestionReporteService {
     /**
     * Get data paginator cuentas por cobrar importador
     */
-     getCuentasPorCobrarImportadorPaginator(paginator: Paginator): Observable<any> {
+    getCuentasPorCobrarImportadorPaginator(paginator: Paginator): Observable<any> {
         return this._httpClient.post<any>(`${this.url}/api_reporte_cuentas_cobrar_importador_paginator.php`, JSON.stringify(paginator)).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+    /**
+    * Get data paginator distribuidores y talleres activos por cobrar importador
+    */
+    getDistribuidoresTalleresActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_distribuidores_talleres_activos_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+
+    /**
+    * Get data export distribuidores y talleres activos por cobrar importador
+    */
+    getExportDistribuidoresTalleresActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_distribuidores_talleres_activos_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+    /**
+    * Get data paginator referencias activas importador
+    */
+    getReferenciasActivasImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_referencias_activas_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+
+    /**
+    * Get data export referencias activas por importador
+    */
+    getExportReferenciasActivasImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_referencias_activas_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+    /**
+    * Get data paginator productos activos importador
+    */
+     getProductosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_productos_activos_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+
+    /**
+    * Get data export productos activos por importador
+    */
+    getExportProductosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_productos_activos_paginator`, paginator).pipe(
             tap((dataPaginator) => {
                 this._dataPaginator.next(dataPaginator);
             })
