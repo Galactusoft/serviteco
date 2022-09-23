@@ -51,6 +51,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/reportes/api_export_reporte_referencias_activas_paginator', [ReportesImportadorController::class, 'api_export_reporte_referencias_activas_paginator']);
     Route::post('/reportes/api_reporte_productos_activos_paginator', [ReportesImportadorController::class, 'api_reporte_productos_activos_paginator']);
     Route::post('/reportes/api_export_reporte_productos_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_productos_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_usuarios_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_usuarios_activos_paginator']);
+    Route::post('/reportes/api_reporte_usuarios_activos_paginator', [ReportesImportadorController::class, 'api_reporte_usuarios_activos_paginator']);
+
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         //Todo lo que este dentro de este grupo requiere verificación de usuario.

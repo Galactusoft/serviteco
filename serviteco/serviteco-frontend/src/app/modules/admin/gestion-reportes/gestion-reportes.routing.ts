@@ -6,6 +6,7 @@ import { ReporteDistribuidoresTalleresActivosComponent } from './importadores/re
 import { ReporteProductosActivosComponent } from './importadores/reporte-productos-activos/reporte-productos-activos.component';
 import { ReporteProductosComponent } from './importadores/reporte-productos-creados/reporte-productos.component';
 import { ReporteReferenciasActivasComponent } from './importadores/reporte-referencias-activas/reporte-referencias-activas.component';
+import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios-activos/reporte-usuarios-activos.component';
 
 export const reportesRoutes: Route[] = [
     {
@@ -32,6 +33,11 @@ export const reportesRoutes: Route[] = [
                 path: 'importadores/referencias-activas',
                 pathMatch: 'full',
                 component: ReporteReferenciasActivasComponent,
+            },
+            {
+                path: 'importadores/usuarios-activos',
+                pathMatch: 'full',
+                component: ReporteUsuariosActivosComponent,
             },
             {
                 path: 'importadores/productos-activos',

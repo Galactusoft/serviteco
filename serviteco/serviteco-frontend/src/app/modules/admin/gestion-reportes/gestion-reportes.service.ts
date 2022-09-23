@@ -108,7 +108,31 @@ export class GestionReporteService {
         );
     }
 
+    
+    /**
+    * Get data paginator usuarios activos importador
+    */
+     getUsuariosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_usuarios_activos_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
 
+
+ /**
+    * Get data export referencias activas por importador
+    */
+  getExportUsuariosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+    return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_usuarios_activos_paginator`, paginator).pipe(
+        tap((dataPaginator) => {
+            this._dataPaginator.next(dataPaginator);
+        })
+    );
+}
+
+    
     /**
     * Get data export referencias activas por importador
     */

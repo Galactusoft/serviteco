@@ -162,6 +162,71 @@ class ReportesImportadorController extends Controller
         return response()->json(['registros' => $items, 'cantidad' => $count]);
     }
 
+//----------------------------------------------------
+   //Función que utilizaremos para obtener los usuarios activos por importador.
+   public function api_reporte_usuarios_activos_paginator(Request $request)
+   {
+       $items = DB::select("
+       select username, nombre_completo,identificacion,correo,telefono,cargo , estado, fecha_sistema
+       from usuarios
+       where (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+       AND (LOWER(fecha_sistema) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+       OR (('$request->fecha_final' != '') AND (LOWER(fecha_sistema) <= '$request->fecha_final')))
+       AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(id_importador) = '$request->id_importador')))
+       LIMIT $request->pageIndex , $request->pageSize;
+       ");
+
+       $count = DB::select("
+       select count(username) as total
+       from usuarios
+       WHERE (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+       AND (LOWER(fecha_sistema) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+       OR (('$request->fecha_final' != '') AND (LOWER(fecha_sistema) <= '$request->fecha_final')))
+       AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(id_importador) = '$request->id_importador')))
+       ");
+
+       //Devolvemos el listado de usuarios si todo va bien.
+       return response()->json(['registros' => $items, 'cantidad' => $count]);
+   }
+
+   //Función que utilizaremos para obtener el export de las referencias activas por importador
+   public function api_export_reporte_usuarios_activos_paginator(Request $request)
+   {
+       $items = DB::select("
+       select username, nombre_completo,identificacion,correo,telefono,cargo , estado, fecha_sistema
+       from usuarios
+       where (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+       AND (LOWER(fecha_sistema) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+       OR (('$request->fecha_final' != '') AND (LOWER(fecha_sistema) <= '$request->fecha_final')))
+       AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(id_importador) = '$request->id_importador')));
+       ");
+
+       $count = DB::select("
+       select count(username) as total
+       from usuarios
+       WHERE (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+       AND (LOWER(fecha_sistema) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+       OR (('$request->fecha_final' != '') AND (LOWER(fecha_sistema) <= '$request->fecha_final')))
+       AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(id_importador) = '$request->id_importador')))
+       ");
+
+       //Devolvemos el listado de usuarios si todo va bien.
+       return response()->json(['registros' => $items, 'cantidad' => $count]);
+   }
+
+
+
+
+//---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
     //Función que utilizaremos para obtener los productos activos por importador.
     public function api_reporte_productos_activos_paginator(Request $request)
     {

@@ -210,6 +210,14 @@ export class NavigationMockApi {
                     link: '/gestion-reportes/importadores/referencias-activas'
                 };
 
+                let reporte_usuarios_activos: FuseNavigationItem = {
+                    id: 'reporte_referencias_activas',
+                    title: 'Usuarios Activas',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/usuarios-activos'
+                };
+
                 let reporte_productos_activos: FuseNavigationItem = {
                     id: 'reporte_productos_activos',
                     title: 'Productos Activos',
@@ -294,6 +302,7 @@ export class NavigationMockApi {
                 childrenReportes.push(reporte_distribuidores_talleres);
                 childrenReportes.push(reporte_referencias_activas);
                 childrenReportes.push(reporte_productos_activos);
+                childrenReportes.push(reporte_usuarios_activos);
 
                 let admin_reportes: FuseNavigationItem = {
                     id: 'admin_reportes',

@@ -32,6 +32,7 @@ import { ReporteDistribuidoresTalleresActivosComponent } from './importadores/re
 import {MatTabsModule} from '@angular/material/tabs';
 import { ReporteReferenciasActivasComponent } from './importadores/reporte-referencias-activas/reporte-referencias-activas.component';
 import { ReporteProductosActivosComponent } from './importadores/reporte-productos-activos/reporte-productos-activos.component';
+import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios-activos/reporte-usuarios-activos.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import { ReporteProductosActivosComponent } from './importadores/reporte-product
         ReporteProductosComponent,
         ReporteDistribuidoresTalleresActivosComponent,
         ReporteReferenciasActivasComponent,
-        ReporteProductosActivosComponent
+        ReporteProductosActivosComponent,
+        ReporteUsuariosActivosComponent
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),
