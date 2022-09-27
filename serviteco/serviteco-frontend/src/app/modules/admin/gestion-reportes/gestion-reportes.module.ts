@@ -33,7 +33,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { ReporteReferenciasActivasComponent } from './importadores/reporte-referencias-activas/reporte-referencias-activas.component';
 import { ReporteProductosActivosComponent } from './importadores/reporte-productos-activos/reporte-productos-activos.component';
 import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios-activos/reporte-usuarios-activos.component';
-
+import { ReporteRepuestosActivosComponent } from './importadores/reporte-repuestos-activos/reporte-repuestos-activos.component';
+import { ReporteSolicitudGarantiasComponent } from './importadores/reporte-solicitud-garantias/reporte-solicitud-garantias.component';
 @NgModule({
     declarations: [
         GestionReportesComponent,
@@ -42,7 +43,9 @@ import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios
         ReporteDistribuidoresTalleresActivosComponent,
         ReporteReferenciasActivasComponent,
         ReporteProductosActivosComponent,
-        ReporteUsuariosActivosComponent
+        ReporteUsuariosActivosComponent,
+        ReporteRepuestosActivosComponent,
+        ReporteSolicitudGarantiasComponent
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),

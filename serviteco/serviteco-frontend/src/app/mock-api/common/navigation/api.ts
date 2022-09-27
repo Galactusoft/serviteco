@@ -210,9 +210,26 @@ export class NavigationMockApi {
                     link: '/gestion-reportes/importadores/referencias-activas'
                 };
 
+                let reporte_solicitud_garantias: FuseNavigationItem = {
+                    id: 'reporte_solicitud_garantias',
+                    title: 'Solicitudes de garantia',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/solicitud-garantias'
+                };
+
+                let reporte_repuestos_activos: FuseNavigationItem = {
+                    id: 'reporte_repuestos_activos',
+                    title: 'Repuestos Activos',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/importadores/repuestos-activos'
+                };
+
+
                 let reporte_usuarios_activos: FuseNavigationItem = {
-                    id: 'reporte_referencias_activas',
-                    title: 'Usuarios Activas',
+                    id: 'reporte_usuarios_activas',
+                    title: 'Usuarios Activos',
                     type: 'basic',
                     icon: 'heroicons_outline:collection',
                     link: '/gestion-reportes/importadores/usuarios-activos'
@@ -303,6 +320,8 @@ export class NavigationMockApi {
                 childrenReportes.push(reporte_referencias_activas);
                 childrenReportes.push(reporte_productos_activos);
                 childrenReportes.push(reporte_usuarios_activos);
+                childrenReportes.push(reporte_repuestos_activos);
+                childrenReportes.push(reporte_solicitud_garantias);
 
                 let admin_reportes: FuseNavigationItem = {
                     id: 'admin_reportes',

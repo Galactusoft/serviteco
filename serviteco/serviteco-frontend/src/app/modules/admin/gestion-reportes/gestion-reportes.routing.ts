@@ -7,6 +7,8 @@ import { ReporteProductosActivosComponent } from './importadores/reporte-product
 import { ReporteProductosComponent } from './importadores/reporte-productos-creados/reporte-productos.component';
 import { ReporteReferenciasActivasComponent } from './importadores/reporte-referencias-activas/reporte-referencias-activas.component';
 import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios-activos/reporte-usuarios-activos.component';
+import { ReporteRepuestosActivosComponent } from './importadores/reporte-repuestos-activos/reporte-repuestos-activos.component'; 
+import { ReporteSolicitudGarantiasComponent } from './importadores/reporte-solicitud-garantias/reporte-solicitud-garantias.component';
 
 export const reportesRoutes: Route[] = [
     {
@@ -33,6 +35,16 @@ export const reportesRoutes: Route[] = [
                 path: 'importadores/referencias-activas',
                 pathMatch: 'full',
                 component: ReporteReferenciasActivasComponent,
+            },      
+            {
+                path: 'importadores/solicitud-garantias',
+                pathMatch: 'full',
+                component: ReporteSolicitudGarantiasComponent,
+            },
+            {
+                path: 'importadores/repuestos-activos',
+                pathMatch: 'full',
+                component: ReporteRepuestosActivosComponent,
             },
             {
                 path: 'importadores/usuarios-activos',

@@ -162,6 +162,137 @@ class ReportesImportadorController extends Controller
         return response()->json(['registros' => $items, 'cantidad' => $count]);
     }
 
+
+
+
+//------------------------------------------------------------------------------------------
+
+ //Función que utilizaremos para obtener las solicitudes de garantia activas por importador.
+ public function api_reporte_solicitud_garantias_paginator(Request $request)
+ {
+     $items = DB::select("
+    select sol.id as ticket, CONCAT(sol.nombres, ' ', sol.apellidos) as nombre_completo, sol.identificacion, sol.telefono,
+    sol.correo, sol.ciudad, sol.fecha_ingreso, sol.descripcion_falla, sol.diagnostico_falla, sol.observacion_diagnostico,
+    sol.observacion_respuesta, sol.creado_por, e.nombre as estado_actual, d.nombre as distribuidor 
+    from recepcion_solicitud sol inner join estados e on e.id = sol.id_estado_actual 
+    inner join producto p on p.id = sol.id_producto 
+    inner join distribuidores d on d.id = p.id_distribuidor 
+    inner join importadores imp on imp.id = p.id_importador 
+    where tipo_recepcion = 'Garantía' and es_garantia = 'SI' and 
+    (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+    AND (LOWER(sol.fecha_ingreso) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+    OR (('$request->fecha_final' != '') AND (LOWER(sol.fecha_ingreso) <= '$request->fecha_final')))
+    AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(imp.id) = '$request->id_importador')))
+    LIMIT $request->pageIndex , $request->pageSize;
+     ");
+
+     $count = DB::select("
+     select count(sol.id) as total
+     from recepcion_solicitud sol inner join estados e on e.id = sol.id_estado_actual 
+     inner join producto p on p.id = sol.id_producto 
+     inner join distribuidores d on d.id = p.id_distribuidor 
+     inner join importadores imp on imp.id = p.id_importador 
+     where tipo_recepcion = 'Garantía' and es_garantia = 'SI' and 
+     (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+     AND (LOWER(sol.fecha_ingreso) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+     OR (('$request->fecha_final' != '') AND (LOWER(sol.fecha_ingreso) <= '$request->fecha_final')))
+     AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(imp.id) = '$request->id_importador')))
+     ");
+
+     //Devolvemos el listado de usuarios si todo va bien.
+     return response()->json(['registros' => $items, 'cantidad' => $count]);
+ }
+
+ //Función que utilizaremos para obtener el export de las referencias activas por importador
+ public function api_export_reporte_solicitud_garantias_paginator(Request $request)
+ {
+     $items = DB::select("
+    select sol.id as ticket, CONCAT(sol.nombres, ' ', sol.apellidos) as nombre_completo, sol.identificacion, sol.telefono,
+    sol.correo, sol.ciudad, sol.fecha_ingreso, sol.descripcion_falla, sol.diagnostico_falla, sol.observacion_diagnostico,
+    sol.observacion_respuesta, sol.creado_por, e.nombre as estado_actual, d.nombre as distribuidor 
+    from recepcion_solicitud sol inner join estados e on e.id = sol.id_estado_actual 
+    inner join producto p on p.id = sol.id_producto 
+    inner join distribuidores d on d.id = p.id_distribuidor 
+    inner join importadores imp on imp.id = p.id_importador 
+    where tipo_recepcion = 'Garantía' and es_garantia = 'SI' and 
+    (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+    AND (LOWER(sol.fecha_ingreso) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+    OR (('$request->fecha_final' != '') AND (LOWER(sol.fecha_ingreso) <= '$request->fecha_final')))
+    AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(imp.id) = '$request->id_importador')))
+     ");
+
+     $count = DB::select("
+     select count(sol.id) as total
+    from recepcion_solicitud sol inner join estados e on e.id = sol.id_estado_actual 
+    inner join producto p on p.id = sol.id_producto 
+    inner join distribuidores d on d.id = p.id_distribuidor 
+    inner join importadores imp on imp.id = p.id_importador 
+    where tipo_recepcion = 'Garantía' and es_garantia = 'SI' and 
+    (('$request->fecha_inicial' = '') OR (('$request->fecha_inicial' != '')
+    AND (LOWER(sol.fecha_ingreso) >= '$request->fecha_inicial'))) AND (('$request->fecha_final' = '')
+    OR (('$request->fecha_final' != '') AND (LOWER(sol.fecha_ingreso) <= '$request->fecha_final')))
+    AND (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(imp.id) = '$request->id_importador')))
+     ");
+
+     //Devolvemos el listado de usuarios si todo va bien.
+     return response()->json(['registros' => $items, 'cantidad' => $count]);
+ }
+
+
+
+
+
+
+
+    
+
+//---------------------------------------------------------------------------------//
+
+
+    public function api_reporte_repuestos_activos_paginator(Request $request)
+    {
+		$items = DB::select("
+		select r.material, r.pieza_fabricante, r.nombre, r.descripcion, m.nombre as marca,
+        ref.nombre as referencia, cat.nombre as categoria from repuestos r
+        inner join referencias ref on ref.id = r.id_referencia inner join marcas m on m.id = ref.id_marca 
+        inner join tipo_productos cat on cat.id = r.id_categoria where m.id 
+        IN (select im.id_marca from importadores_marcas im where im.id_importador = (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(ref.id_importador) = '$request->id_importador'))))
+        LIMIT $request->pageIndex , $request->pageSize;
+		");
+
+        $count = DB::select("
+        select count(r.id) as total from repuestos r
+        inner join referencias ref on ref.id = r.id_referencia inner join marcas m on m.id = ref.id_marca 
+        inner join tipo_productos cat on cat.id = r.id_categoria where m.id 
+        IN (select im.id_marca from importadores_marcas im where im.id_importador = (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(ref.id_importador) = '$request->id_importador'))))
+		");
+
+        //Devolvemos el listado de usuarios si todo va bien.
+        return response()->json(['registros' => $items, 'cantidad' => $count]);
+    }
+
+    //Función que utilizaremos para obtener el export de las referencias activas por importador
+    public function api_export_reporte_repuestos_activos_paginator(Request $request)
+    {
+		$items = DB::select("
+		select r.material, r.pieza_fabricante, r.nombre, r.descripcion, m.nombre as marca,
+        ref.nombre as referencia, cat.nombre as categoria from repuestos r
+        inner join referencias ref on ref.id = r.id_referencia inner join marcas m on m.id = ref.id_marca 
+        inner join tipo_productos cat on cat.id = r.id_categoria where m.id 
+        IN (select im.id_marca from importadores_marcas im where im.id_importador = (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(ref.id_importador) = '$request->id_importador'))));
+		");
+        
+
+        $count = DB::select("
+		select count(r.id) as total from repuestos r
+        inner join referencias ref on ref.id = r.id_referencia inner join marcas m on m.id = ref.id_marca 
+        inner join tipo_productos cat on cat.id = r.id_categoria where m.id 
+        IN (select im.id_marca from importadores_marcas im where im.id_importador = (('$request->id_importador' = '') OR (('$request->id_importador' != '') AND (LOWER(ref.id_importador) = '$request->id_importador'))))
+		");
+
+        //Devolvemos el listado de usuarios si todo va bien.
+        return response()->json(['registros' => $items, 'cantidad' => $count]);
+    }
 //----------------------------------------------------
    //Función que utilizaremos para obtener los usuarios activos por importador.
    public function api_reporte_usuarios_activos_paginator(Request $request)

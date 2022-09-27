@@ -53,6 +53,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/reportes/api_export_reporte_productos_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_productos_activos_paginator']);
     Route::post('/reportes/api_export_reporte_usuarios_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_usuarios_activos_paginator']);
     Route::post('/reportes/api_reporte_usuarios_activos_paginator', [ReportesImportadorController::class, 'api_reporte_usuarios_activos_paginator']);
+    Route::post('/reportes/api_reporte_repuestos_activos_paginator', [ReportesImportadorController::class, 'api_reporte_repuestos_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_repuestos_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_repuestos_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_solicitud_garantias_paginator', [ReportesImportadorController::class, 'api_export_reporte_solicitud_garantias_paginator']);
+    Route::post('/reportes/api_reporte_solicitud_garantias_paginator', [ReportesImportadorController::class, 'api_reporte_solicitud_garantias_paginator']);
+
 
 
     Route::group(['middleware' => ['jwt.verify']], function() {

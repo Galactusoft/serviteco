@@ -97,9 +97,7 @@ export class GestionReporteService {
         );
     }
 
-    /**
-    * Get data paginator referencias activas importador
-    */
+
     getReferenciasActivasImportadorPaginator(paginator: Paginator): Observable<any> {
         return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_referencias_activas_paginator`, paginator).pipe(
             tap((dataPaginator) => {
@@ -108,7 +106,65 @@ export class GestionReporteService {
         );
     }
 
+
+    /**
+    * Get data paginator solicitud garantias importador
+    */
+    getSolicitudGarantiasImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_solicitud_garantias_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+
+        /**
+    * Get data export solicitud garantias por importador
+    */
+         getExportSolicitudGarantiasImportadorPaginator(paginator: Paginator): Observable<any> {
+            return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_solicitud_garantias_paginator`, paginator).pipe(
+                tap((dataPaginator) => {
+                    this._dataPaginator.next(dataPaginator);
+                })
+            );
+        }
     
+
+        /**
+    * Get data paginator repuestos activos importador
+    */
+         getRepuestosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+            return this._httpClient.post<any>(`${this.urlLaravel}/api_reporte_repuestos_activos_paginator`, paginator).pipe(
+                tap((dataPaginator) => {
+                    this._dataPaginator.next(dataPaginator);
+                })
+            );
+        }
+    
+
+        
+    /**
+    * Get data export referencias activas por importador
+    */
+    getExportReferenciasActivasImportadorPaginator(paginator: Paginator): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_referencias_activas_paginator`, paginator).pipe(
+            tap((dataPaginator) => {
+                this._dataPaginator.next(dataPaginator);
+            })
+        );
+    }
+        /**
+    * Get data export solicitudGarantias activas por importador
+    */
+         getExportRepuestosActivosImportadorPaginator(paginator: Paginator): Observable<any> {
+            return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_repuestos_activos_paginator`, paginator).pipe(
+                tap((dataPaginator) => {
+                    this._dataPaginator.next(dataPaginator);
+                })
+            );
+        }
+    
+        
     /**
     * Get data paginator usuarios activos importador
     */
@@ -121,6 +177,7 @@ export class GestionReporteService {
     }
 
 
+    
  /**
     * Get data export referencias activas por importador
     */
@@ -133,16 +190,6 @@ export class GestionReporteService {
 }
 
     
-    /**
-    * Get data export referencias activas por importador
-    */
-    getExportReferenciasActivasImportadorPaginator(paginator: Paginator): Observable<any> {
-        return this._httpClient.post<any>(`${this.urlLaravel}/api_export_reporte_referencias_activas_paginator`, paginator).pipe(
-            tap((dataPaginator) => {
-                this._dataPaginator.next(dataPaginator);
-            })
-        );
-    }
 
     /**
     * Get data paginator productos activos importador
