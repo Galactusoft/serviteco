@@ -169,7 +169,7 @@ class ReportesImportadorController extends Controller
 
  //Función que utilizaremos para obtener las solicitudes de garantia activas por importador.
  public function api_reporte_solicitud_garantias_paginator(Request $request)
- {
+ { 
      $items = DB::select("
     select sol.id as ticket, CONCAT(sol.nombres, ' ', sol.apellidos) as nombre_completo, sol.identificacion, sol.telefono,
     sol.correo, sol.ciudad, sol.fecha_ingreso, sol.descripcion_falla, sol.diagnostico_falla, sol.observacion_diagnostico,
