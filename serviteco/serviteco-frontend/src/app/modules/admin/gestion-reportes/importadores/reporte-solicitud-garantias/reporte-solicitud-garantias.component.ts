@@ -19,6 +19,7 @@ import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Paginator } from '../../../paginator';
+import { BuscadorDistribuidoresImportadorComponent } from 'app/modules/admin/buscadores/buscador-distribuidores-importador/buscador-distribuidores-importador.component';
 
 @Component({
     selector: 'reporte-solicitud-garantia',
@@ -40,7 +41,7 @@ export class ReporteSolicitudGarantiasComponent implements OnInit, OnDestroy {
     @ViewChild(MatSort) sort: MatSort;
     data: any;
     dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    tableColumns: string[] = ['ticket', 'nombre_completo', 'identificacion', 'telefono', 'correo', 'ciudad', 'fecha_ingreso','descripcion_falla','diagnostico_falla',   
+    tableColumns: string[] = ['ticket', 'nombre_completo', 'identificacion', 'telefono', 'correo', 'ciudad', 'fecha_ingreso','descripcion_falla','diagnostico_falla',
                               'observacion_diagnostico','observacion_respuesta','creado_por','estado_actual','distribuidor'];
     orderBy: string = "1";
     order: string = "asc";
@@ -110,9 +111,7 @@ export class ReporteSolicitudGarantiasComponent implements OnInit, OnDestroy {
             this.puedeSeleccionarDistribuidor = false;
             this.form.get('id_importador').setValue(this._aut.accessImportador);
             this.form.get('nombre_importador').setValue(this._aut.accessCompany);
-            this.form.get('id_distribuidorr').setValue(this._aut.accessImportador);
-            this.form.get('nombre_distribuidor').setValue(this._aut.accessCompany);
-            
+
         } else if (this._aut.accessAdmin == 'distribuidor') {
             this.puedeSeleccionarImportador = true;
             this.puedeSeleccionarDistribuidor = true;
@@ -180,9 +179,9 @@ export class ReporteSolicitudGarantiasComponent implements OnInit, OnDestroy {
 
     openBuscadorDistribuidor(): void {
         // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorDistribuidoresComponent, {
+        const dialogRef = this._matDialog.open(BuscadorDistribuidoresImportadorComponent, {
             data: {
-                idTaller: localStorage.getItem('accessTaller')
+                idImportador: this.form.get('id_importador').value,
             }
         });
 
@@ -267,11 +266,11 @@ export class ReporteSolicitudGarantiasComponent implements OnInit, OnDestroy {
     exportar(): void {
         const busqueda = this.form.getRawValue();
         if (this._aut.accessAdmin == 'distribuidor') {
-            busqueda.id_importador = this._aut.accessImportador;      
+            busqueda.id_importador = this._aut.accessImportador;
         }
         this._gestionReporteService.getExportSolicitudGarantiasImportadorPaginator(busqueda).subscribe(data => {
             if (data.registros.length > 0) {
-                var head = ['ticket', 'nombre_completo', 'identificacion', 'telefono', 'correo', 'ciudad', 'fecha_ingreso','descripcion_falla','diagnostico_falla',   
+                var head = ['ticket', 'nombre_completo', 'identificacion', 'telefono', 'correo', 'ciudad', 'fecha_ingreso','descripcion_falla','diagnostico_falla',
                             'observacion_diagnostico','observacion_respuesta','creado_por','estado_actual','distribuidor'];
                 this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_solicitud_garantia_por_importador', head, []);
             } else {

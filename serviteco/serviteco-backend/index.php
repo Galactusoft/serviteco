@@ -11,8 +11,8 @@ define('LARAVEL_START', microtime(true));
 | which could cause an exception.
 |
 */
-if (file_exists(__DIR__.'/../galactusoft-backend/storage/framework/maintenance.php')) {
-    require __DIR__.'/../galactusoft-backend/storage/framework/maintenance.php';
+if (file_exists(__DIR__.'/../serviteco-backend/storage/framework/maintenance.php')) {
+    require __DIR__.'/../serviteco-backend/storage/framework/maintenance.php';
 }
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ if (file_exists(__DIR__.'/../galactusoft-backend/storage/framework/maintenance.p
 | into the script here so we don't need to manually load our classes.
 |
 */
-require __DIR__.'/../galactusoft-backend/vendor/autoload.php';
+require __DIR__.'/../serviteco-backend/vendor/autoload.php';
 /*
 |--------------------------------------------------------------------------
 | Run The Application
@@ -35,7 +35,7 @@ require __DIR__.'/../galactusoft-backend/vendor/autoload.php';
 | to this client's browser, allowing them to enjoy our application.
 |
 */
-$app = require_once __DIR__.'/../galactusoft-backend/bootstrap/app.php';
+$app = require_once __DIR__.'/../serviteco-backend/bootstrap/app.php';
 $kernel = $app->make(Kernel::class);
 $response = tap($kernel->handle(
     $request = Request::capture()

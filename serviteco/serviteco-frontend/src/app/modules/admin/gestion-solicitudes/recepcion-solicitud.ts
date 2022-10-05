@@ -80,6 +80,8 @@ export class RecepcionSolicitudRepuestos {
     id_recepcion_solicitud: string;
     id_repuesto: string;
     nombre: string;
+    material: string;
+    pieza_fabricante: string;
     cantidad: number;
     valor_unitario: number;
     observaciones: string;

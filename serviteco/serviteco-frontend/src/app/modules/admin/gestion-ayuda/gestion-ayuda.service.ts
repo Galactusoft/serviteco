@@ -193,7 +193,7 @@ export class GestionAyudaService {
         const pago = {
             id: id
         }
-        return this._httpClient.post(`${this.url}/delete-file.php`, JSON.stringify(pago))
+        return this._httpClient.post(`${this.url}/api_delete_file`, pago)
     }
 
     /**

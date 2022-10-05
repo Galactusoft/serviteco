@@ -69,6 +69,7 @@
                         <!-- Add usuario button -->
                         <button class="ml-2" mat-flat-button [color]="'primary'" (click)="createayuda()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            Agregar
                         </button>
                     </div>
                 </div>
@@ -115,23 +116,12 @@
                                                 Estado Actual
                                             </th>
                                             <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 whitespace-nowrap">
-                                                    {{transaction.estado_actual}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="estado">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Estado
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
                                                 <span
                                                     class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
                                                     [ngClass]="{'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': transaction.estado_actual == 'Creado',
-                                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': transaction.estado_actual != 'Creado'}">
-                                                    <span
-                                                        class="leading-relaxed whitespace-nowrap">{{transaction.estado_actual != null ? 'Creado' : 'Asignado'}}</span>
+                                                    'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': transaction.estado_actual == 'En Desarrollo',
+                                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': transaction.estado_actual == 'Solucionado'}">
+                                                    {{transaction.estado_actual}}
                                                 </span>
                                             </td>
                                         </ng-container>

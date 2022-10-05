@@ -193,9 +193,8 @@ export class GestionCargaMasivaDetailComponent implements OnInit, OnDestroy {
                     producto.id_referencia = this.fourFormGroup.get('id_referencia').value;
                     producto.numero_factura = rows[index][2].toString();
                     let date = new Date(rows[index][3].toString());
-                    let realDate = new Date();
-                    realDate.setDate(date.getDate()+1);
-                    producto.fecha_venta = realDate.toISOString();
+                    date.setHours(24);
+                    producto.fecha_venta = date.toISOString();
                     producto.garantia_meses = rows[index][4].toString();
                     this.console = this.console.concat("cargando serial: " + rows[index][0] + " <br> ")
                     this.progressbarValue = index;

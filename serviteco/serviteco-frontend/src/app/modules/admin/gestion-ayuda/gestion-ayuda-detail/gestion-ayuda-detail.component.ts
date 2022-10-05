@@ -88,6 +88,7 @@ export class GestionAyudaDetailComponent implements OnInit, OnDestroy {
             nombre_usuario: [null],
             estado_actual: [null],
             descripcion: [null],
+            respuesta: [null],
             estado: [null],
         });
 
@@ -201,8 +202,6 @@ export class GestionAyudaDetailComponent implements OnInit, OnDestroy {
     updateayuda(): void {
         // Get the ayudas object
         const ayuda = this.ayudaForm.getRawValue();
-        ayuda.id = this.ayuda?.id;
-
         if (ayuda.id == null) {
             // Update the ayudas on the server
             this._gestionAyudaService.createAyuda(ayuda).subscribe(data => {
@@ -214,6 +213,7 @@ export class GestionAyudaDetailComponent implements OnInit, OnDestroy {
                     })
                 } else {
                     this.ayuda = data;
+                    this.ayudaForm.get('id').setValue(data.id);
                     this.toggleEditMode(true);
                     // Mark for check
                     this._changeDetectorRef.markForCheck();

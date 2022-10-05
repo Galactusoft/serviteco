@@ -191,7 +191,6 @@ export class ReporteUsuariosActivosComponent implements OnInit, OnDestroy {
             // Mark for check
             this._changeDetectorRef.markForCheck();
 
-            console.log(this.dataCount);
         });
 
         this.dataSource.sort = this.sort;

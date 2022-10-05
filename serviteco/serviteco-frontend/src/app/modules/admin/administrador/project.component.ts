@@ -23,6 +23,7 @@ import { Organigrama } from './organigrama';
 import { GestionImportadoresService } from '../gestion-importadores/gestion-importadores.service';
 import { environment } from 'environments/environment';
 import { GestionEmpresasService } from '../gestion-empresas/gestion-empresas.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'project',
@@ -754,14 +755,32 @@ export class ProjectComponent implements OnInit, OnDestroy {
             paginator.serial = null;
             paginator.filter = this.administracionForm.get('identificacion').value;
             this._gestionProductosService.getProductoPaginatorAvanzado(paginator).subscribe(data => {
-                this.openBuscadorAvanzadoProductos(paginator);
+                if (data.cantidad == 0) {
+                    Swal.fire({
+                        title: "<h5 class='swal2-title-custom'>NÚMERO DE DOCUMENTO NO ENCONTRADO</h5>",
+                        text: "Por favor valide que el documento ingresado sea correcto, el número ingresado NO se encuentra registrado en SERVITECO; confirme que el número de documento proporcionado concuerde con el número de la factura de venta",
+                        icon: 'error',
+                        timer: 7000
+                    })
+                } else {
+                    this.openBuscadorAvanzadoProductos(paginator);
+                }
             })
         } else {
             paginator.serial = this.administracionForm.get('identificacion').value;
             paginator.identificacion = null;
             paginator.filter = this.administracionForm.get('identificacion').value;
             this._gestionProductosService.getProductoPaginatorAvanzado(paginator).subscribe(data => {
-                this.openBuscadorAvanzadoProductos(paginator);
+                if (data.cantidad == 0) {
+                    Swal.fire({
+                        title: "<h5 class='swal2-title-custom'>SERIAL NO ENCONTRADO</h5>",
+                        text: "por favor valide si el serial contiene espacios, guiones o  puntos. es posible que el serial  se creara en la base de datos con caracteres distintos al que usted ingresó, asegúrese de que los números coincidan con el serial de facturación",
+                        icon: 'error',
+                        timer: 7000
+                    })
+                } else {
+                    this.openBuscadorAvanzadoProductos(paginator);
+                }
             })
         }
 

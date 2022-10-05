@@ -1,305 +1,251 @@
-<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+<!-- Main -->
+<div class="flex-auto">
 
-    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
 
-        <!-- Drawer -->
-        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
-            [disableClose]="true" #matDrawer>
-            <router-outlet></router-outlet>
-        </mat-drawer>
-
-        <mat-drawer-content class="flex flex-col">
-
-            <!-- Main -->
+        <!-- Main actions -->
+        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+            <!-- Search -->
             <div class="flex-auto">
+                <form [formGroup]="form">
+                    <div class="grid sm:grid-cols-6 gap-6 w-full">
 
-                <!-- Header -->
-                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Importador</mat-label>
+                                <input matInput [formControlName]="'nombre_importador'" [spellcheck]="false" readonly>
+                                <button mat-icon-button (click)="openBuscadorImportador()" matSuffix
+                                    *ngIf="puedeSeleccionarImportador">
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
 
-                    <!-- Breadcrumbs -->
-                    <div>
-                        <div class="hidden sm:flex flex-wrap items-center font-medium">
-                            <div>
-                                <a class="whitespace-nowrap text-primary-500" style="cursor: pointer;"
-                                    [routerLink]="['/inicio']">Inicio</a>
-                            </div>
-                            <div class="flex items-center ml-1 whitespace-nowrap">
-                                <mat-icon class="icon-size-5 text-secondary"
-                                    [svgIcon]="'heroicons_solid:chevron-right'">
-                                </mat-icon>
-                                <span class="ml-1 text-secondary">Reporte de productos creados</span>
-                            </div>
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Marca</mat-label>
+                                <input matInput [formControlName]="'nombre_marca'" [spellcheck]="false" readonly>
+                                <button mat-icon-button (click)="openBuscadorMarcas()" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
                         </div>
-                        <div class="flex sm:hidden">
-                            <a class="inline-flex items-center -ml-1.5 text-secondary font-medium"
-                                [routerLink]="'/admin-ifec'">
-                                <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-left'">
-                                </mat-icon>
-                                <span class="ml-1">Volver</span>
-                            </a>
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Categoría</mat-label>
+                                <input matInput [formControlName]="'nombre_tipo_producto'" [spellcheck]="false"
+                                    readonly>
+                                <button mat-icon-button (click)="openBuscadorCategoria()" matSuffix
+                                    *ngIf="puedeSeleccionarCategoria">
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
                         </div>
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Referencia</mat-label>
+                                <input matInput [formControlName]="'nombre_referencia'" [spellcheck]="false" readonly>
+                                <button mat-icon-button (click)="openBuscadorReferencias()" matSuffix
+                                    *ngIf="puedeSeleccionarReferencia">
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Distribuidor</mat-label>
+                                <input matInput [formControlName]="'nombre_distribuidor'" [spellcheck]="false" readonly>
+                                <button mat-icon-button (click)="openBuscadorDistribuidores()" matSuffix>
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1 mt-6">
+                            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="consultarData()"
+                                [disabled]="form.invalid">
+                                <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
+                            </button>
+                            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="exportar()"
+                                *ngIf="productosCount > 0" [disabled]="form.invalid">
+                                <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
+                            </button>
+                        </div>
+
                     </div>
-
-                    <!-- Title -->
-                    <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">Reporte de productos creados
-                        </div>
-                    </div>
-                    <!-- Main actions -->
-                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                        <!-- Search -->
-                        <div class="flex-auto">
-                            <form [formGroup]="form">
-                                <div class="grid sm:grid-cols-6 gap-6 w-full">
-
-                                    <div class="sm:col-span-1">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Importador</mat-label>
-                                            <input matInput [formControlName]="'nombre_importador'" [spellcheck]="false"
-                                                readonly>
-                                            <button mat-icon-button (click)="openBuscadorImportador()" matSuffix
-                                                *ngIf="puedeSeleccionarImportador">
-                                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
-                                                </mat-icon>
-                                            </button>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="sm:col-span-1">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Marca</mat-label>
-                                            <input matInput [formControlName]="'nombre_marca'" [spellcheck]="false"
-                                                readonly>
-                                            <button mat-icon-button (click)="openBuscadorMarcas()" matSuffix
-                                                *ngIf="puedeSeleccionarImportador">
-                                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
-                                                </mat-icon>
-                                            </button>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="sm:col-span-1">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Categoría</mat-label>
-                                            <input matInput [formControlName]="'nombre_tipo_producto'"
-                                                [spellcheck]="false" readonly>
-                                            <button mat-icon-button (click)="openBuscadorCategoria()" matSuffix
-                                                *ngIf="puedeSeleccionarImportador">
-                                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
-                                                </mat-icon>
-                                            </button>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="sm:col-span-1">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Referencia</mat-label>
-                                            <input matInput [formControlName]="'nombre_referencia'" [spellcheck]="false"
-                                                readonly>
-                                            <button mat-icon-button (click)="openBuscadorReferencias()" matSuffix>
-                                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
-                                                </mat-icon>
-                                            </button>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="sm:col-span-1">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Distribuidor</mat-label>
-                                            <input matInput [formControlName]="'nombre_distribuidor'"
-                                                [spellcheck]="false" readonly>
-                                            <button mat-icon-button (click)="openBuscadorDistribuidores()" matSuffix>
-                                                <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
-                                                </mat-icon>
-                                            </button>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="sm:col-span-1 mt-6">
-                                        <button class="ml-2" mat-flat-button [color]="'primary'"
-                                            (click)="consultarData()" [disabled]="form.invalid">
-                                            <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
-                                        </button>
-                                        <button class="ml-2" mat-flat-button [color]="'primary'" (click)="exportar()"
-                                            *ngIf="productosCount > 0" [disabled]="form.invalid">
-                                            <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 
-                <!-- usuarios list -->
-                <div class="relative">
-                    <div class="overflow-x-auto">
+    <!-- usuarios list -->
+    <div class="relative">
+        <div class="overflow-x-auto">
 
-                        <ng-container *ngIf="productoPaginator$ | async as producto">
-                            <ng-container *ngIf="productosCount > 0; else noProducto">
-                                <div class="overflow-x-auto mx-6">
-                                    <table class="w-full bg-transparent" mat-table matSort
-                                        [dataSource]="recentTransactionsDataSource" [trackBy]="trackByFn"
-                                        #recentTransactionsTable>
+            <ng-container *ngIf="productoPaginator$ | async as producto">
+                <ng-container *ngIf="productosCount > 0; else noProducto">
+                    <div class="overflow-x-auto mx-6">
+                        <table class="w-full bg-transparent" mat-table matSort
+                            [dataSource]="recentTransactionsDataSource" [trackBy]="trackByFn" #recentTransactionsTable>
 
-                                        <!-- name -->
-                                        <ng-container matColumnDef="importador">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Importador
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.importador}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="marca">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Marca
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.marca}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="categoria">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Categoría
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.categoria}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="referencia">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Referencia
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.referencia}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="serial">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Serial
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.serial}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="distribuidor">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Distribuidor
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.distribuidor}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="factura">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Número Factura
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.factura}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="fecha_factura">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Fecha factura
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.fecha_factura}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="propietario">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Propietario
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.propietario}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="factura_usuario">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Factura usuario
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.factura_usuario}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="fecha_factura_usuario">
-                                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Fecha venta
-                                            </th>
-                                            <td mat-cell *matCellDef="let transaction">
-                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                                    {{transaction.fecha_factura_usuario}}
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <tr mat-header-row *matHeaderRowDef="recentTransactionsTableColumns"
-                                            style="cursor: pointer;"></tr>
-                                        <tr style="cursor: pointer;"
-                                            class="order-row h-16 hover:bg-hover cursor-pointer" mat-row
-                                            *matRowDef="let row; columns: recentTransactionsTableColumns;"
-                                            [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedProductos || selectedProductos.id !== row.id,
-                                            'bg-primary-100 dark:bg-hover': selectedProductos && selectedProductos.id === row.id}"></tr>
-                                    </table>
-
-
-
-                                    <mat-paginator style="float: right;" [pageSize]="pageSizeInit"
-                                        [length]="productosCount" (page)="mostrarMas($event)"
-                                        [showFirstLastButtons]="true"></mat-paginator>
-                                </div>
-
+                            <!-- name -->
+                            <ng-container matColumnDef="importador">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Importador
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.importador}}
+                                    </span>
+                                </td>
                             </ng-container>
-                        </ng-container>
 
-                        <div *ngIf="recentTransactionsDataSource.filteredData.length === 0" fxFlex="auto"
-                            fxLayout="column" fxLayoutAlign="center center">
-                            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">No
-                                existen registros</div>
-                        </div>
+                            <ng-container matColumnDef="marca">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Marca
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.marca}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="categoria">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Categoría
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.categoria}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="referencia">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Referencia
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.referencia}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="serial">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Serial
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.serial}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="distribuidor">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Distribuidor
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.distribuidor}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="factura">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Número Factura
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.factura}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="fecha_factura">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Fecha factura
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.fecha_factura}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="propietario">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Propietario
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.propietario}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="factura_usuario">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Factura usuario
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.factura_usuario}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="fecha_factura_usuario">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Fecha venta
+                                </th>
+                                <td mat-cell *matCellDef="let transaction">
+                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                        {{transaction.fecha_factura_usuario}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="recentTransactionsTableColumns"
+                                style="cursor: pointer;"></tr>
+                            <tr style="cursor: pointer;" class="order-row h-16 hover:bg-hover cursor-pointer" mat-row
+                                *matRowDef="let row; columns: recentTransactionsTableColumns;"
+                                [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedProductos || selectedProductos.id !== row.id,
+                                            'bg-primary-100 dark:bg-hover': selectedProductos && selectedProductos.id === row.id}"></tr>
+                        </table>
 
                     </div>
 
-                </div>
 
+                    <mat-paginator style="float: right;" [pageSize]="pageSizeInit" [length]="productosCount"
+                        (page)="mostrarMas($event)" [showFirstLastButtons]="true"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <div *ngIf="recentTransactionsDataSource.filteredData.length === 0" fxFlex="auto" fxLayout="column"
+                fxLayoutAlign="center center">
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">No
+                    existen registros</div>
             </div>
 
-        </mat-drawer-content>
+        </div>
 
-    </mat-drawer-container>
+    </div>
 
 </div>

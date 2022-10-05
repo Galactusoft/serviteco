@@ -25,6 +25,7 @@ import { BuscadorDistribuidoresComponent } from '../../../buscadores/buscador-di
 import { Distribuidor } from '../../../gestion-distribuidores/distribuidores';
 import { MatTableDataSource } from '@angular/material/table';
 import { Paginator } from '../../../paginator';
+import { BuscadorDistribuidoresImportadorComponent } from 'app/modules/admin/buscadores/buscador-distribuidores-importador/buscador-distribuidores-importador.component';
 
 @Component({
     selector: 'reporte-productos',
@@ -54,6 +55,8 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
     pageSize: number = 10;
     pageSizeInit = 10;
     cantidad: number;
+    puedeSeleccionarCategoria: boolean = false;
+    puedeSeleccionarReferencia: boolean = false;
 
     searchStrAbiertas$ = new BehaviorSubject<string>('');
     loadData: boolean = false;
@@ -197,6 +200,7 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
                 this.form.get('nombre_marca').setValue(selected.nombre);
                 this.form.get('id_referencia').setValue("");
                 this.form.get('nombre_referencia').setValue("");
+                this.puedeSeleccionarCategoria = true;
             });
     }
 
@@ -217,6 +221,7 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
                 this.form.get('nombre_tipo_producto').setValue(selected.nombre);
                 this.form.get('id_referencia').setValue("");
                 this.form.get('nombre_referencia').setValue("");
+                this.puedeSeleccionarReferencia = true;
             });
     }
 
@@ -249,7 +254,11 @@ export class ReporteProductosComponent implements OnInit, OnDestroy {
     */
     openBuscadorDistribuidores(): void {
         // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorDistribuidoresComponent);
+        const dialogRef = this._matDialog.open(BuscadorDistribuidoresImportadorComponent, {
+            data: {
+                idImportador: this.form.get('id_importador').value,
+            }
+        });
 
         dialogRef.afterClosed()
             .subscribe((result) => {

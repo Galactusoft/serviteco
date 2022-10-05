@@ -30,7 +30,7 @@ class AyudaController extends Controller
     {
 		$items = DB::select("
 		select a.id, a.uuid, a.id_usuario, u.nombre_completo as nombre_usuario, a.estado_actual, a.estado, a.fecha_sistema from mesa_ayuda a
-        inner join usuarios u on a.id_usuario = u.id WHERE (('$request->id' = '') OR (('$request->id' != '') AND (a.id_usuario = '$request->id'))) LIMIT $request->pageIndex , $request->pageSize
+        inner join usuarios u on a.id_usuario = u.id WHERE (('$request->id' = '') OR (('$request->id' != '') AND (a.id_usuario = '$request->id'))) order by a.id desc LIMIT $request->pageIndex , $request->pageSize
 		");
 
         $count = DB::select("
@@ -47,7 +47,7 @@ class AyudaController extends Controller
     {
 
 		$ayuda = DB::selectOne("
-		SELECT a.id, a.uuid, a.id_usuario, u.nombre_completo as nombre_usuario, a.estado_actual, a.descripcion, a.estado, a.fecha_sistema from mesa_ayuda a
+		SELECT a.id, a.uuid, a.id_usuario, u.nombre_completo as nombre_usuario, a.estado_actual, a.descripcion, a.respuesta, a.estado, a.fecha_sistema from mesa_ayuda a
         inner join usuarios u on a.id_usuario = u.id where a.id = '$params->id' LIMIT 1");
 
         //Devolvemos el token
@@ -79,7 +79,7 @@ class AyudaController extends Controller
 		$params->id = $id;
 
             return response()->json([
-                'resultado' => 'OK',
+                'resultado' => 'OK', 'id' => $id
             ], 200);
 
     }
@@ -163,6 +163,21 @@ class AyudaController extends Controller
                 'mensaje' => $id,
             ], 200);
 
+    }
+
+	//Función que utilizaremos para eliminar evidencias de la ayuda
+    public function api_delete_file(Request $request)
+    {
+        try {
+		    $items = DB::select("
+		    delete from mesa_ayuda_evidencias where id = ".$request->id.";
+		    ");
+
+            //Devolvemos el listado de secciones si todo va bien.
+            return response()->json(['rpta' => 'OK']);
+        } catch(\Illuminate\Database\QueryException $ex){
+            return response()->json(['rpta' => 'ERROR '.$ex], 404);
+        }
     }
 
 }

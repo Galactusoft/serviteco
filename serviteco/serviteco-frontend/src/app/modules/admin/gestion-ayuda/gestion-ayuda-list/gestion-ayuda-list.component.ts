@@ -34,7 +34,7 @@ export class GestionAyudaListComponent implements OnInit, OnDestroy {
 
     data: any;
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentTransactionsTableColumns: string[] = ['id', 'usuario', 'estado_actual', 'estado', 'fecha_sistema'];
+    recentTransactionsTableColumns: string[] = ['id', 'usuario', 'estado_actual', 'fecha_sistema'];
 
     orderBy: string = "id";
     order: string = "asc";
@@ -80,7 +80,7 @@ export class GestionAyudaListComponent implements OnInit, OnDestroy {
             .subscribe((ayudaPaginator: AyudaPaginator) => {
 
                 // Update the counts
-                this.ayudaCount = ayudaPaginator.cantidad[0]['total'];
+                this.ayudaCount = ayudaPaginator?.cantidad[0]['total'];
 
                 // Store the table data
                 this.recentTransactionsDataSource.data = ayudaPaginator.registros;

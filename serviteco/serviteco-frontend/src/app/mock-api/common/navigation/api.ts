@@ -178,69 +178,12 @@ export class NavigationMockApi {
                     link: '/gestion-contactenos'
                 };
 
-                let reporte_cuentas_cobrar_importador: FuseNavigationItem = {
-                    id: 'reporte_cuentas_cobrar_importador',
-                    title: 'Cuentas por cobrar por importador',
+                let gestion_reportes_importador: FuseNavigationItem = {
+                    id: 'gestion_reportes_importador',
+                    title: 'Visualizar reportes',
                     type: 'basic',
                     icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/cuentas-cobrar-importador'
-                };
-
-                let reporte_productos: FuseNavigationItem = {
-                    id: 'reporte_productos',
-                    title: 'Productos creados',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/productos-creados'
-                };
-
-                let reporte_distribuidores_talleres: FuseNavigationItem = {
-                    id: 'reporte_distribuidores_talleres',
-                    title: 'Distribuidores y talleres activos',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/distribuidores-talleres-activos'
-                };
-
-                let reporte_referencias_activas: FuseNavigationItem = {
-                    id: 'reporte_referencias_activas',
-                    title: 'Referencias Activas',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/referencias-activas'
-                };
-
-                let reporte_solicitud_garantias: FuseNavigationItem = {
-                    id: 'reporte_solicitud_garantias',
-                    title: 'Solicitudes de garantia',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/solicitud-garantias'
-                };
-
-                let reporte_repuestos_activos: FuseNavigationItem = {
-                    id: 'reporte_repuestos_activos',
-                    title: 'Repuestos Activos',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/repuestos-activos'
-                };
-
-
-                let reporte_usuarios_activos: FuseNavigationItem = {
-                    id: 'reporte_usuarios_activas',
-                    title: 'Usuarios Activos',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/usuarios-activos'
-                };
-
-                let reporte_productos_activos: FuseNavigationItem = {
-                    id: 'reporte_productos_activos',
-                    title: 'Productos Activos',
-                    type: 'basic',
-                    icon: 'heroicons_outline:collection',
-                    link: '/gestion-reportes/importadores/productos-activos'
+                    link: '/gestion-reportes/importador'
                 };
 
                 let ayuda_serviteco: FuseNavigationItem = {
@@ -312,24 +255,17 @@ export class NavigationMockApi {
                     children: childrenContactenos
                 };
 
-                let childrenReportes: FuseNavigationItem[] = [];
+                let childrenReportesImportador: FuseNavigationItem[] = [];
 
-                childrenReportes.push(reporte_cuentas_cobrar_importador);
-                childrenReportes.push(reporte_productos);
-                childrenReportes.push(reporte_distribuidores_talleres);
-                childrenReportes.push(reporte_referencias_activas);
-                childrenReportes.push(reporte_productos_activos);
-                childrenReportes.push(reporte_usuarios_activos);
-                childrenReportes.push(reporte_repuestos_activos);
-                childrenReportes.push(reporte_solicitud_garantias);
+                childrenReportesImportador.push(gestion_reportes_importador);
 
-                let admin_reportes: FuseNavigationItem = {
+                let admin_reportes_importador: FuseNavigationItem = {
                     id: 'admin_reportes',
                     title: 'Gestión de Reportes',
                     subtitle: 'Gestión de los reportes generados',
                     type: 'group',
                     icon: 'heroicons_outline:collection',
-                    children: childrenReportes
+                    children: childrenReportesImportador
                 };
 
                 let childrenMesaAyuda: FuseNavigationItem[] = [];
@@ -374,17 +310,16 @@ export class NavigationMockApi {
                     menuPrincipal.push(solicitudes);
                     menuPrincipal.push(admin_pqrs);
                     menuPrincipal.push(admin_contactenos);
-                    menuPrincipal.push(admin_reportes);
                     menuPrincipal.push(admin_ayuda_serviteco);
                 } else {
                     if (this._aut.accessAdmin == 'funcionario' || this._aut.accessAdmin == 'taller autorizado') {
                         menuPrincipal.push(solicitudes);
                     } else if (this._aut.accessAdmin == 'distribuidor') {
                         menuPrincipal.push(solicitudes);
-                        menuPrincipal.push(admin_reportes);
                     } else {
                         menuPrincipal.push(admin_productos);
                         menuPrincipal.push(solicitudes);
+                        menuPrincipal.push(admin_reportes_importador);
                     }
                 }
 

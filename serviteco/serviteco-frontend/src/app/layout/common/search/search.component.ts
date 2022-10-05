@@ -7,16 +7,16 @@ import { Paginator } from 'app/modules/admin/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { GestionProductosService } from 'app/modules/admin/gestion-productos/gestion-productos.service';
 import { BuscadorAvanzadoProductosComponent } from 'app/modules/admin/buscadores/buscador-avanzado-productos/buscador-avanzado-productos.component';
+import Swal from 'sweetalert2';
 
 @Component({
-    selector     : 'search',
-    templateUrl  : './search.component.html',
+    selector: 'search',
+    templateUrl: './search.component.html',
     encapsulation: ViewEncapsulation.None,
-    exportAs     : 'fuseSearch',
-    animations   : fuseAnimations
+    exportAs: 'fuseSearch',
+    animations: fuseAnimations
 })
-export class SearchComponent implements OnChanges, OnInit, OnDestroy
-{
+export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     @Input() appearance: 'basic' | 'bar' = 'basic';
     @Input() debounce: number = 300;
     @Input() minLength: number = 2;
@@ -44,8 +44,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
         private _renderer2: Renderer2,
         private _gestionProductosService: GestionProductosService,
         private _matDialog: MatDialog,
-    )
-    {
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -55,12 +54,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     /**
      * Host binding for component classes
      */
-    @HostBinding('class') get classList(): any
-    {
+    @HostBinding('class') get classList(): any {
         return {
-            'search-appearance-bar'  : this.appearance === 'bar',
+            'search-appearance-bar': this.appearance === 'bar',
             'search-appearance-basic': this.appearance === 'basic',
-            'search-opened'          : this.opened
+            'search-opened': this.opened
         };
     }
 
@@ -70,12 +68,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * @param value
      */
     @ViewChild('barSearchInput')
-    set barSearchInput(value: ElementRef)
-    {
+    set barSearchInput(value: ElementRef) {
         // If the value exists, it means that the search input
         // is now in the DOM and we can focus on the input..
-        if ( value )
-        {
+        if (value) {
             // Give Angular time to complete the change detection cycle
             setTimeout(() => {
 
@@ -94,11 +90,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      *
      * @param changes
      */
-    ngOnChanges(changes: SimpleChanges): void
-    {
+    ngOnChanges(changes: SimpleChanges): void {
         // Appearance
-        if ( 'appearance' in changes )
-        {
+        if ('appearance' in changes) {
             // To prevent any issues, close the
             // search after changing the appearance
             this.close();
@@ -112,30 +106,48 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
         paginator.filter = this.filter || 'all';
         paginator.order = this.order;
         paginator.orderBy = this.orderBy;
-        
+
         if (this.tipoBusqueda) {
             paginator.identificacion = this.identificacion.value;
             paginator.serial = null;
             paginator.filter = this.identificacion.value;
             this._gestionProductosService.getProductoPaginatorAvanzado(paginator).subscribe(data => {
-                this.openBuscadorAvanzadoProductos(paginator);
+                if (data.cantidad == 0) {
+                    Swal.fire({
+                        title: "<h5 class='swal2-title-custom'>NÚMERO DE DOCUMENTO NO ENCONTRADO</h5>",
+                        text: "Por favor valide que el documento ingresado sea correcto, el número ingresado NO se encuentra registrado en SERVITECO; confirme que el número de documento proporcionado concuerde con el número de la factura de venta",
+                        icon: 'error',
+                        timer: 7000
+                    })
+                } else {
+                    this.openBuscadorAvanzadoProductos(paginator);
+                }
             })
         } else {
             paginator.serial = this.identificacion.value;
             paginator.identificacion = null;
             paginator.filter = this.identificacion.value;
             this._gestionProductosService.getProductoPaginatorAvanzado(paginator).subscribe(data => {
-                this.openBuscadorAvanzadoProductos(paginator);
+                if (data.cantidad == 0) {
+                    Swal.fire({
+                        title: "<h5 class='swal2-title-custom'>SERIAL NO ENCONTRADO</h5>",
+                        text: "por favor valide si el serial contiene espacios, guiones o  puntos. es posible que el serial  se creara en la base de datos con caracteres distintos al que usted ingresó, asegúrese de que los números coincidan con el serial de facturación",
+                        icon: 'error',
+                        timer: 7000
+                    })
+                } else {
+                    this.openBuscadorAvanzadoProductos(paginator);
+                }
             })
         }
 
-        
+
     }
 
     /**
     * Open productos avanzado dialog
     */
-     openBuscadorAvanzadoProductos(paginator: Paginator): void {
+    openBuscadorAvanzadoProductos(paginator: Paginator): void {
         // Open the dialog
         const dialogRef = this._matDialog.open(BuscadorAvanzadoProductosComponent, {
             data: {
@@ -150,21 +162,19 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
                     return;
                 }
             });
-    }      
+    }
 
     /**
      * On init
      */
-    ngOnInit(): void
-    {
-        
+    ngOnInit(): void {
+
     }
 
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
@@ -179,15 +189,12 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      *
      * @param event
      */
-    onKeydown(event: KeyboardEvent): void
-    {
+    onKeydown(event: KeyboardEvent): void {
         // Listen for escape to close the search
         // if the appearance is 'bar'
-        if ( this.appearance === 'bar' )
-        {
+        if (this.appearance === 'bar') {
             // Escape
-            if ( event.code === 'Escape' )
-            {
+            if (event.code === 'Escape') {
                 // Close the search
                 this.close();
             }
@@ -198,11 +205,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * Open the search
      * Used in 'bar'
      */
-    open(): void
-    {
+    open(): void {
         // Return if it's already opened
-        if ( this.opened )
-        {
+        if (this.opened) {
             return;
         }
 
@@ -214,11 +219,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * Close the search
      * * Used in 'bar'
      */
-    close(): void
-    {
+    close(): void {
         // Return if it's already closed
-        if ( !this.opened )
-        {
+        if (!this.opened) {
             return;
         }
 
@@ -235,8 +238,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 }

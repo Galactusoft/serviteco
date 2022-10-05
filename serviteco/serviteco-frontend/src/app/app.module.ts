@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
@@ -16,11 +16,15 @@ import { SharedModule } from './shared/shared.module';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomMatPaginatorIntl } from 'custom-mat-paginator-int';
 
+import localeEsCO from "@angular/common/locales/es-CO";
+import { registerLocaleData } from "@angular/common";
+registerLocaleData(localeEsCO, "es-CO");
+
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled',
     useHash: true,
-    
+
 };
 
 @NgModule({
@@ -50,7 +54,7 @@ const routerConfig: ExtraOptions = {
     providers: [{
         provide: MatPaginatorIntl,
         useClass: CustomMatPaginatorIntl,
-    }],
+    }, { provide: LOCALE_ID, useValue: "es-CO" }],
     bootstrap   : [
         AppComponent
     ]

@@ -1,0 +1,141 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div
+                    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-8 bg-card dark:bg-transparent" style="margin-bottom: -70px;">
+                    <!-- Title -->
+                    <div class="flex-1 min-w-0">
+                        <div class="hidden sm:flex flex-wrap items-center font-medium">
+                            <div>
+                                <a class="whitespace-nowrap text-primary-500" style="cursor: pointer;"
+                                    [routerLink]="['/inicio']">Inicio</a>
+                            </div>
+                            <div class="flex items-center ml-1 whitespace-nowrap">
+                                <mat-icon class="icon-size-5 text-secondary"
+                                    [svgIcon]="'heroicons_solid:chevron-right'">
+                                </mat-icon>
+                                <span class="ml-1 text-secondary">Gestión reportes</span>
+                            </div>
+                        </div>
+                        <div class="flex sm:hidden">
+                            <a class="inline-flex items-center -ml-1.5 text-secondary font-medium"
+                                [routerLink]="'/inicio'">
+                                <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-left'">
+                                </mat-icon>
+                                <span class="ml-1">Volver</span>
+                            </a>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-extrabold tracking-tight leading-none">Reportes</div>
+                            <div class="ml-0.5 font-medium text-secondary">
+                                Importador
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Actions -->
+                    <div style="width: 40% !important;">
+                        <form [formGroup]="form">
+                            <mat-form-field style="width: 100% !important;">
+                                <mat-label>Seleccione el reporte a visualizar</mat-label>
+                                <mat-select [formControlName]="'reporte'" [(value)]="selectedReporte">
+                                    <mat-option [value]="0">1. Reporte Gráfico</mat-option>
+                                    <mat-option [value]="1">2. Cuentas por pagar</mat-option>
+                                    <mat-option [value]="2">3. Productos creados</mat-option>
+                                    <mat-option [value]="3">4. Distribuidores y talleres activos</mat-option>
+                                    <mat-option [value]="4">5. Referencias activas</mat-option>
+                                    <mat-option [value]="5">6. Productos activos</mat-option>
+                                    <mat-option [value]="6">7. Usuarios activos</mat-option>
+                                    <mat-option [value]="7">8. Repuestos activos</mat-option>
+                                    <mat-option [value]="8">9. Solicitudes de garantía</mat-option>
+                                    <mat-option [value]="9">10. Referencias con más garantías</mat-option>
+                                    <mat-option [value]="10">11. Repuestos más solicitados</mat-option>
+                                    <mat-option [value]="11">12. Mano de obra más solicitada y costos</mat-option>
+                                    <mat-option [value]="12">13. Distribuidores con adquisición de equipos</mat-option>
+                                    <mat-option [value]="13">14. Distribuidores por colocación en mercado</mat-option>
+                                    <mat-option [value]="14">15. Seriales en bodega</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="form.get('reporte').value == '0'">
+                    <reporte-grafico-importador></reporte-grafico-importador>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '1'">
+                    <reporte-cuentas-pagar-importador></reporte-cuentas-pagar-importador>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '2'">
+                    <reporte-productos></reporte-productos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '3'">
+                    <reporte-distribuidores-talleres-activos></reporte-distribuidores-talleres-activos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '4'">
+                    <reporte-referencias-activas></reporte-referencias-activas>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '5'">
+                    <reporte-productos-activos></reporte-productos-activos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '6'">
+                    <reporte-usuarios-activos></reporte-usuarios-activos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '7'">
+                    <reporte-repuestos-activos></reporte-repuestos-activos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '8'">
+                    <reporte-solicitud-garantia></reporte-solicitud-garantia>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '9'">
+                    <reporte-referencias-mas-garantias></reporte-referencias-mas-garantias>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '10'">
+                    <reporte-repuestos-solicitados></reporte-repuestos-solicitados>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '11'">
+                    <reporte-mano-obra-costos></reporte-mano-obra-costos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '12'">
+                    <reporte-adquisicion-equipos></reporte-adquisicion-equipos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '13'">
+                    <reporte-colocacion-mercado></reporte-colocacion-mercado>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '14'">
+                    <reporte-seriales-bodega></reporte-seriales-bodega>
+                </ng-container>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

@@ -534,6 +534,7 @@
                                         (click)="deleteRepuesto(i)"></mat-icon>
                                 </a>
                                 {{ repuesto.nombre }}
+                                <div style="font-size: 10px;">{{ repuesto.material }} - {{ repuesto.pieza_fabricante }} </div>
                             </div>
                             <div class="self-center text-right" *ngIf="!externo">
                                 <input matInput value="1" min="1" minlength="1" type="number"
@@ -551,7 +552,7 @@
                                     class="self-center text-right" style="margin-left: 5px !important;">
                             </div>
                             <div class="self-center text-right" *ngIf="externo">
-                                {{ repuesto.valor_unitario | currency }}
+                                {{ repuesto.valor_unitario | currency : 'COP'  }}
                             </div>
 
                             <div class="col-span-2 self-center text-right" *ngIf="!externo">
@@ -563,7 +564,7 @@
                             <div class="col-span-2 self-center text-right" *ngIf="externo">
                                 {{ repuesto.observaciones }}
                             </div>
-                            <div class="self-center text-right">{{ repuesto.total | currency }}</div>
+                            <div class="self-center text-right">{{ repuesto.total | currency : 'COP'  }}</div>
 
                         </ng-container>
 
@@ -600,7 +601,7 @@
                                     (change)="onChangeCantidadManoObra($event.target.value, manoObra, i)"
                                     class="self-center text-right" style="margin-left: 5px !important;">
                             </div>
-                            <div class="self-center text-right"> {{ manoObra.valor_unitario | currency }} </div>
+                            <div class="self-center text-right"> {{ manoObra.valor_unitario | currency : 'COP'  }} </div>
                             <div class="col-span-2 self-center text-right" *ngIf="!externo">
                                 <input matInput type="text"
                                     value="{{manoObra.observaciones}}"
@@ -610,7 +611,7 @@
                             <div class="col-span-2 self-center text-right" *ngIf="externo">
                                 {{ manoObra.observaciones }}
                             </div>
-                            <div class="self-center text-right">{{ manoObra.total | currency }}</div>
+                            <div class="self-center text-right">{{ manoObra.total | currency : 'COP'  }}</div>
 
                         </ng-container>
 
@@ -620,7 +621,7 @@
                         <!-- Total -->
                         <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">TOTAL
                         </div>
-                        <div class="col-span-2 text-right text-2xl font-medium">{{ total | currency }}</div>
+                        <div class="col-span-2 text-right text-2xl font-medium">{{ total | currency : 'COP'  }}</div>
                     </div>
 
                     <div class="flex flex-auto items-center min-w-0">
@@ -662,7 +663,7 @@
                             [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" required [readonly]="historialSolicitud"></textarea>
                     </mat-form-field>
 
-                    <div class="grid sm:grid-cols-6 gap-6 w-full">
+                    <div class="grid sm:grid-cols-6 gap-6 w-full  mb-4">
 
                         <div class="sm:col-span-3" *ngIf="editMode">
                             <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -679,6 +680,12 @@
                         </div>
 
                     </div>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full mb-4" *ngIf="(solicitud?.id_estado_actual == '4' || solicitud?.id_estado_actual == '5')">
+                        <mat-label>Comentarios adicionales</mat-label>
+                        <textarea matInput [formControlName]="'comentarios'" cdkTextareaAutosize
+                            [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000" required [readonly]="comentarios"></textarea>
+                    </mat-form-field>
 
                 </fuse-card>
 
@@ -858,6 +865,17 @@
                             <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
                                 [disabled]="solicitudForm.invalid" [matTooltip]="'Guardar'"
                                 (click)="AprobarNoAprobarCotizacionSolicitud()">Guardar
+                            </button>
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="externo && (solicitud?.id_estado_actual == '4' || solicitud?.id_estado_actual == '5')">
+                    <div class="flex items-center justify-end w-full mt-20" style="margin-top: 50px !important;">
+                        <ng-container *ngIf="editMode">
+                            <button class="ml-2" [color]="'primary'" type="button" mat-flat-button
+                                [disabled]="solicitudForm.invalid" [matTooltip]="'Modificar'"
+                                (click)="updateSolicitudInfoBasica()">Modificar
                             </button>
                         </ng-container>
                     </div>

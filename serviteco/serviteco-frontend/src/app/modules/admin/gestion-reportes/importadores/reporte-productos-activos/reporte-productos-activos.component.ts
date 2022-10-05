@@ -25,6 +25,7 @@ import { BuscadorDistribuidoresComponent } from '../../../buscadores/buscador-di
 import { Distribuidor } from '../../../gestion-distribuidores/distribuidores';
 import { MatTableDataSource } from '@angular/material/table';
 import { Paginator } from '../../../paginator';
+import { BuscadorDistribuidoresImportadorComponent } from 'app/modules/admin/buscadores/buscador-distribuidores-importador/buscador-distribuidores-importador.component';
 
 @Component({
     selector: 'reporte-productos-activos',
@@ -250,7 +251,11 @@ export class ReporteProductosActivosComponent implements OnInit, OnDestroy {
     */
     openBuscadorDistribuidores(): void {
         // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorDistribuidoresComponent);
+        const dialogRef = this._matDialog.open(BuscadorDistribuidoresImportadorComponent, {
+            data: {
+                idImportador: this.form.get('id_importador').value,
+            }
+        });
 
         dialogRef.afterClosed()
             .subscribe((result) => {
@@ -265,7 +270,6 @@ export class ReporteProductosActivosComponent implements OnInit, OnDestroy {
 
     consultarData() {
         const busqueda = this.form.getRawValue();
-        console.log(busqueda)
         const paginator = new Paginator();
         paginator.pageIndex = this.pageIndex;
         paginator.pageSize = this.pageSize;

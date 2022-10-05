@@ -99,6 +99,18 @@
 
                 </div>
 
+                <div class="grid sm:grid-cols-4 gap-6 w-full" style="margin-top: 25px !important;" *ngIf="editMode">
+
+                    <div class="sm:col-span-4">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Respuesta (Información diligenciada por el desarrollador)</mat-label>
+                            <textarea matInput [formControlName]="'respuesta'" cdkTextareaAutosize readonly
+                                [cdkAutosizeMinRows]="7" [cdkAutosizeMaxRows]="7" maxlength="2000"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
                 <fuse-card class="flex-col p-6 sm:py-12 sm:px-10 ring-2 ring-primary overflow-visible"
                     style="width: inherit; margin-top: 40px !important;" *ngIf="editMode">
                     <div class="absolute inset-x-0 -top-4 flex items-center justify-center">

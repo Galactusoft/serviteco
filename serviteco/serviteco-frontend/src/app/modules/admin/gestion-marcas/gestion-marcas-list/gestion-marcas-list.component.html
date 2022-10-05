@@ -70,6 +70,7 @@
                         <!-- Add marca button -->
                         <button class="ml-2" mat-flat-button [color]="'primary'" (click)="createMarca()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            Agregar
                         </button>
                     </div>
                 </div>
@@ -112,7 +113,7 @@
                                         <!-- email -->
                                         <ng-container matColumnDef="nombre">
                                             <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                                Nombre 
+                                                Nombre
                                             </th>
                                             <td mat-cell *matCellDef="let transaction">
                                                 <span class="pr-6 whitespace-nowrap uppercase">
@@ -132,7 +133,7 @@
                                             </td>
                                         </ng-container>
 
-                                        
+
 
                                         <ng-container matColumnDef="estado">
                                             <th mat-header-cell mat-sort-header *matHeaderCellDef>

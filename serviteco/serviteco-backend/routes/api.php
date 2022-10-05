@@ -44,6 +44,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/ayuda/api_upload_file', [AyudaController::class, 'api_upload_file']);
     Route::post('/ayuda/api_registrar_ayuda', [AyudaController::class, 'api_registrar_ayuda']);
     Route::post('/ayuda/api_actualizar_ayuda', [AyudaController::class, 'api_actualizar_ayuda']);
+    Route::post('/ayuda/api_delete_file', [AyudaController::class, 'api_delete_file']);
+
+    Route::post('/reportes/api_reporte_cuentas_pagar_importador_paginator', [ReportesImportadorController::class, 'api_reporte_cuentas_pagar_importador_paginator']);
+    Route::post('/reportes/api_export_reporte_cuentas_pagar_importador', [ReportesImportadorController::class, 'api_export_reporte_cuentas_pagar_importador']);
 
     Route::post('/reportes/api_reporte_distribuidores_talleres_activos_paginator', [ReportesImportadorController::class, 'api_reporte_distribuidores_talleres_activos_paginator']);
     Route::post('/reportes/api_export_reporte_distribuidores_talleres_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_distribuidores_talleres_activos_paginator']);
@@ -57,8 +61,28 @@ Route::prefix('v1')->group(function () {
     Route::post('/reportes/api_export_reporte_repuestos_activos_paginator', [ReportesImportadorController::class, 'api_export_reporte_repuestos_activos_paginator']);
     Route::post('/reportes/api_export_reporte_solicitud_garantias_paginator', [ReportesImportadorController::class, 'api_export_reporte_solicitud_garantias_paginator']);
     Route::post('/reportes/api_reporte_solicitud_garantias_paginator', [ReportesImportadorController::class, 'api_reporte_solicitud_garantias_paginator']);
+    Route::post('/reportes/api_reporte_referencia_solicita_garantia_paginator', [ReportesImportadorController::class, 'api_reporte_referencia_solicita_garantia_paginator']);
+    Route::post('/reportes/api_export_reporte_referencia_solicita_garantia_paginator', [ReportesImportadorController::class, 'api_export_reporte_referencia_solicita_garantia_paginator']);
 
+    Route::post('/reportes/api_reporte_repuestos_solicitados_paginator', [ReportesImportadorController::class, 'api_reporte_repuestos_solicitados_paginator']);
+    Route::post('/reportes/api_export_reporte_repuestos_solicitados_paginator', [ReportesImportadorController::class, 'api_export_reporte_repuestos_solicitados_paginator']);
 
+    Route::post('/reportes/api_reporte_mano_obra_costos_paginator', [ReportesImportadorController::class, 'api_reporte_mano_obra_costos_paginator']);
+    Route::post('/reportes/api_export_reporte_mano_obra_costos_paginator', [ReportesImportadorController::class, 'api_export_reporte_mano_obra_costos_paginator']);
+
+    Route::post('/reportes/api_reporte_adquisicion_equipos_paginator', [ReportesImportadorController::class, 'api_reporte_adquisicion_equipos_paginator']);
+    Route::post('/reportes/api_export_reporte_adquisicion_equipos_paginator', [ReportesImportadorController::class, 'api_export_reporte_adquisicion_equipos_paginator']);
+
+    Route::post('/reportes/api_reporte_colocacion_mercado_paginator', [ReportesImportadorController::class, 'api_reporte_colocacion_mercado_paginator']);
+    Route::post('/reportes/api_export_reporte_colocacion_mercado_paginator', [ReportesImportadorController::class, 'api_export_reporte_colocacion_mercado_paginator']);
+
+    Route::post('/reportes/api_reporte_seriales_bodega_paginator', [ReportesImportadorController::class, 'api_reporte_seriales_bodega_paginator']);
+    Route::post('/reportes/api_export_reporte_seriales_bodega_paginator', [ReportesImportadorController::class, 'api_export_reporte_seriales_bodega_paginator']);
+
+    Route::post('/reportes/api_reporte_grafico_referencias_mas_vendidas', [ReportesImportadorController::class, 'api_reporte_grafico_referencias_mas_vendidas']);
+    Route::post('/reportes/api_reporte_grafico_garantias_solicitadas_importador', [ReportesImportadorController::class, 'api_reporte_grafico_garantias_solicitadas_importador']);
+    Route::post('/reportes/api_reporte_grafico_info_general_importador', [ReportesImportadorController::class, 'api_reporte_grafico_info_general_importador']);
+    Route::post('/reportes/api_reporte_grafico_costos_mano_obra_taller_importador', [ReportesImportadorController::class, 'api_reporte_grafico_costos_mano_obra_taller_importador']);
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         //Todo lo que este dentro de este grupo requiere verificación de usuario.

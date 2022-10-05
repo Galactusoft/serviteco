@@ -17,6 +17,12 @@ import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Paginator } from '../../../paginator';
+import { BuscadorMarcasImportadorComponent } from 'app/modules/admin/buscadores/buscador-marcas-importador/buscador-marcas-importador.component';
+import { Marca } from 'app/modules/admin/gestion-marcas/marcas';
+import { BuscadorCategoriasComponent } from 'app/modules/admin/buscadores/buscador-categorias/buscador-categorias.component';
+import { TipoProducto } from 'app/modules/admin/gestion-tipoProductos/tipoProductos';
+import { BuscadorReferenciasComponent } from 'app/modules/admin/buscadores/buscador-referencias/buscador-referencias.component';
+import { Referencia } from 'app/modules/admin/gestion-referencias/referencias';
 
 @Component({
     selector: 'reporte-repuestos-activos',
@@ -54,6 +60,8 @@ export class ReporteRepuestosActivosComponent implements OnInit, OnDestroy {
     searchStrAbiertas$ = new BehaviorSubject<string>('');
     loadData: boolean = false;
     puedeSeleccionarImportador: boolean = false;
+    puedeSeleccionarCategoria: boolean = false;
+    puedeSeleccionarReferencia: boolean = false;
 
     form = this._formBuilder.group({
         fecha_inicial: null,
@@ -62,7 +70,10 @@ export class ReporteRepuestosActivosComponent implements OnInit, OnDestroy {
         nombre_importador: null,
         id_marca: null,
         nombre_marca: null,
-        id_distribuidor: null,
+        id_tipo_producto: null,
+        nombre_tipo_producto: null,
+        id_referencia: null,
+        nombre_referencia: null,
         proceso: 'all',
     });
 
@@ -175,8 +186,10 @@ export class ReporteRepuestosActivosComponent implements OnInit, OnDestroy {
         paginator.order = this.order;
         paginator.orderBy = this.orderBy;
         paginator.id_importador = busqueda.id_importador;
-        paginator.fecha_inicial = busqueda.fecha_inicial;
-        paginator.fecha_final = busqueda.fecha_final;
+        paginator.id_marca = busqueda.id_marca;
+        paginator.id_categoria = busqueda.id_tipo_producto;
+        paginator.id_referencia = busqueda.id_referencia;
+
         // Search
         this._gestionReporteService.getRepuestosActivosImportadorPaginator(paginator).subscribe(data => {
 
@@ -224,6 +237,78 @@ export class ReporteRepuestosActivosComponent implements OnInit, OnDestroy {
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
+
+
+    /**
+    * Open marcas dialog
+    */
+     openBuscadorMarcas(): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(BuscadorMarcasImportadorComponent, {
+            data: {
+                idImportador: this.form.get('id_importador').value
+            }
+        });
+
+        dialogRef.afterClosed()
+            .subscribe((result) => {
+                if (!result) {
+                    return;
+                }
+                const selected: Marca = result[1];
+                this.form.get('id_marca').setValue(selected.id);
+                this.form.get('nombre_marca').setValue(selected.nombre);
+                this.form.get('id_referencia').setValue("");
+                this.form.get('nombre_referencia').setValue("");
+                this.puedeSeleccionarCategoria = true;
+            });
+    }
+
+    /**
+    * Open categorias dialog
+    */
+    openBuscadorCategoria(): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(BuscadorCategoriasComponent);
+
+        dialogRef.afterClosed()
+            .subscribe((result) => {
+                if (!result) {
+                    return;
+                }
+                const selected: TipoProducto = result[1];
+                this.form.get('id_tipo_producto').setValue(selected.id);
+                this.form.get('nombre_tipo_producto').setValue(selected.nombre);
+                this.form.get('id_referencia').setValue("");
+                this.form.get('nombre_referencia').setValue("");
+                this.puedeSeleccionarReferencia = true;
+            });
+    }
+
+    /**
+    * Open subcategorias dialog
+    */
+    openBuscadorReferencias(): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(BuscadorReferenciasComponent, {
+            data: {
+                idTipoProducto: this.form.get('id_tipo_producto').value,
+                idImportador: this.form.get('id_importador').value,
+                idMarca: this.form.get('id_marca').value
+            }
+        });
+
+        dialogRef.afterClosed()
+            .subscribe((result) => {
+                if (!result) {
+                    return;
+                }
+                const selected: Referencia = result[1];
+                this.form.get('id_referencia').setValue(selected.id);
+                this.form.get('nombre_referencia').setValue(selected.nombre);
+            });
+    }
+
 
     /**
      * Create contactenos

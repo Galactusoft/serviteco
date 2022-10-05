@@ -21,12 +21,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Paginator } from '../../../paginator';
 
 @Component({
-    selector: 'reporte-cuentas-cobrar-importador',
-    templateUrl: './reporte-cuentas-cobrar-importador.component.html',
+    selector: 'reporte-cuentas-pagar-importador',
+    templateUrl: './reporte-cuentas-pagar-importador.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReporteCuentasCobrarImportadorComponent implements OnInit, OnDestroy {
+export class ReporteCuentasPagarImportadorComponent implements OnInit, OnDestroy {
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     drawerMode: 'side' | 'over';
@@ -40,7 +40,7 @@ export class ReporteCuentasCobrarImportadorComponent implements OnInit, OnDestro
     @ViewChild(MatSort) sort: MatSort;
     data: any;
     dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    tableColumns: string[] = ['importador', 'ticket', 'cliente', 'descripcion', 'valor', 'fecha', 'tipo'];
+    tableColumns: string[] = ['importador', 'ticket', 'cliente', 'taller', 'descripcion', 'valor', 'fecha', 'tipo'];
     orderBy: string = "1";
     order: string = "asc";
     filter: string = "all";
@@ -206,10 +206,10 @@ export class ReporteCuentasCobrarImportadorComponent implements OnInit, OnDestro
         paginator.fecha_final = busqueda.fecha_final;
         paginator.proceso = busqueda.proceso;
         // Search
-        this._gestionReporteService.getCuentasPorCobrarImportadorPaginator(paginator).subscribe(data => {
+        this._gestionReporteService.getCuentasPorPagarImportadorPaginator(paginator).subscribe(data => {
 
             // Update the counts
-            this.dataCount = data.cantidad;
+            this.dataCount = data.cantidad[0]['total'];
 
             // Store the table data
             this.dataSource.data = data.registros;
@@ -265,14 +265,14 @@ export class ReporteCuentasCobrarImportadorComponent implements OnInit, OnDestro
         if (this._aut.accessAdmin == 'distribuidor') {
             busqueda.id_distribuidor = this._aut.accessDistribuidor;
         }
-        this._gestionReporteService.reporteCuentasCobrarImportador(busqueda).subscribe(data => {
+        this._gestionReporteService.reporteCuentasPagarImportador(busqueda).subscribe(data => {
             const totalRepuestos = data.registros.filter(m => m.tipo === 'Repuesto').map(t => Number(t.valor)).reduce((acc, value) => acc + value, 0);
             const totalManoObra = data.registros.filter(m => m.tipo === 'Mano de Obra').map(t => Number(t.valor)).reduce((acc, value) => acc + value, 0);
             const total = Number(totalRepuestos) + Number(totalManoObra);
             if (data.registros.length > 0) {
-                var head = ['Importador', 'Ticket', 'Cliente', 'Descripción', 'Valor sin IVA', 'Fecha', 'Tipo'];
-                var footer = ['TOTAL REPUESTOS', totalRepuestos, 'TOTAL MANO OBRA', totalManoObra, '', 'VALOR TOTAL', total];
-                this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_cuentas_por_cobrar_importador', head, footer);
+                var head = ['Importador', 'Ticket', 'Cliente', 'Taller', 'Descripción', 'Valor sin IVA', 'Fecha', 'Tipo'];
+                var footer = ['TOTAL REPUESTOS', totalRepuestos, 'TOTAL MANO OBRA', totalManoObra, '', '', 'VALOR TOTAL', total];
+                this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_cuentas_por_pagar_importador', head, footer);
             } else {
                 Swal.fire({
                     title: 'No existe información para exportar reporte con los parámetros de búsqueda ingresados',

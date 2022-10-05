@@ -178,6 +178,7 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
             nombre_distribuidor: [null],
             nombre_creador: [null],
             transportadora: [null],
+            comentarios: [null],
             numero_guia: [null],
             id_taller: [null],
             nombre_taller: [null],
@@ -246,6 +247,8 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
                             const rep = new Repuesto();
                             rep.id = repuesto.id_repuesto;
                             rep.nombre = repuesto.nombre;
+                            rep.material = repuesto.material;
+                            rep.pieza_fabricante = repuesto.pieza_fabricante;
                             rep.cantidad = repuesto.cantidad;
                             rep.valor_unitario = repuesto.valor_unitario;
                             rep.total = rep.cantidad * rep.valor_unitario;
@@ -776,6 +779,27 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
 
 
 
+    }
+
+    /**
+         * Update the solicitud
+         */
+     updateSolicitudInfoBasica(): void {
+        // Get the actividades object
+        const solicitud = this.solicitudForm.getRawValue();
+
+        // Update the actividades on the server
+        this._gestionSolicitudesService.updateSolicitud(solicitud?.id, solicitud).subscribe((editSolicitud) => {
+            this.editMode = true;
+            this.validarEstadoSolicitud(solicitud);
+            this._changeDetectorRef.markForCheck();
+            Swal.fire({
+                title: 'Solicitud modificada exitosamente',
+                icon: 'info',
+                timer: 1000
+            })
+
+        });
     }
 
     /**

@@ -25,7 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FuseCardModule } from '@fuse/components/card';
 import { reportesRoutes } from './gestion-reportes.routing';
 import { GestionReportesComponent } from './gestion-reportes.component';
-import { ReporteCuentasCobrarImportadorComponent } from './importadores/reporte-cuentas-cobrar-importador/reporte-cuentas-cobrar-importador.component';
+import { ReporteCuentasPagarImportadorComponent } from './importadores/reporte-cuentas-pagar-importador/reporte-cuentas-pagar-importador.component';
 import { GestionReporteService } from './gestion-reportes.service';
 import { ReporteProductosComponent } from './importadores/reporte-productos-creados/reporte-productos.component';
 import { ReporteDistribuidoresTalleresActivosComponent } from './importadores/reporte-distribuidores-talleres-activos/reporte-distribuidores-talleres-activos.component';
@@ -35,17 +35,37 @@ import { ReporteProductosActivosComponent } from './importadores/reporte-product
 import { ReporteUsuariosActivosComponent } from './importadores/reporte-usuarios-activos/reporte-usuarios-activos.component';
 import { ReporteRepuestosActivosComponent } from './importadores/reporte-repuestos-activos/reporte-repuestos-activos.component';
 import { ReporteSolicitudGarantiasComponent } from './importadores/reporte-solicitud-garantias/reporte-solicitud-garantias.component';
+import { ReporteReferenciasMasGarantiasComponent } from './importadores/reporte-referencias-mas-garantias/reporte-referencias-mas-garantias.component';
+import { GestionReportesImportadoresComponent } from './importadores/gestion-reportes-importadores.component';
+import { BuscadorDistribuidoresImportadorComponent } from '../buscadores/buscador-distribuidores-importador/buscador-distribuidores-importador.component';
+import { ReporteRepuestosSolicitadosComponent } from './importadores/reporte-repuestos-solicitados/reporte-repuestos-solicitados.component';
+import { ReporteManoObraCostosComponent } from './importadores/reporte-mano-obra-costos/reporte-mano-obra-costos.component';
+import { ReporteAdquisicionEquiposComponent } from './importadores/reporte-adquisicion-equipos/reporte-adquisicion-equipos.component';
+import { ReporteColocacionMercadoComponent } from './importadores/reporte-colocacion-mercado/reporte-colocacion-mercado.component';
+import { ReporteSerialesBodegaComponent } from './importadores/reporte-seriales-bodega/reporte-seriales-bodega.component';
+import { ReporteGraficoImportadorComponent } from './importadores/reporte-grafico-importador/reporte-grafico-importador.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NgApexchartsModule } from 'ng-apexcharts';
 @NgModule({
     declarations: [
         GestionReportesComponent,
-        ReporteCuentasCobrarImportadorComponent,
+        GestionReportesImportadoresComponent,
+        ReporteCuentasPagarImportadorComponent,
         ReporteProductosComponent,
         ReporteDistribuidoresTalleresActivosComponent,
         ReporteReferenciasActivasComponent,
         ReporteProductosActivosComponent,
         ReporteUsuariosActivosComponent,
         ReporteRepuestosActivosComponent,
-        ReporteSolicitudGarantiasComponent
+        ReporteSolicitudGarantiasComponent,
+        ReporteReferenciasMasGarantiasComponent,
+        BuscadorDistribuidoresImportadorComponent,
+        ReporteRepuestosSolicitadosComponent,
+        ReporteManoObraCostosComponent,
+        ReporteAdquisicionEquiposComponent,
+        ReporteColocacionMercadoComponent,
+        ReporteSerialesBodegaComponent,
+        ReporteGraficoImportadorComponent
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),
@@ -72,6 +92,8 @@ import { ReporteSolicitudGarantiasComponent } from './importadores/reporte-solic
         MatSnackBarModule,
         FuseCardModule,
         MatTabsModule,
+        MatButtonToggleModule,
+        NgApexchartsModule,
     ],
     providers   : [
         {
@@ -90,7 +112,8 @@ import { ReporteSolicitudGarantiasComponent } from './importadores/reporte-solic
         }
     ],
     entryComponents: [
-        GestionReporteService
+        GestionReporteService,
+        BuscadorDistribuidoresImportadorComponent
     ],
 })
 export class GestionReportesModule

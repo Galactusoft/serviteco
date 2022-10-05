@@ -3,8 +3,8 @@ import { Referencia } from "../gestion-referencias/referencias";
 
 export class Repuesto {
     id: string;
-    material: number;
-    pieza_fabricante: number;
+    material: string;
+    pieza_fabricante: string;
     nombre: string;
     descripcion: string;
     valor_unitario: number;
