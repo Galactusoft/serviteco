@@ -334,13 +334,27 @@ export class GestionSolicitudesService {
      *
      * @param id
      */
-    deleteSolicitud(id: string): Observable<any> {
-        const solicitud = {
-            id: id
-        }
+    deleteSolicitud(solicitud: RecepcionSolicitud): Observable<any> {
         return this.solicitudes$.pipe(
             take(1),
             switchMap(solicitudes => this._httpClient.post<RecepcionSolicitud>(`${this.url}/api_eliminacion_solicitud.php`, JSON.stringify(solicitud)).pipe(
+                map((isDeleted: RecepcionSolicitud) => {
+                    // Return the deleted status
+                    return isDeleted;
+                })
+            ))
+        );
+    }
+
+    /**
+     * Delete solicitud definitivamente
+     *
+     * @param id
+     */
+     deleteSolicitudDefinitamente(solicitud: RecepcionSolicitud): Observable<any> {
+        return this.solicitudes$.pipe(
+            take(1),
+            switchMap(solicitudes => this._httpClient.post<RecepcionSolicitud>(`${this.url}/api_eliminacion_solicitud_definitiva.php`, JSON.stringify(solicitud)).pipe(
                 map((isDeleted: RecepcionSolicitud) => {
                     // Return the deleted status
                     return isDeleted;

@@ -1209,8 +1209,8 @@ class ReportesImportadorController extends Controller
     {
 		$items = DB::select("
         SELECT t.nombre as taller, TRUNCATE((select sum((rsmo.valor_unitario * rsmo.cantidad)) from recepcion_solicitud_mano_obra rsmo
-        inner join recepcion_solicitud sol on sol.id = rsmo.id_recepcion_solicitud inner join talleres t on t.id = sol.id_taller
-        where t.id = ti.id_taller), 2) as mano_obra
+        inner join recepcion_solicitud sol on sol.id = rsmo.id_recepcion_solicitud inner join producto p on p.id = sol.id_producto inner join talleres t on t.id = sol.id_taller
+        where t.id = ti.id_taller AND p.id_importador = '$request->id_importador'), 2) as mano_obra
         FROM talleres_importadores ti inner join talleres t on t.id = ti.id_taller where ti.id_importador = '$request->id_importador';
 		");
 

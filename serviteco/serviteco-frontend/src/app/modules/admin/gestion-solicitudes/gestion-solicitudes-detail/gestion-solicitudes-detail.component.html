@@ -796,9 +796,15 @@
                 <!-- Actions -->
                 <ng-container *ngIf="!externo">
                     <div class="flex items-center justify-end w-full mt-20" style="margin-top: 50px !important;">
-                        <ng-container *ngIf="false">
+                        <ng-container *ngIf="solicitud?.id_estado_actual != '8'">
                             <button mat-button [color]="'warn'" [matTooltip]="'Eliminar'" (click)="deleteSolicitud()">
                                 Eliminar
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="puedeEliminarDefinitivamente && solicitud?.id_estado_actual == '8'">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Eliminar'" (click)="deleteSolicitudDefinitivamente()">
+                                Eliminar definitivamente
                             </button>
                         </ng-container>
 

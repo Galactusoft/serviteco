@@ -90,6 +90,7 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
     file_data: any = '';
     cargoNuevaEvidencia: boolean = false;
     puedeAsignar: boolean = false;
+    puedeEliminarDefinitivamente: boolean = false;
     labelVolver: string = "Volver a las solicitudes"
     linkVolver: string = "..";
     producto: ProductoPropietario;
@@ -134,6 +135,10 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
             } else {
                 this.tituloFormulario = "Revisión de recepción de solicitud";
             }
+        }
+
+        if (this._aut.accessAdmin == 'administrador') {
+            this.puedeEliminarDefinitivamente = true;
         }
         if (this._aut.accessAdmin == 'administrador' || this._aut.accessJefe == 'SI') {
             this.puedeAsignar = true;
@@ -784,7 +789,7 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
     /**
          * Update the solicitud
          */
-     updateSolicitudInfoBasica(): void {
+    updateSolicitudInfoBasica(): void {
         // Get the actividades object
         const solicitud = this.solicitudForm.getRawValue();
 
@@ -809,7 +814,7 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
         // Open the confirmation dialog
         const confirmation = this._fuseConfirmationService.open({
             title: 'Eliminar solicitud',
-            message: 'Está seguro de eliminar la solicitud? Esta acción no se puede deshacer!',
+            message: 'Está seguro de eliminar la solicitud? Se enviará notificación al administrdor del sistema para realizar la eliminación de la solicitud.',
             actions: {
                 confirm: {
                     label: 'Eliminar'
@@ -823,16 +828,77 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
             // If the confirm button pressed...
             if (result === 'confirmed') {
                 // Get the current solicitudes id
-                const id = this.solicitud.id;
+                const solicitud = this.solicitudForm.getRawValue();
+                solicitud.id_usuario = localStorage.getItem('accessUserId');
+                solicitud.id_usuario_asignado = localStorage.getItem('accessUserId');
+                solicitud.id_estado_actual = 8;
+                solicitud.estado = 1;
 
                 // Delete the contact
-                this._gestionSolicitudesService.deleteSolicitud(id)
+                this._gestionSolicitudesService.deleteSolicitud(solicitud)
                     .subscribe((request) => {
 
-                        if (request['mensaje'] == 'OK') {
+                        if (request['resultado'] == 'OK') {
 
                             this.editMode = true;
-                            this._router.navigateByUrl('/solicitudes');
+                            this._router.navigateByUrl('gestion-solicitudes');
+                            this._changeDetectorRef.markForCheck();
+                            Swal.fire({
+                                title: 'Solicitud de eliminación de recepción enviada exitosamente',
+                                icon: 'info',
+                                timer: 1000
+                            })
+                        } else {
+
+                            this.editMode = true;
+                            this._changeDetectorRef.markForCheck();
+                            Swal.fire({
+                                title: 'No fue posible enviar la solicitud de eliminación de la recepción de solicitud',
+                                icon: 'error',
+                                timer: 1000
+                            })
+                        }
+
+                    });
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+            }
+        });
+
+    }
+
+    /**
+     * Delete solicitud definitivamente
+     */
+    deleteSolicitudDefinitivamente(): void {
+        // Open the confirmation dialog
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'Eliminar solicitud definitivamente',
+            message: 'Está seguro de eliminar definitivamente la solicitud? Esta acción no se podrá deshacer!',
+            actions: {
+                confirm: {
+                    label: 'Eliminar'
+                }
+            }
+        });
+
+        // Subscribe to the confirmation dialog closed action
+        confirmation.afterClosed().subscribe((result) => {
+
+            // If the confirm button pressed...
+            if (result === 'confirmed') {
+                // Get the current solicitudes id
+                const solicitud = this.solicitudForm.getRawValue();
+
+                // Delete the contact
+                this._gestionSolicitudesService.deleteSolicitudDefinitamente(solicitud)
+                    .subscribe((request) => {
+
+                        if (request['resultado'] == 'OK') {
+
+                            this.editMode = true;
+                            this._router.navigateByUrl('gestion-solicitudes');
                             this._changeDetectorRef.markForCheck();
                             Swal.fire({
                                 title: 'Solicitud eliminada exitosamente',
@@ -844,7 +910,7 @@ export class GestionSolicitudesDetailComponent implements OnInit, OnDestroy {
                             this.editMode = true;
                             this._changeDetectorRef.markForCheck();
                             Swal.fire({
-                                title: 'No es posible eliminar esta solicitud',
+                                title: 'No fue posible eliminar definitivamente la solicitud',
                                 icon: 'error',
                                 timer: 1000
                             })

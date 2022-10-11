@@ -254,7 +254,8 @@
                                                     'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': item.estado_actual === 'ENVIADA',
                                                 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-50': item.estado_actual === 'SOLICITUD EVALUADA',
                                                 'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': item.estado_actual === 'ASIGNADA',
-                                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': item.estado_actual === 'SOLUCIONADA'}">
+                                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': item.estado_actual === 'SOLUCIONADA',
+                                                'bg-red-800 text-white dark:bg-red-800 dark:text-white': item.estado_actual === 'ANULADA'}">
                                                     <span
                                                         class="leading-relaxed whitespace-nowrap">{{item.estado_actual}}
 
