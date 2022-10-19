@@ -54,6 +54,7 @@ export class GestionProductosDetailComponent implements OnInit, OnDestroy {
     textoGarantia: string;
     puedeSeleccionarDistribuidor: boolean = false;
     puedeSeleccionarImportador: boolean = false;
+    puedeSeleccionarReferencia: boolean = false;
     listadoUsuario: UsuarioFinal[];
     usuarioTallerAutorizado: boolean = false;
     usuarioFuncionario: boolean = false;
@@ -477,22 +478,44 @@ export class GestionProductosDetailComponent implements OnInit, OnDestroy {
     * Open categorias dialog
     */
     openBuscadorImportador(): void {
-        // Open the dialog
-        const dialogRef = this._matDialog.open(BuscadorImportadorasComponent, {
-            data: {
-                idTaller: localStorage.getItem('accessTaller')
-            }
-        });
 
-        dialogRef.afterClosed()
-            .subscribe((result) => {
-                if (!result) {
-                    return;
+        if (this._aut.accessAdmin == 'distribuidor') {
+            // Open the dialog importadores distribuidor autorizado
+            const dialogRef = this._matDialog.open(BuscadorImportadorasComponent, {
+                data: {
+                    idTaller: localStorage.getItem('accessTaller'),
+                    idDistribuidor: this._aut.accessDistribuidor
                 }
-                const selected: TipoProducto = result[1];
-                this.productoForm.get('id_importador').setValue(selected.id);
-                this.productoForm.get('nombre_importador').setValue(selected.nombre);
             });
+            dialogRef.afterClosed()
+                .subscribe((result) => {
+                    if (!result) {
+                        return;
+                    }
+                    const selected: TipoProducto = result[1];
+                    this.productoForm.get('id_importador').setValue(selected.id);
+                    this.productoForm.get('nombre_importador').setValue(selected.nombre);
+                });
+        } else {
+            // Open the dialog
+            const dialogRef = this._matDialog.open(BuscadorImportadorasComponent, {
+                data: {
+                    idTaller: localStorage.getItem('accessTaller')
+                }
+            });
+            dialogRef.afterClosed()
+                .subscribe((result) => {
+                    if (!result) {
+                        return;
+                    }
+                    const selected: TipoProducto = result[1];
+                    this.productoForm.get('id_importador').setValue(selected.id);
+                    this.productoForm.get('nombre_importador').setValue(selected.nombre);
+                });
+        }
+
+
+
     }
 
     /**
@@ -508,6 +531,7 @@ export class GestionProductosDetailComponent implements OnInit, OnDestroy {
                     return;
                 }
                 const selected: TipoProducto = result[1];
+                this.puedeSeleccionarReferencia = true;
                 this.productoForm.get('id_tipo_producto').setValue(selected.id);
                 this.productoForm.get('nombre_tipo_producto').setValue(selected.nombre);
             });

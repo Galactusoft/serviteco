@@ -98,7 +98,7 @@ export class GestionPqrsListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pqrs: Pqrs) => {
 
-                // Update the selected pqrs 
+                // Update the selected pqrs
                 this.selectedPqrs = pqrs;
 
                 // Mark for check

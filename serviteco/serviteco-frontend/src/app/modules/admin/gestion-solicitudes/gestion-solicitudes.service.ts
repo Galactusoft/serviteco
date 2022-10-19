@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
 import { environment } from 'environments/environment';
-import { Evidencias, PanelSolicitudes, RecepcionSolicitud, RecepcionSolicitudEstado, RecepcionSolicitudManoObra, RecepcionSolicitudRepuestos } from './recepcion-solicitud';
+import { Evidencias, PanelSolicitudes, RecepcionSolicitud, RecepcionSolicitudesPaginator, RecepcionSolicitudEstado, RecepcionSolicitudManoObra, RecepcionSolicitudRepuestos } from './recepcion-solicitud';
 import { AuthService } from 'app/core/auth/auth.service';
+import { Paginator } from '../paginator';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class GestionSolicitudesService {
     private _repuestos: BehaviorSubject<RecepcionSolicitudRepuestos[] | null> = new BehaviorSubject(null);
     private _manosObra: BehaviorSubject<RecepcionSolicitudManoObra[] | null> = new BehaviorSubject(null);
     private _panelSolicitudes: BehaviorSubject<PanelSolicitudes | null> = new BehaviorSubject(null);
+    private _recepcionSolicitudesPaginator: BehaviorSubject<RecepcionSolicitudesPaginator | null> = new BehaviorSubject(null);
 
     /**
      * Constructor
@@ -41,6 +43,13 @@ export class GestionSolicitudesService {
      */
     get solicitudes$(): Observable<RecepcionSolicitud[]> {
         return this._solicitudes.asObservable();
+    }
+
+    /**
+    * Getter for RecepcionSolicitudesPaginator
+    */
+    get recepcionSolicitudesPaginator$(): Observable<RecepcionSolicitudesPaginator> {
+        return this._recepcionSolicitudesPaginator.asObservable();
     }
 
     get bitacora$(): Observable<RecepcionSolicitudEstado[]> {
@@ -194,6 +203,64 @@ export class GestionSolicitudesService {
                 })
             );
         }
+    }
+
+    /**
+    * Get pqrss paginator
+    */
+    getRecepcionSolicitudesPaginator(paginator: Paginator): Observable<RecepcionSolicitudesPaginator> {
+        if (this._aut.accessAdmin == 'funcionario' && this._aut.accessJefe == 'NO') {
+            paginator.tipo = 'usuario';
+            paginator.id = localStorage.getItem('accessUserId')
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        } else if (this._aut.accessAdmin == 'importador') {
+            paginator.tipo = 'importador';
+            paginator.id = localStorage.getItem('accessImportador')
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        } else if (this._aut.accessAdmin == 'distribuidor') {
+            paginator.tipo = 'distribuidor';
+            paginator.id = localStorage.getItem('accessDistribuidor')
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        } else if (this._aut.accessAdmin == 'taller autorizado') {
+            paginator.tipo = 'taller';
+            paginator.id = localStorage.getItem('accessTaller');
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        } else if (this._aut.accessAdmin == 'funcionario' && this._aut.accessJefe == 'SI') {
+            paginator.tipo = 'taller';
+            paginator.id = localStorage.getItem('accessTaller');
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        } else if (this._aut.accessAdmin == 'administrador') {
+            paginator.tipo = 'administrador';
+            return this._httpClient.post<RecepcionSolicitudesPaginator>(`${this.url}/api_solicitudes_paginator.php`, JSON.stringify(paginator)).pipe(
+                tap((recepcionSolicitudesPaginator) => {
+                    this._recepcionSolicitudesPaginator.next(recepcionSolicitudesPaginator);
+                })
+            );
+        }
+
+
+
+
     }
 
     /**
@@ -351,7 +418,7 @@ export class GestionSolicitudesService {
      *
      * @param id
      */
-     deleteSolicitudDefinitamente(solicitud: RecepcionSolicitud): Observable<any> {
+    deleteSolicitudDefinitamente(solicitud: RecepcionSolicitud): Observable<any> {
         return this.solicitudes$.pipe(
             take(1),
             switchMap(solicitudes => this._httpClient.post<RecepcionSolicitud>(`${this.url}/api_eliminacion_solicitud_definitiva.php`, JSON.stringify(solicitud)).pipe(

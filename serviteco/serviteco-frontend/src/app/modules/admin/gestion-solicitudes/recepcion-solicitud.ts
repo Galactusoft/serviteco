@@ -154,3 +154,8 @@ export class PanelSolicitudes {
     evaluadas: RecepcionSolicitud[];
     asignadas: RecepcionSolicitud[];
 }
+
+export class RecepcionSolicitudesPaginator {
+    registros: RecepcionSolicitud[];
+    cantidad: number;
+}

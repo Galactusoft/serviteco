@@ -23,6 +23,7 @@ export class BuscadorImportadorasComponent implements OnInit, AfterViewInit {
     searchCtrl = new FormControl('');
     searchStr$ = this.searchCtrl.valueChanges.pipe(debounceTime(10));
     idTaller: string;
+    idDistribuidor: string;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -42,6 +43,7 @@ export class BuscadorImportadorasComponent implements OnInit, AfterViewInit {
         @Inject(MAT_DIALOG_DATA) private _data: any,
     ) {
         this.idTaller = _data?.idTaller;
+        this.idDistribuidor = _data?.idDistribuidor;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -62,6 +64,8 @@ export class BuscadorImportadorasComponent implements OnInit, AfterViewInit {
 
         if ('null' != this.idTaller && null != this.idTaller && '0' != this.idTaller) {
             this.importadoras$ = this._gestionImportadoresService.getImportadorasPorTaller(this.idTaller);
+        } else if ('null' != this.idDistribuidor && null != this.idDistribuidor && '0' != this.idDistribuidor) {
+            this.importadoras$ = this._gestionImportadoresService.getImportadorasPorDistribuidor(this.idDistribuidor);
         } else {
             this.importadoras$ = this._gestionImportadoresService.getImportadores();
         }

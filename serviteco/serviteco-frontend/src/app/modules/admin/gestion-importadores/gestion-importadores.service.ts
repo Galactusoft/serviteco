@@ -114,6 +114,20 @@ export class GestionImportadoresService {
     }
 
     /**
+    * Get imnportadoras por distribuidor
+    */
+     getImportadorasPorDistribuidor(idDistribuidor: string): Observable<Importador[]> {
+        const distribuidor = {
+            id: idDistribuidor
+        }
+        return this._httpClient.post<Importador[]>(`${this.url}/api_importadores_distribuidor.php`, JSON.stringify(distribuidor)).pipe(
+            tap((importadores) => {
+                this._importadores.next(importadores);
+            })
+        );
+    }
+
+    /**
     * Get importadores paginator
     */
     getImportadoresPaginator(paginator: Paginator): Observable<Importador[]> {

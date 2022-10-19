@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
+import { Paginator } from '../paginator';
 import { GestionSolicitudesService } from './gestion-solicitudes.service';
 import { PanelSolicitudes, RecepcionSolicitud } from './recepcion-solicitud';
 
@@ -25,8 +26,14 @@ export class GestionSolicitudesResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RecepcionSolicitud[]> {
-        return this._gestionSolicitudesService.getSolicitudes();
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        const paginator = new Paginator();
+        paginator.pageIndex = 0;
+        paginator.pageSize = 10;
+        paginator.filter = "all";
+        paginator.order = "asc";
+        paginator.orderBy = "id";
+        return this._gestionSolicitudesService.getRecepcionSolicitudesPaginator(paginator);
     }
 }
 

@@ -5,10 +5,12 @@ import { FormControl } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { BehaviorSubject, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { RecepcionSolicitud } from '../recepcion-solicitud';
+import { RecepcionSolicitud, RecepcionSolicitudesPaginator } from '../recepcion-solicitud';
 import { GestionSolicitudesService } from '../gestion-solicitudes.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { Paginator } from '../../paginator';
 
 @Component({
     selector: 'gestion-solicitudes-list',
@@ -20,7 +22,7 @@ import { GestionSolicitudesService } from '../gestion-solicitudes.service';
 export class GestionSolicitudesListComponent implements OnInit, OnDestroy {
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    solicitudes$: Observable<RecepcionSolicitud[]>;
+    solicitudes$: Observable<RecepcionSolicitudesPaginator>;
 
     solicitudesCount: number = 0;
     drawerMode: 'side' | 'over';
@@ -28,6 +30,7 @@ export class GestionSolicitudesListComponent implements OnInit, OnDestroy {
     selected: RecepcionSolicitud;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
     data: any;
@@ -37,9 +40,10 @@ export class GestionSolicitudesListComponent implements OnInit, OnDestroy {
     orderBy: string = "id";
     order: string = "desc";
     filter: string = "all";
-    pageIndex: string = "0";
-    pageSize: string = "10";
+    pageIndex: number = 0;
+    pageSize: number = 10;
     pageSizeInit = 10;
+    cantidad: number;
 
     searchStr$ = new BehaviorSubject<string>('');
     loadData: boolean = false;
@@ -71,16 +75,16 @@ export class GestionSolicitudesListComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Get the solicitud
-        this.solicitudes$ = this._gestionSolicitudesService.solicitudes$;
-        this._gestionSolicitudesService.solicitudes$
+        this.solicitudes$ = this._gestionSolicitudesService.recepcionSolicitudesPaginator$;
+        this._gestionSolicitudesService.recepcionSolicitudesPaginator$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((solicitudes: RecepcionSolicitud[]) => {
+            .subscribe((recepcionSolicitudesPaginator: RecepcionSolicitudesPaginator) => {
 
                 // Update the counts
-                this.solicitudesCount = solicitudes.length;
+                this.solicitudesCount = recepcionSolicitudesPaginator.cantidad;
 
                 // Store the table data
-                this.dataSource.data = solicitudes;
+                this.dataSource.data = recepcionSolicitudesPaginator.registros;
 
                 this.loadData = true;
 
@@ -158,10 +162,48 @@ export class GestionSolicitudesListComponent implements OnInit, OnDestroy {
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
+    consultarData() {
+
+        const paginator = new Paginator();
+        paginator.pageIndex = this.pageIndex;
+        paginator.pageSize = this.pageSize;
+        paginator.filter = this.filter || 'all';
+        paginator.order = this.order;
+        paginator.orderBy = this.orderBy;
+        // Search
+        this._gestionSolicitudesService.getRecepcionSolicitudesPaginator(paginator).subscribe(data => {
+
+            // Update the counts
+            this.solicitudesCount = data.cantidad;
+
+            // Store the table data
+            this.dataSource.data = data.registros;
+
+            this.loadData = true;
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this.dataSource.sort = this.sort;
+    }
+
+    sortData(sort: Sort) {
+        this.order = sort.direction;
+        this.orderBy = sort.active;
+        this.consultarData();
+    }
+
+    mostrarMas(e: any) {
+        this.pageIndex = e.pageIndex * 10;
+        this.pageSize = e.pageSize;
+        this.consultarData();
+    }
+
     applyFilter(filterValue: string): void {
-        this.filter = filterValue;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        this.solicitudesCount = this.dataSource.filteredData.length;
+        this.filter = (filterValue || 'all').trim().toLowerCase();
+        //this.paginator.firstPage();
+        this.consultarData();
     }
 
     /**

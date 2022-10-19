@@ -98,7 +98,7 @@
                             <input matInput [formControlName]="'nombre_referencia'" [spellcheck]="false" readonly
                                 required>
                             <button mat-icon-button (click)="openBuscadorReferencias()" matSuffix
-                                [disabled]="!editMode">
+                                [disabled]="!editMode" *ngIf="puedeSeleccionarReferencia">
                                 <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
                                 </mat-icon>
                             </button>
