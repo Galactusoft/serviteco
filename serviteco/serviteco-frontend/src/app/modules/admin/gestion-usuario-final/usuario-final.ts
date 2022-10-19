@@ -6,7 +6,9 @@ export class UsuarioFinal {
     correo: string;
     telefono: string;
     direccion: string;
-    codigo_postal: string;
+    ubicacion: string;
+    latitud: string;
+    longitud: string;
 
     /**
      * Constructor

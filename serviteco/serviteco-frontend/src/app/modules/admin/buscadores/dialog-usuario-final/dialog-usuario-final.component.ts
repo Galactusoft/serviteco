@@ -63,11 +63,10 @@ export class DialogUsuarioFinalComponent implements OnInit, AfterViewInit {
             identificacion: [null],
             telefono: [null],
             direccion: [null],
-            codigo_postal: [null],
             correo: ['', [Validators.required, Validators.email]],
             ubicacion: [null],
-            latitud: [null],
-            longitud: [null],
+            latitud: [''],
+            longitud: [''],
         });
 
         this._changeDetectorRef.markForCheck();
@@ -87,7 +86,8 @@ export class DialogUsuarioFinalComponent implements OnInit, AfterViewInit {
                 this.usuarioFinalForm.get('identificacion').setValue(res.identificacion);
                 this.usuarioFinalForm.get('telefono').setValue(res.telefono);
                 this.usuarioFinalForm.get('direccion').setValue(res.direccion);
-                this.usuarioFinalForm.get('codigo_postal').setValue(res.codigo_postal);
+                this.usuarioFinalForm.get('latitud').setValue(res.latitud);
+                this.usuarioFinalForm.get('longitud').setValue(res.longitud);
                 this.usuarioFinalForm.get('correo').setValue(res.correo);
                 this.existeUsuario = true;
             } else {
@@ -101,7 +101,8 @@ export class DialogUsuarioFinalComponent implements OnInit, AfterViewInit {
                 this.usuarioFinalForm.get('apellidos').setValue(null);
                 this.usuarioFinalForm.get('telefono').setValue(null);
                 this.usuarioFinalForm.get('direccion').setValue(null);
-                this.usuarioFinalForm.get('codigo_postal').setValue(null);
+                this.usuarioFinalForm.get('latitud').setValue(null);
+                this.usuarioFinalForm.get('longitud').setValue(null);
                 this.usuarioFinalForm.get('correo').setValue(null);
                 this.existeUsuario = false;
             }
@@ -138,8 +139,8 @@ export class DialogUsuarioFinalComponent implements OnInit, AfterViewInit {
         // Open the dialog
         const dialogRef = this._matDialog.open(DialogMapaComponent, {
             data: {
-                latitud: Number(123456),
-                longitud: Number(123456)
+                latitud: Number(this.usuarioFinalForm.get('latitud').value),
+                longitud: Number(this.usuarioFinalForm.get('longitud').value)
             }
         });
 

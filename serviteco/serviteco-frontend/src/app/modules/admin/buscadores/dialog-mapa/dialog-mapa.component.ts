@@ -50,8 +50,8 @@ export class DialogMapaComponent implements OnInit, AfterViewInit {
         private _snackBar: MatSnackBar,
         @Inject(MAT_DIALOG_DATA) private _data: any,
     ) {
-        this.lat = _data.latitud;
-        this.lng = _data.longitud;
+        this.lat = _data.latitud == 0 ? this.lat : _data.latitud;
+        this.lng = _data.longitud == 0 ? this.lng : _data.longitud;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ export class DialogMapaComponent implements OnInit, AfterViewInit {
     }
 
     clickedMarker(lat: number, lng: number): void {
-        
+
     }
 
     openSnackBar(message: string, action: string) {

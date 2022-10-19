@@ -60,8 +60,12 @@
 
             <div class="mt-4">
                 <mat-form-field class="fuse-mat-no-subscript w-full">
-                    <mat-label>Código postal</mat-label>
-                    <input matInput [formControlName]="'codigo_postal'" required appNumberOnly>
+                    <mat-label>Ubicación geográfica del usuario</mat-label>
+                    <input matInput [formControlName]="'ubicacion'" [spellcheck]="false" readonly required>
+                    <button mat-icon-button (click)="openMapa()" matSuffix>
+                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                        </mat-icon>
+                    </button>
                 </mat-form-field>
             </div>
 

@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { GestionUsuarioFinalListComponent } from '../gestion-usuario-final-list/gestion-usuario-final-list.component';
 import { GestionUsuarioFinalService } from '../gestion-usuario-final.service';
 import { UsuarioFinal } from '../usuario-final';
+import { DialogMapaComponent } from '../../buscadores/dialog-mapa/dialog-mapa.component';
+import { Ubicacion } from '../../buscadores/dialog-mapa/ubicacion';
 
 @Component({
     selector: 'gestion-usuario-final-detail',
@@ -46,6 +48,7 @@ export class GestionUsuarioFinalDetailComponent implements OnInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private _router: Router,
         private _snackBar: MatSnackBar,
+        private _matDialog: MatDialog,
     ) {
     }
 
@@ -69,7 +72,9 @@ export class GestionUsuarioFinalDetailComponent implements OnInit, OnDestroy {
             direccion: [''],
             telefono: [''],
             correo: ['', [Validators.required, Validators.email]],
-            codigo_postal: [''],
+            ubicacion: [null],
+            latitud: [''],
+            longitud: [''],
         });
 
         // Get the usuario
@@ -93,8 +98,15 @@ export class GestionUsuarioFinalDetailComponent implements OnInit, OnDestroy {
                 // Get the usuario
                 this.usuario = usuario;
 
+                if (usuario?.latitud != null) {
+                    this.usuarioForm.get('ubicacion').setValue(usuario.latitud + " / " + usuario.longitud);
+                } else {
+                    this.usuarioForm.get('ubicacion').setValue(null);
+                }
+
                 if (usuario != null) {
                     this.editPassword = true;
+
 
                     // Toggle the edit mode off
                     this.toggleEditMode(false);
@@ -194,6 +206,31 @@ export class GestionUsuarioFinalDetailComponent implements OnInit, OnDestroy {
                 this._router.navigate(['gestion-usuario-final']);
             });
         }
+    }
+
+
+    /**
+    * Open mapa dialog
+    */
+    openMapa(): void {
+        // Open the dialog
+        const dialogRef = this._matDialog.open(DialogMapaComponent, {
+            data: {
+                latitud: Number(this.usuarioForm.get('latitud').value),
+                longitud: Number(this.usuarioForm.get('longitud').value)
+            }
+        });
+
+        dialogRef.afterClosed()
+            .subscribe((result) => {
+                if (!result) {
+                    return;
+                }
+                const selected: Ubicacion = result[1];
+                this.usuarioForm.get('ubicacion').setValue(selected.lat + " / " + selected.lon);
+                this.usuarioForm.get('latitud').setValue(selected.lat);
+                this.usuarioForm.get('longitud').setValue(selected.lon);
+            });
     }
 
     openSnackBar(message: string, action: string) {

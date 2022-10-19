@@ -27,7 +27,8 @@
                         <!-- Avatar -->
                         <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card"
                             style="background-color: white;">
-                            <mat-icon *ngIf="!imagenBase64" class="icon-size-20" [svgIcon]="'heroicons_outline:user-group'">
+                            <mat-icon *ngIf="!imagenBase64" class="icon-size-20"
+                                [svgIcon]="'heroicons_outline:user-group'">
                             </mat-icon>
                             <div>
                                 <img [src]="imagenBase64">
@@ -98,10 +99,16 @@
                                 </mat-form-field>
 
                                 <mat-form-field class="fuse-mat-no-subscript flex-auto ml-2">
-                                    <mat-label>Código postal</mat-label>
-                                    <input [formControlName]="'codigo_postal'" matInput required maxlength="300"
+                                    <mat-label>Correo electrónico</mat-label>
+                                    <input [formControlName]="'correo'" matInput required maxlength="300"
                                         [readonly]="!editMode" class="uppercase">
+                                    <mat-error *ngIf="usuarioForm.get('correo').hasError('email')">
+                                        Por favor ingrese un correo válido, ejm: correo@correo.com
+                                    </mat-error>
                                 </mat-form-field>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -110,12 +117,13 @@
                         <div class="space-y-4">
                             <div class="flex">
                                 <mat-form-field class="fuse-mat-no-subscript flex-auto">
-                                    <mat-label>Correo electrónico</mat-label>
-                                    <input [formControlName]="'correo'" matInput required maxlength="300"
-                                        [readonly]="!editMode" class="uppercase">
-                                    <mat-error *ngIf="usuarioForm.get('correo').hasError('email')">
-                                        Por favor ingrese un correo válido, ejm: correo@correo.com
-                                    </mat-error>
+                                    <mat-label>Ubicación geográfica del usuario</mat-label>
+                                    <input matInput [formControlName]="'ubicacion'" [spellcheck]="false" readonly
+                                        required>
+                                    <button mat-icon-button (click)="openMapa()" matSuffix [disabled]="!editMode">
+                                        <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                        </mat-icon>
+                                    </button>
                                 </mat-form-field>
                             </div>
                         </div>

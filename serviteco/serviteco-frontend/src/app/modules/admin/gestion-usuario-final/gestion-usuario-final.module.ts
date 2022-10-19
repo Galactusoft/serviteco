@@ -28,6 +28,9 @@ import { GestionUsuarioFinalComponent } from './gestion-usuario-final.component'
 import { GestionUsuarioFinalListComponent } from './gestion-usuario-final-list/gestion-usuario-final-list.component';
 import { GestionUsuarioFinalDetailComponent } from './gestion-usuario-final-detail/gestion-usuario-final-detail.component';
 import { usuarioFinalRoutes } from './gestion-usuario-final.routing';
+import { DialogMapaComponent } from '../buscadores/dialog-mapa/dialog-mapa.component';
+import { AgmCoreModule } from '@agm/core';
+import { environment } from 'environments/environment';
 
 @NgModule({
     declarations: [
@@ -58,7 +61,10 @@ import { usuarioFinalRoutes } from './gestion-usuario-final.routing';
         MatPaginatorModule,
         MatSortModule,
         MatSnackBarModule,
-        MatIconModule
+        MatIconModule,
+        AgmCoreModule.forRoot({
+            apiKey: environment.API_KEY_GOOGLE_MAPS
+        }),
     ],
     providers   : [
         {
@@ -78,7 +84,8 @@ import { usuarioFinalRoutes } from './gestion-usuario-final.routing';
     ],
     entryComponents: [
         BuscadorFuncionariosComponent,
-        BuscadorTalleresComponent
+        BuscadorTalleresComponent,
+        DialogMapaComponent
     ],
 })
 export class GestionUsuarioFinalModule

@@ -32,7 +32,7 @@ export class GestionUsuarioFinalListComponent implements OnInit, OnDestroy {
 
     data: any;
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentTransactionsTableColumns: string[] = ['id', 'identificacion', 'nombres', 'apellidos', 'direccion', 'telefono', 'codigo_postal'];
+    recentTransactionsTableColumns: string[] = ['id', 'identificacion', 'nombres', 'apellidos', 'direccion', 'telefono'];
 
     orderBy: string = "id";
     order: string = "desc";
