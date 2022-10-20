@@ -1,0 +1,131 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div
+                    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-8 bg-card dark:bg-transparent" style="margin-bottom: -70px;">
+                    <!-- Title -->
+                    <div class="flex-1 min-w-0">
+                        <div class="hidden sm:flex flex-wrap items-center font-medium">
+                            <div>
+                                <a class="whitespace-nowrap text-primary-500" style="cursor: pointer;"
+                                    [routerLink]="['/inicio']">Inicio</a>
+                            </div>
+                            <div class="flex items-center ml-1 whitespace-nowrap">
+                                <mat-icon class="icon-size-5 text-secondary"
+                                    [svgIcon]="'heroicons_solid:chevron-right'">
+                                </mat-icon>
+                                <span class="ml-1 text-secondary">Gestión reportes</span>
+                            </div>
+                        </div>
+                        <div class="flex sm:hidden">
+                            <a class="inline-flex items-center -ml-1.5 text-secondary font-medium"
+                                [routerLink]="'/inicio'">
+                                <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-left'">
+                                </mat-icon>
+                                <span class="ml-1">Volver</span>
+                            </a>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-extrabold tracking-tight leading-none">Reportes</div>
+                            <div class="ml-0.5 font-medium text-secondary">
+                                Distribuidor
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Actions -->
+                    <div style="width: 40% !important;">
+                        <form [formGroup]="form">
+                            <mat-form-field style="width: 100% !important;">
+                                <mat-label>Seleccione el reporte a visualizar</mat-label>
+                                <mat-select [formControlName]="'reporte'" [(value)]="selectedReporte">
+                                    <mat-option [value]="0">1. Reporte Gráfico</mat-option>
+                                    <mat-option [value]="1">2. Importadores activos asociados</mat-option>
+                                    <mat-option [value]="2">3. Talleres asociados</mat-option>
+                                    <mat-option [value]="3">4. Listado de referencias</mat-option>
+                                    <mat-option [value]="4">5. Listado de repuestos</mat-option>
+                                    <mat-option [value]="5">6. Solicitudes por importador</mat-option>
+                                    <mat-option [value]="6">7. Repuestos solicitados a importador</mat-option>
+                                    <mat-option [value]="7">8. Tickets (cotizaciones) por cobrar por importador</mat-option>
+                                    <mat-option [value]="8">9. Usuarios finales</mat-option>
+                                    <mat-option [value]="9">10. Referencias con mayor solicitud de garantías</mat-option>
+                                    <mat-option [value]="10">11. Marcas con mayor solicitud de garantías</mat-option>
+                                    <mat-option [value]="11">12. Listado de estado de solicitudes</mat-option>
+                                    <mat-option [value]="12">13. Aprobación y rechazo de solicitudes de garantía</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="form.get('reporte').value == '0'">
+                    <reporte-grafico-distribuidor></reporte-grafico-distribuidor>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '1'">
+                    <reporte-importadores-activos></reporte-importadores-activos>
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '2'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '3'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '4'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '5'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '6'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '7'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '8'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '9'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '10'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '11'">
+
+                </ng-container>
+
+                <ng-container *ngIf="form.get('reporte').value == '12'">
+
+                </ng-container>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

@@ -101,8 +101,8 @@ export class DialogUsuarioFinalComponent implements OnInit, AfterViewInit {
                 this.usuarioFinalForm.get('apellidos').setValue(null);
                 this.usuarioFinalForm.get('telefono').setValue(null);
                 this.usuarioFinalForm.get('direccion').setValue(null);
-                this.usuarioFinalForm.get('latitud').setValue(null);
-                this.usuarioFinalForm.get('longitud').setValue(null);
+                this.usuarioFinalForm.get('latitud').setValue('');
+                this.usuarioFinalForm.get('longitud').setValue('');
                 this.usuarioFinalForm.get('correo').setValue(null);
                 this.existeUsuario = false;
             }

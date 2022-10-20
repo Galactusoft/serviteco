@@ -46,6 +46,9 @@ import { ReporteSerialesBodegaComponent } from './importadores/reporte-seriales-
 import { ReporteGraficoImportadorComponent } from './importadores/reporte-grafico-importador/reporte-grafico-importador.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { GestionReportesDistribuidoresComponent } from './distribuidores/gestion-reportes-distribuidores.component';
+import { ReporteImportadoresActivosComponent } from './distribuidores/reporte-importadores-activos/reporte-importadores-activos.component';
+import { ReporteGraficoDistribuidorComponent } from './distribuidores/reporte-grafico-distribuidor/reporte-grafico-distribuidor.component';
 @NgModule({
     declarations: [
         GestionReportesComponent,
@@ -65,7 +68,10 @@ import { NgApexchartsModule } from 'ng-apexcharts';
         ReporteAdquisicionEquiposComponent,
         ReporteColocacionMercadoComponent,
         ReporteSerialesBodegaComponent,
-        ReporteGraficoImportadorComponent
+        ReporteGraficoImportadorComponent,
+        GestionReportesDistribuidoresComponent,
+        ReporteGraficoDistribuidorComponent,
+        ReporteImportadoresActivosComponent
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),

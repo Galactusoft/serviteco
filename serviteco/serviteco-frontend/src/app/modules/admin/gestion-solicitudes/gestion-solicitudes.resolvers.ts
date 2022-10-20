@@ -31,7 +31,7 @@ export class GestionSolicitudesResolver implements Resolve<any>
         paginator.pageIndex = 0;
         paginator.pageSize = 10;
         paginator.filter = "all";
-        paginator.order = "asc";
+        paginator.order = "desc";
         paginator.orderBy = "id";
         return this._gestionSolicitudesService.getRecepcionSolicitudesPaginator(paginator);
     }

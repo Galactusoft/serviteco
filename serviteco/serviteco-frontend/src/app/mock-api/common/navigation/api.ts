@@ -186,6 +186,14 @@ export class NavigationMockApi {
                     link: '/gestion-reportes/importador'
                 };
 
+                let gestion_reportes_distribuidor: FuseNavigationItem = {
+                    id: 'gestion_reportes_distribuidor',
+                    title: 'Visualizar reportes',
+                    type: 'basic',
+                    icon: 'heroicons_outline:collection',
+                    link: '/gestion-reportes/distribuidor'
+                };
+
                 let ayuda_serviteco: FuseNavigationItem = {
                     id: 'ayuda-serviteco',
                     title: 'Ayuda SERVITECO',
@@ -268,6 +276,19 @@ export class NavigationMockApi {
                     children: childrenReportesImportador
                 };
 
+                let childrenReportesDistribuidor: FuseNavigationItem[] = [];
+
+                childrenReportesDistribuidor.push(gestion_reportes_distribuidor);
+
+                let admin_reportes_distribuidor: FuseNavigationItem = {
+                    id: 'admin_reportes_distribuidor',
+                    title: 'Gestión de Reportes',
+                    subtitle: 'Gestión de los reportes generados',
+                    type: 'group',
+                    icon: 'heroicons_outline:collection',
+                    children: childrenReportesDistribuidor
+                };
+
                 let childrenMesaAyuda: FuseNavigationItem[] = [];
 
                 childrenMesaAyuda.push(ayuda_serviteco);
@@ -316,6 +337,7 @@ export class NavigationMockApi {
                         menuPrincipal.push(solicitudes);
                     } else if (this._aut.accessAdmin == 'distribuidor') {
                         menuPrincipal.push(solicitudes);
+                        menuPrincipal.push(admin_reportes_distribuidor);
                     } else {
                         menuPrincipal.push(admin_productos);
                         menuPrincipal.push(solicitudes);

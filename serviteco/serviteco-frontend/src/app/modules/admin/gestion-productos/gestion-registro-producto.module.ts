@@ -26,6 +26,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GestionProductosDetailComponent } from './gestion-productos-detail/gestion-productos-detail.component';
 import { registroProductoRoutes} from './gestion-productos.routing';
 import { FuseCardModule } from '@fuse/components/card';
+import { AgmCoreModule } from '@agm/core';
+import { environment } from 'environments/environment';
 
 @NgModule({
     declarations: [
@@ -54,6 +56,9 @@ import { FuseCardModule } from '@fuse/components/card';
         MatSortModule,
         MatSnackBarModule,
         FuseCardModule,
+        AgmCoreModule.forRoot({
+            apiKey: environment.API_KEY_GOOGLE_MAPS
+        }),
     ],
     providers   : [
         {
