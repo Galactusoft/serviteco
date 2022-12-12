@@ -51,7 +51,7 @@
                             <mat-label>Serial</mat-label>
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:annotation'" matPrefix>
                             </mat-icon>
-                            <input [formControlName]="'serial'" matInput required [readonly]="!editMode" maxlength="300"
+                            <input [formControlName]="'serial'" matInput required [readonly]="!editMode" appAlphaNumericOnly maxlength="300"
                                 class="uppercase">
                         </mat-form-field>
                     </div>

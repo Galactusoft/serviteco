@@ -59,10 +59,10 @@
                                     <mat-option [value]="5">6. Solicitudes por importador</mat-option>
                                     <mat-option [value]="6">7. Repuestos solicitados a importador</mat-option>
                                     <mat-option [value]="7">8. Tickets (cotizaciones) por cobrar por importador</mat-option>
-                                    <mat-option [value]="8">9. Usuarios finales</mat-option>
-                                    <mat-option [value]="9">10. Referencias con mayor solicitud de garantías</mat-option>
-                                    <mat-option [value]="10">11. Marcas con mayor solicitud de garantías</mat-option>
-                                    <mat-option [value]="11">12. Listado de estado de solicitudes</mat-option>
+                                    <mat-option [value]="8">9. Usuarios asociados al distribuidor</mat-option>
+                                    <mat-option [value]="9">10. Usuarios finales</mat-option>
+                                    <mat-option [value]="10">11. Referencias con mayor solicitud de garantías</mat-option>
+                                    <mat-option [value]="11">12. Marcas con mayor solicitud de garantías</mat-option>
                                     <mat-option [value]="12">13. Aprobación y rechazo de solicitudes de garantía</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -79,47 +79,47 @@
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '2'">
-
+                    <reporte-talleres-asociados></reporte-talleres-asociados>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '3'">
-
+                    <reporte-referencias-activas-distribuidor></reporte-referencias-activas-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '4'">
-
+                    <reporte-repuestos-distribuidor></reporte-repuestos-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '5'">
-
+                    <reporte-solicitud-garantia-distribuidor></reporte-solicitud-garantia-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '6'">
-
+                    <reporte-repuestos-solicitados-distribuidor></reporte-repuestos-solicitados-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '7'">
-
+                    <reporte-tickets-por-cobrar></reporte-tickets-por-cobrar>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '8'">
-
+                    <reporte-usuarios-asociados-distribuidor></reporte-usuarios-asociados-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '9'">
-
+                    <reporte-usuarios-finales></reporte-usuarios-finales>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '10'">
-
+                    <reporte-referencias-mas-garantias-distribuidor></reporte-referencias-mas-garantias-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '11'">
-
+                    <reporte-marcas-mas-garantias-distribuidor></reporte-marcas-mas-garantias-distribuidor>
                 </ng-container>
 
                 <ng-container *ngIf="form.get('reporte').value == '12'">
-
+                    <reporte-aprobacion-rechazo></reporte-aprobacion-rechazo>
                 </ng-container>
 
             </div>

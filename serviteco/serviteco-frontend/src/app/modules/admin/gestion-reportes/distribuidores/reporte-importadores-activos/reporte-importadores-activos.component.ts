@@ -11,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BuscadorImportadorasComponent } from '../../../buscadores/buscador-importador/buscador-importador.component';
 import { Importador } from '../../../gestion-importadores/importadores';
-import { GestionReporteService } from '../../gestion-reportes.service';
+import { GestionReporteDistribuidorService } from '../../gestion-reportes-distribuidor.service';
 import Swal from 'sweetalert2';
 import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -39,7 +39,7 @@ export class ReporteImportadoresActivosComponent implements OnInit, OnDestroy {
     @ViewChild(MatSort) sort: MatSort;
     data: any;
     dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    tableColumns: string[] = ['id', 'nombre', 'categoria', 'importador', 'marca', 'estado'];
+    tableColumns: string[] = ['id', 'nombre', 'direccion', 'telefono', 'correo', 'correo_contabilidad', 'estado', 'fecha_sistema'];
     orderBy: string = "1";
     order: string = "asc";
     filter: string = "all";
@@ -75,7 +75,7 @@ export class ReporteImportadoresActivosComponent implements OnInit, OnDestroy {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
         private _matDialog: MatDialog,
-        private _gestionReporteService: GestionReporteService,
+        private _gestionReporteService: GestionReporteDistribuidorService,
         private _gestionReportesService: GestionReportesService,
         private _aut: AuthService,
     ) {
@@ -169,11 +169,11 @@ export class ReporteImportadoresActivosComponent implements OnInit, OnDestroy {
         paginator.filter = this.filter || 'all';
         paginator.order = this.order;
         paginator.orderBy = this.orderBy;
-        paginator.id_importador = busqueda.id_importador;
+        paginator.id_distribuidor = this._aut.accessDistribuidor;
         paginator.fecha_inicial = busqueda.fecha_inicial;
         paginator.fecha_final = busqueda.fecha_final;
         // Search
-        this._gestionReporteService.getReferenciasActivasImportadorPaginator(paginator).subscribe(data => {
+        this._gestionReporteService.getImportadoresActivosAsociadosPaginator(paginator).subscribe(data => {
 
             // Update the counts
             this.dataCount = data.cantidad[0]['total'];
@@ -226,12 +226,12 @@ export class ReporteImportadoresActivosComponent implements OnInit, OnDestroy {
     exportar(): void {
         const busqueda = this.form.getRawValue();
         if (this._aut.accessAdmin == 'distribuidor') {
-            busqueda.id_importador = this._aut.accessImportador;
+            busqueda.id_distribuidor = this._aut.accessDistribuidor;
         }
-        this._gestionReporteService.getExportReferenciasActivasImportadorPaginator(busqueda).subscribe(data => {
+        this._gestionReporteService.getExportImportadoresActivosAsociadosPaginator(busqueda).subscribe(data => {
             if (data.registros.length > 0) {
-                var head = ['Código', 'Nombre', 'Descripción', 'Categoría', 'Importador', 'Marca', 'Estado', 'Fecha Sistema'];
-                this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_referencias_activas_por_importador', head, []);
+                var head = ['Id', 'Nombre', 'Dirección', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
+                this._gestionReportesService.exportReportAsExcelFile(data.registros, 'reporte_importadores_activos_distribuidor', head, []);
             } else {
                 Swal.fire({
                     title: 'No existe información para exportar reporte con los parámetros de búsqueda ingresados',

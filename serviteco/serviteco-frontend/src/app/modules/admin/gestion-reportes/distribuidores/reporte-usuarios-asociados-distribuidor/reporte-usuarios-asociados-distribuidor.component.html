@@ -1,0 +1,194 @@
+<!-- Main -->
+<div class="flex-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+
+        <!-- Main actions -->
+        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+            <!-- Search -->
+            <div class="flex-auto">
+                <form [formGroup]="form">
+                    <div class="grid sm:grid-cols-6 gap-6 w-full">
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Fecha Inicial</mat-label>
+                                <input matInput [matDatepicker]="pickerFechaInicial" formControlName="fecha_inicial"
+                                    readonly>
+                                <mat-datepicker-toggle matSuffix [for]="pickerFechaInicial">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #pickerFechaInicial></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Fecha Final</mat-label>
+                                <input matInput [matDatepicker]="pickerFechaFinal" formControlName="fecha_final"
+                                    readonly>
+                                <mat-datepicker-toggle matSuffix [for]="pickerFechaFinal">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #pickerFechaFinal></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Distribuidor</mat-label>
+                                <input matInput [formControlName]="'nombre_distribuidor'" [spellcheck]="false" readonly>
+                                <button mat-icon-button (click)="openBuscadorDistribuidor()" matSuffix
+                                *ngIf="puedeSeleccionarDistribuidor">
+                                    <mat-icon class="icon-size-5 ml-2" [svgIcon]="'heroicons_solid:search'">
+                                    </mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1 mt-6">
+                            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="consultarData()"
+                                [disabled]="form.invalid">
+                                <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
+                            </button>
+                            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="exportar()"
+                                *ngIf="dataCount > 0" [disabled]="form.invalid">
+                                <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- usuarios list -->
+    <div class="relative">
+        <div class="overflow-x-auto">
+
+
+            <ng-container *ngIf="dataCount > 0;">
+                <div class="overflow-x-auto mx-6">
+                    <table class="w-full bg-transparent" mat-table matSort [dataSource]="dataSource"
+                        [trackBy]="trackByFn" #table>
+
+                        <!-- name -->
+
+
+                        <ng-container matColumnDef="nombre_completo">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Nombre - Apellido
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.nombre_completo}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="username">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Usuario
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.username}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="identificacion">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Identificación
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.identificacion}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="correo">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Correo
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.correo}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="telefono">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Teléfono
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.telefono}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="cargo">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Cargo
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.cargo}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Estado
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.estado == 1 ? 'ACTIVO' : 'INACTIVO' }}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="fecha_sistema">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                Fecha del Sistema
+                            </th>
+                            <td mat-cell *matCellDef="let transaction">
+                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                    {{transaction.fecha_sistema}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+
+
+
+
+                        <tr mat-header-row *matHeaderRowDef="tableColumns" style="cursor: pointer;">
+                        </tr>
+                        <tr style="cursor: pointer;" class="order-row h-16 hover:bg-hover cursor-pointer" mat-row
+                            *matRowDef="let row; columns: tableColumns;"
+                            [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedData || selectedData.id !== row.id,
+                                            'bg-primary-100 dark:bg-hover': selectedData && selectedData.id === row.id}"></tr>
+                    </table>
+
+                </div>
+
+
+                <mat-paginator style="float: right;" [pageSize]="pageSizeInit" [length]="dataCount"
+                    (page)="mostrarMas($event)" [showFirstLastButtons]="true"></mat-paginator>
+
+            </ng-container>
+
+
+            <div *ngIf="dataSource.filteredData.length === 0" fxFlex="auto" fxLayout="column"
+                fxLayoutAlign="center center">
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                    No
+                    existen registros</div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>

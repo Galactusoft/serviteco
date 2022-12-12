@@ -11,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BuscadorImportadorasComponent } from '../../../buscadores/buscador-importador/buscador-importador.component';
 import { Importador } from '../../../gestion-importadores/importadores';
-import { GestionReporteService } from '../../gestion-reportes.service';
+import { GestionReporteImportadorService } from '../../gestion-reportes-importador.service';
 import Swal from 'sweetalert2';
 import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -77,7 +77,7 @@ export class ReporteReferenciasActivasComponent implements OnInit, OnDestroy {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
         private _matDialog: MatDialog,
-        private _gestionReporteService: GestionReporteService,
+        private _gestionReporteService: GestionReporteImportadorService,
         private _gestionReportesService: GestionReportesService,
         private _aut: AuthService,
     ) {

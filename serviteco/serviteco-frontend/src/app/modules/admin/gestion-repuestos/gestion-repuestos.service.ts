@@ -210,7 +210,7 @@ export class GestionRepuestosService {
                     const index = contacts.registros.findIndex(item => item.id === id);
 
                     // Update the contact
-                    contacts.registros[index] = repuesto;
+                    contacts.registros[index] = repuestoEdit;
 
 
                     // Update the contacts

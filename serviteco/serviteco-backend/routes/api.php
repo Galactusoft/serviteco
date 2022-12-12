@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\CategoriaController;
 use App\Http\Controllers\V1\AyudaController;
 use App\Http\Controllers\V1\ReportesImportadorController;
+use App\Http\Controllers\V1\ReportesDistribuidorController;
 
 
 /*
@@ -63,16 +64,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/reportes/api_reporte_solicitud_garantias_paginator', [ReportesImportadorController::class, 'api_reporte_solicitud_garantias_paginator']);
     Route::post('/reportes/api_reporte_referencia_solicita_garantia_paginator', [ReportesImportadorController::class, 'api_reporte_referencia_solicita_garantia_paginator']);
     Route::post('/reportes/api_export_reporte_referencia_solicita_garantia_paginator', [ReportesImportadorController::class, 'api_export_reporte_referencia_solicita_garantia_paginator']);
-
     Route::post('/reportes/api_reporte_repuestos_solicitados_paginator', [ReportesImportadorController::class, 'api_reporte_repuestos_solicitados_paginator']);
     Route::post('/reportes/api_export_reporte_repuestos_solicitados_paginator', [ReportesImportadorController::class, 'api_export_reporte_repuestos_solicitados_paginator']);
-
     Route::post('/reportes/api_reporte_mano_obra_costos_paginator', [ReportesImportadorController::class, 'api_reporte_mano_obra_costos_paginator']);
     Route::post('/reportes/api_export_reporte_mano_obra_costos_paginator', [ReportesImportadorController::class, 'api_export_reporte_mano_obra_costos_paginator']);
-
     Route::post('/reportes/api_reporte_adquisicion_equipos_paginator', [ReportesImportadorController::class, 'api_reporte_adquisicion_equipos_paginator']);
     Route::post('/reportes/api_export_reporte_adquisicion_equipos_paginator', [ReportesImportadorController::class, 'api_export_reporte_adquisicion_equipos_paginator']);
-
     Route::post('/reportes/api_reporte_colocacion_mercado_paginator', [ReportesImportadorController::class, 'api_reporte_colocacion_mercado_paginator']);
     Route::post('/reportes/api_export_reporte_colocacion_mercado_paginator', [ReportesImportadorController::class, 'api_export_reporte_colocacion_mercado_paginator']);
 
@@ -83,6 +80,38 @@ Route::prefix('v1')->group(function () {
     Route::post('/reportes/api_reporte_grafico_garantias_solicitadas_importador', [ReportesImportadorController::class, 'api_reporte_grafico_garantias_solicitadas_importador']);
     Route::post('/reportes/api_reporte_grafico_info_general_importador', [ReportesImportadorController::class, 'api_reporte_grafico_info_general_importador']);
     Route::post('/reportes/api_reporte_grafico_costos_mano_obra_taller_importador', [ReportesImportadorController::class, 'api_reporte_grafico_costos_mano_obra_taller_importador']);
+
+
+    Route::post('/reportes/api_reporte_grafico_referencias_mas_vendidas_distribuidor', [ReportesDistribuidorController::class, 'api_reporte_grafico_referencias_mas_vendidas_distribuidor']);
+    Route::post('/reportes/api_reporte_grafico_garantias_solicitadas_distribuidor', [ReportesDistribuidorController::class, 'api_reporte_grafico_garantias_solicitadas_distribuidor']);
+    Route::post('/reportes/api_reporte_grafico_info_general_distribuidor', [ReportesDistribuidorController::class, 'api_reporte_grafico_info_general_distribuidor']);
+    Route::post('/reportes/api_reporte_grafico_costos_mano_obra_taller_distribuidor', [ReportesDistribuidorController::class, 'api_reporte_grafico_costos_mano_obra_taller_distribuidor']);
+
+    Route::post('/reportes/api_reporte_importadores_activos_paginator', [ReportesDistribuidorController::class, 'api_reporte_importadores_activos_paginator']);
+    Route::post('/reportes/api_export_reporte_importadores_activos_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_importadores_activos_paginator']);
+    Route::post('/reportes/api_reporte_talleres_asociados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_talleres_asociados_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_talleres_asociados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_talleres_asociados_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_referencias_activas_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_referencias_activas_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_referencias_activas_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_referencias_activas_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_repuestos_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_repuestos_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_repuestos_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_repuestos_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_solicitud_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_solicitud_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_solicitud_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_solicitud_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_repuestos_solicitados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_repuestos_solicitados_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_repuestos_solicitados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_repuestos_solicitados_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_tickets_por_cobrar_paginator', [ReportesDistribuidorController::class, 'api_reporte_tickets_por_cobrar_paginator']);
+    Route::post('/reportes/api_export_reporte_tickets_por_cobrar_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_tickets_por_cobrar_paginator']);
+    Route::post('/reportes/api_reporte_usuarios_asociados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_usuarios_asociados_distribuidor_paginator']);
+    Route::post('/reportes/api_export_usuarios_asociados_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_usuarios_asociados_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_usuarios_finales_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_usuarios_finales_distribuidor_paginator']);
+    Route::post('/reportes/api_export_usuarios_finales_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_usuarios_finales_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_referencias_mas_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_referencias_mas_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_export_referencias_mas_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_referencias_mas_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_marcas_mas_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_marcas_mas_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_export_marcas_mas_garantias_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_marcas_mas_garantias_distribuidor_paginator']);
+    Route::post('/reportes/api_reporte_aprobacion_rechazo_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_reporte_aprobacion_rechazo_distribuidor_paginator']);
+    Route::post('/reportes/api_export_reporte_aprobacion_rechazo_distribuidor_paginator', [ReportesDistribuidorController::class, 'api_export_reporte_aprobacion_rechazo_distribuidor_paginator']);
+
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         //Todo lo que este dentro de este grupo requiere verificación de usuario.

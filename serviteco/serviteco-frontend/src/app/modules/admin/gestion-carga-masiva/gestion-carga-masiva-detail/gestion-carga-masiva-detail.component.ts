@@ -141,7 +141,7 @@ export class GestionCargaMasivaDetailComponent implements OnInit, OnDestroy {
             this.puedeSeleccionarImportador = false;
             this.firstFormGroup.get('id_importador').setValue(this._aut.accessImportador);
             this.firstFormGroup.get('nombre_importador').setValue(this._aut.accessCompany);
-        }  else if (this._aut.accessAdmin == 'distribuidor') {
+        } else if (this._aut.accessAdmin == 'distribuidor') {
             this.puedeSeleccionarImportador = true;
         }
     }
@@ -189,24 +189,32 @@ export class GestionCargaMasivaDetailComponent implements OnInit, OnDestroy {
                     producto.id_importador = this.firstFormGroup.get('id_importador').value;
                     producto.id_marca = this.secondFormGroup.get('id_marca').value;
                     producto.id_tipo_producto = this.thirdFormGroup.get('id_tipo_producto').value;
+
                     producto.serial = rows[index][0].toString();
-                    producto.id_referencia = this.fourFormGroup.get('id_referencia').value;
-                    producto.numero_factura = rows[index][2].toString();
-                    let date = new Date(rows[index][3].toString());
-                    date.setHours(24);
-                    producto.fecha_venta = date.toISOString();
-                    producto.garantia_meses = rows[index][4].toString();
-                    this.console = this.console.concat("cargando serial: " + rows[index][0] + " <br> ")
-                    this.progressbarValue = index;
-                    this._changeDetectorRef.markForCheck();
-                    this.listado.push(producto);
+
+                    const initalValue = producto.serial;
+                    producto.serial = initalValue.replace(/[^a-zA-Z0-9]*/g, '');
+                    if (initalValue !== producto.serial) {
+                        this.console = this.console.concat("serial debe ser alfanumérico: " + rows[index][0] + ", no se cargará <br> ")
+                    } else {
+                        producto.id_referencia = this.fourFormGroup.get('id_referencia').value;
+                        producto.numero_factura = rows[index][2].toString();
+                        let date = new Date(rows[index][3].toString());
+                        date.setHours(24);
+                        producto.fecha_venta = date.toISOString();
+                        producto.garantia_meses = rows[index][4].toString();
+                        this.console = this.console.concat("cargando serial: " + rows[index][0] + " <br> ")
+                        this.progressbarValue = index;
+                        this._changeDetectorRef.markForCheck();
+                        this.listado.push(producto);
+                    }
                 }
                 const total = Number(rows.length) - Number(1);
                 this._changeDetectorRef.markForCheck();
                 this.selectedFiles = undefined;
                 this.terminaCargaArchivo = true;
                 this.progressbarValue = total;
-                this.console = this.console.concat("<br> se cargarán: " + total + " registros <br> ")
+                this.console = this.console.concat("<br> se cargarán: " + this.listado.length + " registros que pasaron las validaciones <br> ")
             })
 
             this._changeDetectorRef.markForCheck();

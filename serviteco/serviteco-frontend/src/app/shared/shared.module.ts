@@ -14,11 +14,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NumberOnlyDirective } from './number-only.directive';
 import { GestionReportesService } from './gestion-reportes.service';
+import { AlphaNumericOnlyDirective } from './alpha-numeric-only.directive';
 
 @NgModule({
     declarations: [
         GenericDataTableComponent,
-        NumberOnlyDirective
+        NumberOnlyDirective,
+        AlphaNumericOnlyDirective
       ],
     imports: [
         CommonModule,
@@ -40,7 +42,8 @@ import { GestionReportesService } from './gestion-reportes.service';
         FormsModule,
         ReactiveFormsModule,
         GenericDataTableComponent,
-        NumberOnlyDirective
+        NumberOnlyDirective,
+        AlphaNumericOnlyDirective
     ]
 })
 export class SharedModule {

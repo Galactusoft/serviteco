@@ -26,7 +26,7 @@ import { FuseCardModule } from '@fuse/components/card';
 import { reportesRoutes } from './gestion-reportes.routing';
 import { GestionReportesComponent } from './gestion-reportes.component';
 import { ReporteCuentasPagarImportadorComponent } from './importadores/reporte-cuentas-pagar-importador/reporte-cuentas-pagar-importador.component';
-import { GestionReporteService } from './gestion-reportes.service';
+import { GestionReporteImportadorService } from './gestion-reportes-importador.service';
 import { ReporteProductosComponent } from './importadores/reporte-productos-creados/reporte-productos.component';
 import { ReporteDistribuidoresTalleresActivosComponent } from './importadores/reporte-distribuidores-talleres-activos/reporte-distribuidores-talleres-activos.component';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -49,6 +49,18 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { GestionReportesDistribuidoresComponent } from './distribuidores/gestion-reportes-distribuidores.component';
 import { ReporteImportadoresActivosComponent } from './distribuidores/reporte-importadores-activos/reporte-importadores-activos.component';
 import { ReporteGraficoDistribuidorComponent } from './distribuidores/reporte-grafico-distribuidor/reporte-grafico-distribuidor.component';
+import { GestionReporteDistribuidorService } from './gestion-reportes-distribuidor.service';
+import { ReporteTalleresAsociadosComponent } from './distribuidores/reporte-talleres-asociados/reporte-talleres-asociados.component';
+import { ReporteReferenciasActivasDistribuidorComponent } from './distribuidores/reporte-referencias-activas-distribuidor/reporte-referencias-activas-distribuidor.component';
+import { ReporteRepuestosDistribuidorComponent } from './distribuidores/reporte-repuestos-distribuidor/reporte-repuestos-distribuidor.component';
+import { ReporteSolicitudGarantiasDistribuidorComponent } from './distribuidores/reporte-solicitud-garantias-distribuidor/reporte-solicitud-garantias-distribuidor.component';
+import { ReporteRepuestosSolicitadosDistribuidorComponent } from './distribuidores/reporte-repuestos-solicitados-distribuidor/reporte-repuestos-solicitados-distribuidor.component';
+import { ReporteTicketsPorCobrarComponent } from './distribuidores/reporte-tickets-por-cobrar/reporte-tickets-por-cobrar.component';
+import { ReporteUsuariosFinalesComponent } from './distribuidores/reporte-usuarios-finales/reporte-usuarios-finales.component';
+import { ReporteReferenciasMasGarantiasDistribuidorComponent } from './distribuidores/reporte-referencias-mas-garantias-distribuidor/reporte-referencias-mas-garantias-distribuidor.component';
+import { ReporteMarcasMasGarantiasDistribuidorComponent } from './distribuidores/reporte-marcas-mas-garantias-distribuidor/reporte-marcas-mas-garantias-distribuidor.component';
+import { ReporteAprobacionRechazoComponent } from './distribuidores/reporte-aprobacion-rechazo/reporte-aprobacion-rechazo.component';
+import { ReporteUsuariosAsociadosDistribuidorComponent } from './distribuidores/reporte-usuarios-asociados-distribuidor/reporte-usuarios-asociados-distribuidor.component';
 @NgModule({
     declarations: [
         GestionReportesComponent,
@@ -71,7 +83,18 @@ import { ReporteGraficoDistribuidorComponent } from './distribuidores/reporte-gr
         ReporteGraficoImportadorComponent,
         GestionReportesDistribuidoresComponent,
         ReporteGraficoDistribuidorComponent,
-        ReporteImportadoresActivosComponent
+        ReporteImportadoresActivosComponent,
+        ReporteTalleresAsociadosComponent,
+        ReporteReferenciasActivasDistribuidorComponent,
+        ReporteRepuestosDistribuidorComponent,
+        ReporteSolicitudGarantiasDistribuidorComponent,
+        ReporteRepuestosSolicitadosDistribuidorComponent,
+        ReporteTicketsPorCobrarComponent,
+        ReporteUsuariosFinalesComponent,
+        ReporteReferenciasMasGarantiasDistribuidorComponent,
+        ReporteMarcasMasGarantiasDistribuidorComponent,
+        ReporteAprobacionRechazoComponent,
+        ReporteUsuariosAsociadosDistribuidorComponent,
     ],
     imports     : [
         RouterModule.forChild(reportesRoutes),
@@ -118,7 +141,8 @@ import { ReporteGraficoDistribuidorComponent } from './distribuidores/reporte-gr
         }
     ],
     entryComponents: [
-        GestionReporteService,
+        GestionReporteImportadorService,
+        GestionReporteDistribuidorService,
         BuscadorDistribuidoresImportadorComponent
     ],
 })

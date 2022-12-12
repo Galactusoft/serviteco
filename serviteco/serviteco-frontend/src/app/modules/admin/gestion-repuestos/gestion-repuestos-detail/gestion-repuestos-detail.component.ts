@@ -212,6 +212,7 @@ export class GestionRepuestoDetailComponent implements OnInit, OnDestroy {
                     this._changeDetectorRef.markForCheck();
                 });
 
+
                 // Toggle the edit mode off
                 this.toggleEditMode(false);
 

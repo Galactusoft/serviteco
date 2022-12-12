@@ -8,7 +8,7 @@ import { Paginator } from '../paginator';
 @Injectable({
     providedIn: 'root'
 })
-export class GestionReporteService {
+export class GestionReporteImportadorService {
     url: string = `${environment.HOST}/reportes`;
     urlLaravel: string = `${environment.HOST_LARAVEL}/reportes`;
 

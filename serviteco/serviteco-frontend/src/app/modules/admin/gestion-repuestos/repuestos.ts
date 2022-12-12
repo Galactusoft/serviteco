@@ -13,6 +13,7 @@ export class Repuesto {
     total: number;
     estado: string;
     id_marca: string;
+    id_referencia: string;
     nombre_marca: string;
 
 

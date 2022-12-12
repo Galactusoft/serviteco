@@ -11,7 +11,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BuscadorImportadorasComponent } from '../../../buscadores/buscador-importador/buscador-importador.component';
 import { Importador } from '../../../gestion-importadores/importadores';
-import { GestionReporteService } from '../../gestion-reportes.service';
+import { GestionReporteImportadorService } from '../../gestion-reportes-importador.service';
 import Swal from 'sweetalert2';
 import { GestionReportesService } from 'app/shared/gestion-reportes.service';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -84,7 +84,7 @@ export class ReporteDistribuidoresTalleresActivosComponent implements OnInit, On
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder,
         private _matDialog: MatDialog,
-        private _gestionReporteService: GestionReporteService,
+        private _gestionReporteService: GestionReporteImportadorService,
         private _gestionReportesService: GestionReportesService,
         private _aut: AuthService,
     ) {
@@ -247,9 +247,9 @@ export class ReporteDistribuidoresTalleresActivosComponent implements OnInit, On
             busqueda.id_importador = this._aut.accessImportador;
         }
         this._gestionReporteService.getExportDistribuidoresTalleresActivosImportadorPaginator(busqueda).subscribe(data => {
-            if (data.registros.length > 0) {
-                var head = ['Id', 'Nombre', 'Fecha', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
-                var headTaller = ['Id', 'NIT', 'Nombre', 'Fecha', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
+            if (this.dataCount > 0 || this.dataCountTalleres > 0 ) {
+                var head = ['Id', 'Nombre', 'Dirección', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
+                var headTaller = ['Id', 'NIT', 'Nombre', 'Dirección', 'Teléfono', 'Correo', 'Correo contabilidad', 'Estado', 'Fecha Sistema'];
                 this.exportReportAsExcelFile(data.registros, 'reporte_distribuidores_talleres_activos', head, data.talleres, headTaller);
             } else {
                 Swal.fire({

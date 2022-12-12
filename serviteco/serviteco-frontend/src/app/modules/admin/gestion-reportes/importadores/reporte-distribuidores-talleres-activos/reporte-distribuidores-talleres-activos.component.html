@@ -51,7 +51,7 @@
                                 <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
                             </button>
                             <button class="ml-2" mat-flat-button [color]="'primary'" (click)="exportar()"
-                                *ngIf="dataCount > 0" [disabled]="form.invalid">
+                                *ngIf="dataCount > 0 || dataCountTalleres > 0" [disabled]="form.invalid">
                                 <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
                             </button>
                         </div>
@@ -323,7 +323,7 @@
                         </ng-container>
                     </ng-container>
 
-                    <div *ngIf="dataSource.filteredData.length === 0" fxFlex="auto" fxLayout="column"
+                    <div *ngIf="dataSourceTalleres.filteredData.length === 0" fxFlex="auto" fxLayout="column"
                         fxLayoutAlign="center center">
                         <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
                             No

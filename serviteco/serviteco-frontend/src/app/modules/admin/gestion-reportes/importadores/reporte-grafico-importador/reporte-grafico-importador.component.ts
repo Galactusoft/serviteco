@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { GestionReporteService } from '../../gestion-reportes.service';
+import { GestionReporteImportadorService } from '../../gestion-reportes-importador.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ApexOptions } from 'ng-apexcharts';
 @Component({
@@ -41,7 +41,7 @@ export class ReporteGraficoImportadorComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _gestionReporteService: GestionReporteService,
+        private _gestionReporteService: GestionReporteImportadorService,
         private _aut: AuthService,
     ) {
     }
